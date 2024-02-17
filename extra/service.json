@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "rohan-constructions-db",
+  "private_key_id": "35e3d1f251296e3b907b68a34b63e9a22a7d7fb0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC5vRU1mMCY0MmM\nHllvQ8EYJaDAQvQGRcQJLiMIfIObVNNSq19d6baHsJVdeiauSPpQnuLLLY98xJh6\nP6HZoY/UTRDD7wSqbndMRIxkeXgq2akX80ikcQx/5VCULEZQgHVLd63uuEiva64j\npO8jqkLQjahjWADCkRiv93Ck8TZRVcbS5bgGGV9A+Tkr1VgJuOZo1XQM2RGsign8\nUJuGMa1MZJ1lwwktrp4EdUtafxxbQ9qGGEc78glh9acsdx9WTTY/7nRdREUBvgbH\n8dxjf0QtU3Rv7Fjphrxe03Nk5ppwV22CL8+p/TO86CWh1mq6/H5ezL6bnZAY2uwT\n6gT5SaRRAgMBAAECggEAATYE5RUQyGfjSh987zDhzOtnfJyf8UlTwy8pH+oj6rra\nWxMhkfMVc0jVwhORgsuYajcm/MxYWUFoFxmPT7DYeoaU6E1VWlq4oQD5A1yxYy7v\nhc4nXpi05dtgzTgernHjK35+97jKEu66TQj+kCmqug5gymKgzdcnvvORKSbzdwNI\nmEcz6ukJYuxtPcFbmEFEGCaaa/5DQpvRntWzAAxfGLbaXaTNExYeY7As4VUMjY7Y\nwcYhDJSyyWkATWpemMIo+46pdkIJ/xMnLcmfZk6asd7tGgguWySZ0rAwfs1K+b0f\nNKEC+1SCoYBV+fclZDqsh7f2NZPnrE/vMYcvPa9hawKBgQD3A51jECazkTt6esvM\nc1+e+DhNNBZYI4LKkb95q1AL8jWAQPTpHzgRbjSJeEBQBJiVT6ngDiNUAZQflXo+\nil+IaQMCV9451AwFNXeW/OWAJMAHHLcfWv73klwH8K0I8ZdN+29BkWU2F+L3H/uH\n6I45No17edsKb50hv5k0DCAOxwKBgQDAftLJ9Y5SUrEBQ3Xk94xLNEju5FUs4Zbl\noyvNO2pCs4qrfpJiBq294702KqkHhscevMKfyfeWVmIPsp+mL9N5KtQRjWVpeF/0\nqr2eaSyqpWkWHp3G32BOx8k1TLDOC9ezmJhogb4OxbEUcfcR7UqlvQLa7EAvYPvx\n1VFBCcl8JwKBgQDV+16rQ4GTSvvQhXHo4gVyzCrRzo6QueqCmzHZL6u/PYpVWXAQ\nR0gl6Wc/s1lbODAKIKHTg8vc6SUtGytz5CEQJZBCxmWviN8E4CWCOgCCOtPTFXAZ\njJWVWEe7ZSYwukDNgEQH8/FOo/CtDhqyyKX0MCruTUiQSNJBOx53tQ1MXwKBgQCO\n7JttwJkPnr42BfS/MN5F6GhOl9J2JHl5v5GCLJ9VLyHC+5OMnRDbcQDH+xzNrdCi\njdyj772ZLkJZDXNkXRZTXO1gqu+lQ+9bJnrr54N2oKJJ/il/w9MqK0TGAk80ba6W\ndrKSxeJr7XTxjTy5XsqSDKjWC5wMkaH/iTdvZujm+QKBgQCZ+Y64AXaYP9y54KIN\nLVIiYk53oYl2Fln/QIWrrqTWoS6088qOCfCREXxaFifWstNrxpMQDsRE/ECRpzoN\n/WYXM0SGEHXfA2lPYMINwCUtUI8EwYfzMLTgl54x7oCFep8PePQSafTtKsFmEVl0\n6QAjW4D0lwOwvG6s5Gji2SG7SQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-6ne2o@rohan-constructions-db.iam.gserviceaccount.com",
+  "client_id": "108240755981639281475",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-6ne2o%40rohan-constructions-db.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

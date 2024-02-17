@@ -8,13 +8,19 @@ from kivy.uix.label import Label
 
 def btn_click(instance):
     # Navigate to corresponding UI based on button text
-    button_text = instance.text
-    if button_text == 'Projects':
+    btn_text = instance.text
+    if btn_text == 'Projects':
         print('Projects')
-    elif button_text == 'Clients':
+    elif btn_text == 'Clients':
         print('Clients')
-    elif button_text == 'Resources':
+    elif btn_text == 'Resources':
         print('Resources')
+    elif btn_text == 'Suppliers':
+        print('Suppliers')
+    elif btn_text == 'Personnel':
+        print('Personnel')
+    elif btn_text == 'Finances':
+        print('Finances')
 
 
 class MainApp(App):

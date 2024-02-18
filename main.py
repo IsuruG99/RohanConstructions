@@ -1,59 +1,45 @@
 from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.lang import Builder
+from ui.projects_ui import ProjectsScreen
+from utils import messagebox
+
+# Load the KV file for the main screen
+Builder.load_file('main.kv')
+Builder.load_file('ui/projects.kv')
 
 
-def btn_click(instance):
-    # Navigate to corresponding UI based on button text
-    btn_text = instance.text
-    if btn_text == 'Projects':
-        print('Projects')
-    elif btn_text == 'Clients':
-        print('Clients')
-    elif btn_text == 'Resources':
-        print('Resources')
-    elif btn_text == 'Suppliers':
-        print('Suppliers')
-    elif btn_text == 'Personnel':
-        print('Personnel')
-    elif btn_text == 'Finances':
-        print('Finances')
+class MainScreen(Screen):
+    pass
 
 
 class MainApp(App):
     def build(self):
-        # Window Options
-        Window.size = (800, 400)
-        Window.clearcolor = (0.5, 0.5, 0.5, 1)
-        Window.title = 'Project Management System'
+        # Create a screen manager
+        sm = ScreenManager()
 
-        # Main Layout
-        root_layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+        # Add the main screen
+        sm.add_widget(MainScreen(name='main'))
 
-        # Title Label
-        root_layout.add_widget(Label(text='Project Management System', size_hint=(1, 0.1), font_size=30,
-                                     color=(1, 1, 1, 1), bold=True))
-        root_layout.add_widget(Label(text='Rohan Constructions', size_hint=(1, 0.1), font_size=25,
-                                     color=(1, 1, 1, 1)))
+        # Add the projects screen
+        sm.add_widget(ProjectsScreen(name='projects'))
 
-        # Button Layout
-        btn_layout = GridLayout(cols=3, spacing=20, padding=20, size_hint=(1, 0.6))
+        return sm
 
-        # Create Buttons & Add to Layout
-        options = ['Projects', 'Clients', 'Suppliers', 'Resources',
-                   'Personnel', 'Finances']
-        for option in options:
-            btn = Button(text=option, size_hint=(1, 0.2), font_size=20)
-            btn.bind(on_press=btn_click)
-            btn_layout.add_widget(btn)
-
-        # Add the button layout to the root layout
-        root_layout.add_widget(btn_layout)
-
-        return root_layout
+    def btn_click(self, instance):
+        if instance.text == 'Projects':
+            self.root.current = 'projects'  # Switch to the projects screen
+        elif instance.text == 'Clients':
+            messagebox('Error', 'Clients screen not implemented yet.')
+        elif instance.text == 'Resources':
+            messagebox('Error', 'Resources screen not implemented yet.')
+        elif instance.text == 'Suppliers':
+            messagebox('Error', 'Suppliers screen not implemented yet.')
+        elif instance.text == 'Personnel':
+            messagebox('Error', 'Personnel screen not implemented yet.')
+        elif instance.text == 'Finances':
+            messagebox('Error', 'Finances screen not implemented yet.')
 
 
-MainApp().run()
+if __name__ == '__main__':
+    MainApp().run()

@@ -12,7 +12,7 @@
                         bold: True
 
                 GridLayout:
-                        cols: 3
+                        cols: 2
                         spacing: 20
                         padding: 20
                         size_hint: 1, 0.6
@@ -37,16 +37,6 @@
                                 font_size: 20
                                 on_press: root.btn_click(self)
 
-                        Button:
-                                text: 'Project Status'
-                                font_size: 20
-                                on_press: root.btn_click(self)
-
-                        Button:
-                                text: 'Project Reports'
-                                font_size: 20
-                                on_press: root.btn_click(self)
-
                 Button:
                         text: 'Back'
                         font_size: 20
@@ -54,3 +44,108 @@
                         on_press:
                                 root.manager.current = 'main'
                                 root.manager.transition.direction = 'right'
+
+<AddPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 6
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.8
+
+                        Label:
+                                text: 'Name'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_name
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Project AD'
+
+                        Label:
+                                text: 'Description'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_desc
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Project is about this.'
+
+                        Label:
+                                text: 'Start Date'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_start
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'YYYY-MM-DD'
+
+                        Label:
+                                text: 'End Date'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_end
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'YYYY-MM-DD'
+
+                        Label:
+                                text: 'Client'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_client
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'ABC Company'
+
+                        Label:
+                                text: 'Budget'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_budget
+                                multiline: False
+                                font_size: 20
+                                hint_text: '10000'
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.2
+
+                        Button:
+                                text: 'Insert'
+                                font_size: 20
+                                on_release:
+                                        root.addProj(project_name.text, project_desc.text, project_start.text, project_end.text, project_client.text, project_budget.text)
+                                        project_name.text = ''
+                                        project_desc.text = ''
+                                        project_start.text = ''
+                                        project_end.text = ''
+                                        project_client.text = ''
+                                        project_budget.text = ''
+
+                        Button:
+                                text: 'Cancel'
+                                font_size: 20
+                                on_release:
+                                        root.dismiss_popup(root.popup)

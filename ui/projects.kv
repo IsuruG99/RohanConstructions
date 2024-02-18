@@ -1,0 +1,56 @@
+<ProjectsScreen>:
+        BoxLayout:
+                orientation: 'vertical'
+                padding: 40
+                spacing: 40
+
+                Label:
+                        text: 'Projects'
+                        size_hint: 1, 0.1
+                        font_size: 30
+                        color: 1, 1, 1, 1
+                        bold: True
+
+                GridLayout:
+                        cols: 3
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.6
+
+                        Button:
+                                text: 'Add Project'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                        Button:
+                                text: 'View Projects'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                        Button:
+                                text: 'Edit Project'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                        Button:
+                                text: 'Delete Project'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                        Button:
+                                text: 'Project Status'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                        Button:
+                                text: 'Project Reports'
+                                font_size: 20
+                                on_press: root.btn_click(self)
+
+                Button:
+                        text: 'Back'
+                        font_size: 20
+                        size_hint: 1, 0.1
+                        on_press:
+                                root.manager.current = 'main'
+                                root.manager.transition.direction = 'right'

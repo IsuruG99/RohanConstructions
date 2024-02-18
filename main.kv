@@ -1,0 +1,56 @@
+<MainScreen>:
+        BoxLayout:
+                orientation: 'vertical'
+                padding: 40
+                spacing: 40
+
+                Label:
+                        text: 'Project Management System'
+                        size_hint: 1, 0.1
+                        font_size: 30
+                        color: 1, 1, 1, 1
+                        bold: True
+
+                Label:
+                        text: 'Rohan Constructions'
+                        size_hint: 1, 0.1
+                        font_size: 25
+                        color: 1, 1, 1, 1
+
+                GridLayout:
+                        cols: 3
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.6
+
+                        Button:
+                                text: 'Projects'
+                                font_size: 20
+                                on_press:
+                                        app.btn_click(self)
+                                        root.manager.transition.direction = 'left'
+
+                        Button:
+                                text: 'Clients'
+                                font_size: 20
+                                on_press: app.btn_click(self)
+
+                        Button:
+                                text: 'Suppliers'
+                                font_size: 20
+                                on_press: app.btn_click(self)
+
+                        Button:
+                                text: 'Resources'
+                                font_size: 20
+                                on_press: app.btn_click(self)
+
+                        Button:
+                                text: 'Personnel'
+                                font_size: 20
+                                on_press: app.btn_click(self)
+
+                        Button:
+                                text: 'Finances'
+                                font_size: 20
+                                on_press: app.btn_click(self)

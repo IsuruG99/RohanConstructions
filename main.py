@@ -1,4 +1,6 @@
 from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from ui.projects_ui import ProjectsScreen
@@ -15,13 +17,11 @@ class MainScreen(Screen):
 
 class MainApp(App):
     def build(self):
-        # Create a screen manager
+        # Screen Manager Initialized
         sm = ScreenManager()
 
-        # Add the main screen
+        # Screens are added to Manager
         sm.add_widget(MainScreen(name='main'))
-
-        # Add the projects screen
         sm.add_widget(ProjectsScreen(name='projects'))
 
         return sm

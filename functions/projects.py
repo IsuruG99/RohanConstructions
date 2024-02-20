@@ -26,6 +26,18 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
         print("Failed to add project: 'projects' reference not found.")
 
 
+def load_projects():
+    # Get a reference to the 'projects' branch in the Firebase Realtime Database
+    ref = database.get_ref('projects')
+
+    # Retrieve all projects as a list of dictionaries
+    projects = []
+    for project_id, project in ref.get().items():
+        project['id'] = project_id
+        projects.append(project)
+
+    return projects
+
 # Test adding a new project record
 # if __name__ == "__main__":
 # add_project(

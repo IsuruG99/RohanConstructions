@@ -1,6 +1,4 @@
 from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from ui.projects_ui import ProjectsScreen

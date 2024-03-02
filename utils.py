@@ -21,6 +21,11 @@ def validate_date(*args):
     return True
 
 
-def messagebox(title, message):
+def message_box(title, message):
     from tkinter import messagebox
     messagebox.showinfo(title, message)
+
+
+def confirm_box(title, message):
+    from tkinter import messagebox
+    return messagebox.askquestion(title, message)

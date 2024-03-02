@@ -1,8 +1,10 @@
 import database
+from utils import message_box
 
 
+# Add a new project
 def add_project(name, description, start_date, end_date, client_name, budget, status):
-    # Get a reference to the 'projects' branch in the Firebase Realtime Database
+    # Get a reference to DB
     ref = database.get_ref('projects')
 
     print(name, description, start_date, end_date, client_name, budget, status)
@@ -21,13 +23,13 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
             'status': status
         })
 
-        print("Project added successfully.")
     else:
-        print("Failed to add project: 'projects' reference not found.")
+        message_box('Error', 'Failed to add project: "projects" reference not found.')
 
 
+# Get all projects
 def load_projects():
-    # Get a reference to the 'projects' branch in the Firebase Realtime Database
+    # Get a reference to DB
     ref = database.get_ref('projects')
 
     # Retrieve all projects as a list of dictionaries
@@ -38,14 +40,55 @@ def load_projects():
 
     return projects
 
-# Test adding a new project record
-# if __name__ == "__main__":
-# add_project(
-#    name="New Project",
-#    description="This is a new project",
-#    start_date="2024-01-01",
-#    end_date="2024-12-31",
-#    client_name="client1",
-#    budget=1000000,
-#     status="in progress"
-# )
+
+# Get a single project by ID
+def get_project(proj_id):
+    # Get a reference to DB
+    ref = database.get_ref('projects')
+
+    # Retrieve the project data as a dictionary
+    project = ref.child(proj_id).get()
+
+    return project
+
+
+# Take a dictionary with relevant unique key and update the project
+def update_project(project_id, name, description, start_date, end_date, client_name, budget, status):
+    # Get a reference to DB
+    ref = database.get_ref('projects')
+
+    if ref is not None:
+        # Set the project data under the new key
+        ref.child(project_id).update({
+            'name': name,
+            'description': description,
+            'start_date': start_date,
+            'end_date': end_date,
+            'client_name': client_name,
+            'budget': budget,
+            'status': status
+        })
+
+    else:
+        message_box('Error', 'Failed to update project: "projects" reference not found.')
+
+    print("Project updated successfully.")
+    return True
+
+
+# Delete a project by ID
+def delete_project(project_id):
+    # Get a reference to DB
+    ref = database.get_ref('projects')
+
+    if ref is not None:
+        # Delete the project
+        ref.child(project_id).delete()
+    else:
+        message_box('Error', 'Failed to delete project: "projects" reference not found.')
+
+    print("Project deleted successfully.")
+    return True
+
+# very specific function here
+#

@@ -21,4 +21,6 @@ def get_ref(ref_name):
         return db.reference('personnel')
     elif ref_name == 'finances':
         return db.reference('finances')
+    elif ref_name == 'users':
+        return db.reference('users')
     return None

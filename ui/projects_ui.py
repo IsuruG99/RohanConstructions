@@ -3,7 +3,8 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
-from functions.projects import add_project, load_projects
+from functions.projects import add_project, load_projects, get_project, update_project, delete_project
+from functools import partial
 
 from utils import *
 
@@ -23,15 +24,106 @@ class AddPopup(GridLayout):
         budget = str(budget)
         # Validate inputs
         if not validate_string(name, description, client_name, budget):
-            messagebox('Error', 'All fields are required.')
+            message_box('Error', 'All fields are required.')
             return
         if not validate_date(start_date, end_date):
-            messagebox('Error', 'Invalid date format.')
+            message_box('Error', 'Invalid date format.')
             return
         # Send data to projects.py
         add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
-        self.projects_screen.populate_projects()
+        message_box('Success', 'Project added successfully.')
+        self.projects_screen.populate_projects(0)
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
+
+# View Project Popup Window
+class ViewPopup(GridLayout):
+    def __init__(self, projects_screen, project_id, **kwargs):
+        super().__init__(**kwargs)
+        self.project_id = project_id
+        self.populate_view()
+        self.projects_screen = projects_screen
+
+    # Populate PopUp Window
+    def populate_view(self):
+        # Get the project data from the DB
+        project = get_project(self.project_id)
+        # Assign
+        self.ids.viewPop_name.text = project["name"]
+        self.ids.viewPop_desc.text = project["description"]
+        self.ids.viewPop_startDate.text = project["start_date"]
+        self.ids.viewPop_endDate.text = project["end_date"]
+        self.ids.viewPop_client.text = project["client_name"]
+        self.ids.viewPop_budget.text = str(project["budget"])
+        self.ids.viewPop_status.text = project["status"]
+
+    # Edit Project
+    def editProj(self, name, description, start_date, end_date, client_name, budget, status):
+        # Stringify inputs (Including Dates)
+        name = str(name)
+        description = str(description)
+        start_date = str(start_date)
+        end_date = str(end_date)
+        client_name = str(client_name)
+        budget = str(budget)
+        status = str(status)
+
+        # Validate inputs
+        if not validate_string(name, description, client_name, budget, status):
+            message_box('Error', 'All fields are required.')
+            return
+        if not validate_date(start_date, end_date):
+            message_box('Error', 'Invalid date format.')
+            return
+
+        # Send data to projects.py
+        update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status)
+        message_box('Success', 'Project updated successfully.')
+        self.projects_screen.populate_projects(0)
         self.dismiss_popup(self.popup)
+
+    # Open Reports Popup Window
+    def reports_popup(self):
+        self.dismiss_popup(self.popup)
+        reportsPop = Popup(title='Project Reports', content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
+        reportsPop.open()
+        reportsPop.content.popup = reportsPop
+
+    # Delete Project
+    def deleteProj(self):
+        # Send project_id to projects.py
+        if confirm_box('Delete Project', 'Are you sure you want to delete this project?') == 'yes':
+            if delete_project(self.project_id):
+                message_box('Success', 'Project deleted successfully.')
+            else:
+                message_box('Error', 'Failed to delete project.')
+            self.projects_screen.populate_projects(0)
+            self.dismiss_popup(self.popup)
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
+
+class ReportsPopup(GridLayout):
+    def __init__(self, projects_screen, proj_id, **kwargs):
+        super().__init__(**kwargs)
+        self.projects_screen = projects_screen
+        self.populate_reports(proj_id)
+
+    # We have the Proj_ID, populate the fields
+    def populate_reports(self, pid):
+        # Get the project data from the DB
+        project = get_project(pid)
+        # Assign
+        self.ids.proj_id.text = pid
+        self.ids.proj_name.text = project["name"]
+        self.ids.proj_desc.text = project["description"]
+        self.ids.proj_start.text = project["start_date"]
+        self.ids.proj_end.text = project["end_date"]
+        self.ids.proj_client.text = project["client_name"]
+        self.ids.proj_budget.text = str(project["budget"])
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -41,50 +133,69 @@ class AddPopup(GridLayout):
 class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_projects()
+        self.populate_projects(0)
+        self.switch = 0
 
-    def populate_projects(self):
+    # Populate the ScrollView with the projects
+    def populate_projects(self, status):
         # Get the projects from the database
         projects = load_projects()
 
         # Clear the existing widgets in the ScrollView
         self.ids.projects_list.clear_widgets()
 
-        for project in projects:
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
-            button = Button(text=project["name"], on_release=self.view_project, background_normal='',
-                            background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
-            grid.project = project
-            grid.add_widget(button)
-            grid.add_widget(Label(text=project["client_name"]))
-            grid.add_widget(Label(text=project["end_date"]))
-            grid.add_widget(Label(text=project["status"]))
-            self.ids.projects_list.add_widget(grid)
+        if status == 0:
+            for project in projects:
+                if not project["status"] == "Completed":
+                    grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+                    button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
+                                    background_normal='',
+                                    background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
+                    grid.project = project
+                    grid.add_widget(button)
+                    grid.add_widget(Label(text=project["client_name"]))
+                    grid.add_widget(Label(text=project["end_date"]))
+                    grid.add_widget(Label(text=project["status"]))
+                    self.ids.projects_list.add_widget(grid)
+        elif status == 1:
+            for project in projects:
+                if project["status"] == "Completed":
+                    grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+                    button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
+                                    background_normal='',
+                                    background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
+                    grid.project = project
+                    grid.add_widget(button)
+                    grid.add_widget(Label(text=project["client_name"]))
+                    grid.add_widget(Label(text=project["end_date"]))
+                    grid.add_widget(Label(text=project["status"]))
+                    self.ids.projects_list.add_widget(grid)
 
-    def view_project(self, instance):
-        # Get the project data from the instance
-        project = instance.parent.project
+                    # Open View Popup Window with the project_id
 
-        # Display the project data in a message box
-        messagebox('Project Details',
-                   f'Name: {project["name"]}\nClient: {project["client_name"]}\nDeadline: {project["end_date"]}'
-                   f'\nStatus: {project["status"]}')
+    def view_project(self, project_id, instance):
+        # ViewPopup class will be called to display the project details in a popup window
+        # The project_id is passed to the ViewPopup class
+        viewPop = Popup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
+        viewPop.open()
+        viewPop.content.popup = viewPop
 
-    def btn_click(self, instance):
-        if instance.text == 'Add':
-            self.add_popup()
-        elif instance.text == 'Edit':
-            messagebox('Error', 'Edit project screen not implemented yet.')
-        elif instance.text == 'Delete':
-            messagebox('Error', 'Delete project screen not implemented yet.')
-        elif instance.text == 'Back':
-            self.parent.current = 'main'
-
+    # Open Add Popup Window
     def add_popup(self):
-        addPop = Popup(title='Add Project', content=AddPopup(self), size_hint=(0.8, 0.7))
+        addPop = Popup(title='Add Project', content=AddPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 
-
-
-
+    # Button Click Event Handler
+    def btn_click(self, instance):
+        if instance.text == 'Add':
+            self.add_popup()
+        elif instance.text == 'Current/Completed':
+            if self.switch == 0:
+                self.populate_projects(1)
+                self.switch = 1
+            else:
+                self.populate_projects(0)
+                self.switch = 0
+        elif instance.text == 'Back':
+            self.parent.current = 'main'

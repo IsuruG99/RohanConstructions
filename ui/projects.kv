@@ -370,41 +370,57 @@
                                         text: 'Description'
                                         font_size: 20
                                         color: 1, 1, 1, 1
+                                        size_hint_y: 0.2
                                 TextInput:
                                         hint_text: 'Description'
                                         id: proj_desc
                                         multiline: True
+                                        size_hint_y: 0.5
 
                                 Label:
                                         text: 'Budget'
                                         font_size: 20
                                         color: 1, 1, 1, 1
+                                        size_hint_y: 0.2
                                 TextInput:
                                         hint_text: 'Budget'
                                         id: proj_budget
                                         multiline: False
+                                        size_hint_y: 0.2
 
                                 Label:
                                         text: 'Assigned Members'
                                         font_size: 20
                                         color: 1, 1, 1, 1
+                                        size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
+                                                id: assigned_manpower
                                                 cols: 1
                                                 size_hint_y: None
                                                 height: self.minimum_height
                                                 color: 1, 1, 1, 1
+                                                scroll_type: ['bars', 'content']
+                                                bar_width: 10
+                                                bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
+                                                bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
 
                                 Label:
                                         text: 'Assigned Resources'
                                         font_size: 20
                                         color: 1, 1, 1, 1
+                                        size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
+                                                id: assigned_resources
                                                 cols: 1
                                                 size_hint_y: None
                                                 height: self.minimum_height
                                                 color: 1, 1, 1, 1
+                                                scroll_type: ['bars', 'content']
+                                                bar_width: 10
+                                                bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
+                                                bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
 
                 GridLayout:
                         size_hint: 1, 0.1

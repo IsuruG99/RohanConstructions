@@ -17,8 +17,8 @@ def get_ref(ref_name):
         return db.reference('resources')
     elif ref_name == 'suppliers':
         return db.reference('suppliers')
-    elif ref_name == 'personnel':
-        return db.reference('personnel')
+    elif ref_name == 'manpower':
+        return db.reference('manpower')
     elif ref_name == 'finances':
         return db.reference('finances')
     elif ref_name == 'users':

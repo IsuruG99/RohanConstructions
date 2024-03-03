@@ -3,7 +3,7 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
-from functions.projects import add_project, load_projects, get_project, update_project, delete_project
+from functions.projects import *
 from functools import partial
 
 from utils import *
@@ -28,6 +28,9 @@ class AddPopup(GridLayout):
             return
         if not validate_date(start_date, end_date):
             message_box('Error', 'Invalid date format.')
+            return
+        if name_unique_check('add', name) is False:
+            message_box('Error', 'Project name must be unique.')
             return
         # Send data to projects.py
         add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
@@ -77,7 +80,9 @@ class ViewPopup(GridLayout):
         if not validate_date(start_date, end_date):
             message_box('Error', 'Invalid date format.')
             return
-
+        if name_unique_check('update', name, self.project_id) is False:
+            message_box('Error', 'Project name must be unique.')
+            return
         # Send data to projects.py
         update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status)
         message_box('Success', 'Project updated successfully.')
@@ -116,6 +121,8 @@ class ReportsPopup(GridLayout):
     def populate_reports(self, pid):
         # Get the project data from the DB
         project = get_project(pid)
+
+
         # Assign
         self.ids.proj_id.text = pid
         self.ids.proj_name.text = project["name"]
@@ -124,6 +131,17 @@ class ReportsPopup(GridLayout):
         self.ids.proj_end.text = project["end_date"]
         self.ids.proj_client.text = project["client_name"]
         self.ids.proj_budget.text = str(project["budget"])
+        # Get relevant manpower data (manpower role, count)
+        roles = load_members(project["name"])
+        # There is an assigned manpower scrollview, we will call load_manpower(with project name)
+        # and output a dictionary of manpower related to this project
+        # then display it in the scrollview('assigned_manpower')
+        # dictionary format is role and count
+        for role, count in roles.items():
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+            grid.add_widget(Label(text=role))
+            grid.add_widget(Label(text=str(count)))
+            self.ids.assigned_manpower.add_widget(grid)
 
     def dismiss_popup(self, instance):
         instance.dismiss()

@@ -1,0 +1,149 @@
+{
+  "clients": {
+    "client1": {
+      "address": "123 Main St, City, Country",
+      "company_name": "ABC Company Inc.",
+      "contact_email": "john@example.com",
+      "contact_person": "John Doe",
+      "contact_phone": "+1234567890",
+      "name": "ABC Company"
+    }
+  },
+  "finance": {
+    "transaction1": {
+      "amount": 5000,
+      "category": "materials",
+      "date": "2024-02-01",
+      "description": "Payment to supplier for concrete",
+      "project_name": "Old Office Building",
+      "related_entity": "supplier1",
+      "type": "expense"
+    }
+  },
+  "manpower": {
+    "employee1": {
+      "contact_email": "alice@example.com",
+      "contact_phone": "+1122334455",
+      "employment_status": "permanent",
+      "name": "Alice Johnson",
+      "project_assignments": [
+        "New Office Building"
+      ],
+      "role": "Project Manager"
+    }
+  },
+  "projects": {
+    "-NqvdIMAcqWg2lEyLIuP": {
+      "budget": "200000",
+      "client_name": "ABC Company",
+      "description": "ABCD",
+      "end_date": "2222-22-22",
+      "name": "AAA",
+      "start_date": "2001-10-11",
+      "status": "In Progress"
+    },
+    "-Nr3dnCefKCWCiHhBo02": {
+      "budget": "10000",
+      "client_name": "ABC Company",
+      "description": "Project CL is a test  project",
+      "end_date": "2022-05-11",
+      "name": "Project ClA",
+      "start_date": "2010-2-11",
+      "status": "Completed"
+    },
+    "-Nr3eDYjz9n-Wat_fcT8": {
+      "budget": "20000",
+      "client_name": "ABC Company",
+      "description": "Test 2",
+      "end_date": "2032-2-11",
+      "name": "Test2 ",
+      "start_date": "2022-2-11",
+      "status": "In Progress"
+    },
+    "-Nr3ekhFFfkI5uluRaPd": {
+      "budget": "2345",
+      "client_name": "ABC",
+      "description": "AA",
+      "end_date": "2222-3-22",
+      "name": "AA",
+      "start_date": "2222-2-22",
+      "status": "In Progress"
+    },
+    "-Nr3f4jQf6532XjvOXNm": {
+      "budget": "55555",
+      "client_name": "ABC",
+      "description": "ABCC",
+      "end_date": "3333-3-15",
+      "name": "ABd",
+      "start_date": "2222-2-5",
+      "status": "In Progress"
+    },
+    "-NryzFXh5S2EFa-XN8qa": {
+      "budget": "22222",
+      "client_name": "ABC Company",
+      "description": "AAAA",
+      "end_date": "2222-11-11",
+      "name": "AAA",
+      "start_date": "2222-11-11",
+      "status": "In Progress"
+    },
+    "project1": {
+      "budget": 1000000,
+      "client_name": "ABC Company",
+      "description": "Construction of a new office building",
+      "end_date": "2024-12-31",
+      "name": "New Office Building",
+      "start_date": "2024-01-01",
+      "status": "in progress"
+    }
+  },
+  "resources": {
+    "resource1": {
+      "name": "Concrete",
+      "quantity_available": 100,
+      "status": "in stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": 50
+    },
+    "resource2": {
+      "name": "Wood",
+      "quantity_available": 120,
+      "status": "in stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": 30
+    },
+    "resource3": {
+      "name": "Steel",
+      "quantity_available": 70,
+      "status": "in stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": 90
+    }
+  },
+  "suppliers": {
+    "supplier1": {
+      "address": "456 Elm St, City, Country",
+      "contact_email": "jane@example.com",
+      "contact_person": "Jane Smith",
+      "contact_phone": "+9876543210",
+      "name": "XYZ Suppliers",
+      "products_supplied": [
+        "Concrete",
+        "Steel",
+        "Wood"
+      ]
+    }
+  },
+  "users": {
+    "user1": {
+      "admin": 1,
+      "email": "a",
+      "password": "a"
+    },
+    "user2": {
+      "admin": 0,
+      "email": "ab@cd.com",
+      "password": "abcd"
+    }
+  }
+}

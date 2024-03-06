@@ -1,0 +1,49 @@
+Project Management:
++ Project name
++ Project description
++ Start date
++ End date
++ Client Name (reference to Client Management)
++ Budget
++ Status (e.g., in progress, completed, pending)
+
+Client Management:
++ Client name
++ Contact person
++ Contact email
++ Contact phone number
++ Company/organization name
++ Address
++ Projects [Array of Project ID's]
+
+Supplier Management:
++ Supplier name
++ Contact person
++ Contact email
++ + Contact phone number
++ Products/materials supplied
++ Address
+
+Resource Management:
++ Resource name
++ Quantity available
++ Unit cost
++ Supplier Name (reference to Supplier Management)
++ Status (e.g., in stock, out of stock)
+
+Manpower Management:
++ Employee name
++ Employee role/position
++ Contact email
++ Contact phone number
++ Employment status (e.g., permanent, temporary)
++ Project assignments (list of project IDs)
+
+Finance Management:
++ Transaction type (income, expense)
++ Amount
++ Date
++ Description
++ Related entity (e.g., employee Name, supplier Name, client Name)
++ Project Name (if applicable)
++ Transaction category (e.g., salaries, materials, revenue)

@@ -3,6 +3,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from ui.projects_ui import ProjectsScreen
+from ui.suppliers_ui import SuppliersScreen
 from ui.login_ui import LoginScreen
 from utils import message_box
 
@@ -10,6 +11,7 @@ from utils import message_box
 Builder.load_file('main.kv')
 Builder.load_file('ui/login.kv')
 Builder.load_file('ui/projects.kv')
+Builder.load_file('ui/suppliers.kv')
 
 
 class MainScreen(Screen):
@@ -27,6 +29,7 @@ class MainApp(App):
         sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(MainScreen(name='main'))
         sm.add_widget(ProjectsScreen(name='projects'))
+        sm.add_widget(SuppliersScreen(name='suppliers'))
 
         return sm
 
@@ -38,7 +41,7 @@ class MainApp(App):
         elif instance.text == 'Resources':
             message_box('Error', 'Resources screen not implemented yet.')
         elif instance.text == 'Suppliers':
-            message_box('Error', 'Suppliers screen not implemented yet.')
+            self.root.current = 'suppliers'
         elif instance.text == 'Personnel':
             message_box('Error', 'Personnel screen not implemented yet.')
         elif instance.text == 'Finances':

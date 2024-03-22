@@ -1,0 +1,28 @@
+<ClientsScreen>
+        GridLayout:
+                rows: 3
+                cols: 1
+                padding: 20
+                spacing: 20
+
+                Label:
+                        text: 'Clients Label'
+                        size_hint: 1, 0.1
+                        font_size: 40
+                        color: 1, 1, 1, 1
+                        bold: True
+
+                Label:
+                        text: 'Thanks for beginning your part on your own'
+                        size_hint: 1, 0.1
+                        font_size: 40
+                        color: 1, 1, 1, 1
+                        bold: True
+
+                Button:
+                        text: 'Back'
+                        font_size: 20
+                        size_hint: 1, 0.2
+                        on_press:
+                                root.manager.current = 'main'
+                                root.manager.transition.direction = 'right'

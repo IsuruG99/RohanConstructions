@@ -122,7 +122,6 @@ class ReportsPopup(GridLayout):
         # Get the project data from the DB
         project = get_project(pid)
 
-
         # Assign
         self.ids.proj_id.text = pid
         self.ids.proj_name.text = project["name"]
@@ -133,10 +132,6 @@ class ReportsPopup(GridLayout):
         self.ids.proj_budget.text = str(project["budget"])
         # Get relevant manpower data (manpower role, count)
         roles = load_members(project["name"])
-        # There is an assigned manpower scrollview, we will call load_manpower(with project name)
-        # and output a dictionary of manpower related to this project
-        # then display it in the scrollview('assigned_manpower')
-        # dictionary format is role and count
         for role, count in roles.items():
             grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
             grid.add_widget(Label(text=role))

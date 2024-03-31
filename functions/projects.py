@@ -7,7 +7,6 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
     # Get a reference to DB
     ref = database.get_ref('projects')
 
-    print(name, description, start_date, end_date, client_name, budget, status)
     if ref is not None:
         # Generate a new unique key for the project
         new_project_ref = ref.push()

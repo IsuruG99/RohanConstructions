@@ -1,28 +1,289 @@
 <FinancesScreen>
         GridLayout:
-                rows: 3
+                rows: 2
                 cols: 1
-                padding: 20
+                padding: 40
                 spacing: 20
 
                 Label:
-                        text: 'Finances Label'
+                        text: 'Finances'
                         size_hint: 1, 0.1
-                        font_size: 40
+                        font_size: 30
                         color: 1, 1, 1, 1
                         bold: True
 
-                Label:
-                        text: 'Sigh, here we go again'
-                        size_hint: 1, 0.1
-                        font_size: 40
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        rows: 2
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.9
 
-                Button:
-                        text: 'Back'
-                        font_size: 20
+                        ScrollView:
+                                size_hint: 1, 1
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: finances_list
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        spacing: 10
+                                        padding: 10
+                                        cols: 1
+                                        font_name: 'Roboto'
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                spacing: 20
+                                padding: 20
+                                size_hint: 1, 0.3
+
+                                Button:
+                                        text: 'Filter'
+                                        font_size: 20
+                                        size_hint: 0.3, 1
+                                        on_release: root.btn_click(self)
+
+                                Button:
+                                        text: 'Add'
+                                        font_size: 20
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+
+                                Button:
+                                        text: 'Back'
+                                        font_size: 20
+                                        size_hint: 0.2, 1
+                                        on_release:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
+
+
+<ViewLogPopup>:
+        size: 400, 600
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 7
+                        padding: 5
+                        spacing: 5
+                        size_hint: 1, 0.9
+
+                        Label:
+                                text: 'Type'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        Spinner:
+                                id: viewLog_type
+                                text: 'Type'
+                                values: ['Income', 'Expense']
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Amount'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: viewLog_amount
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Date'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: viewLog_date
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Description'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: viewLog_desc
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Related Entity'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: viewLog_entity
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Project Name'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: viewLog_project
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Category'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        Spinner:
+                                id: viewLog_category
+                                text: 'Category'
+                                values: ['Materials', 'Payroll', 'Contract', 'Misc']
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                GridLayout:
+                        cols: 3
+                        rows: 1
+                        padding: 20
+                        spacing: 20
                         size_hint: 1, 0.2
-                        on_press:
-                                root.manager.current = 'main'
-                                root.manager.transition.direction = 'right'
+
+                        Button:
+                                text: 'Edit'
+                                font_size: 20
+                                on_release:
+                                        root.edit_log(viewLog_type.text, viewLog_amount.text, viewLog_date.text, viewLog_desc.text, viewLog_entity.text, viewLog_project.text, viewLog_category.text)
+
+                        Button:
+                                text: 'Delete'
+                                font_size: 20
+                                on_release:
+                                        root.delete_log()
+
+                        Button:
+                                text: 'Report'
+                                font_size: 20
+
+
+<AddLogPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 7
+                        padding: 5
+                        spacing: 5
+                        size_hint: 1, 0.9
+
+                        Label:
+                                text: 'Type'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        Spinner:
+                                id: addLog_type
+                                text: 'Type'
+                                values: ['Income', 'Expense']
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Amount'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: addLog_amount
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Date'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: addLog_date
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Description'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: addLog_desc
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Related Entity'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: addLog_entity
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Project Name'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        TextInput:
+                                id: addLog_project
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                        Label:
+                                text: 'Category'
+                                font_size: 20
+                                size_hint: 0.3, 0.1
+
+                        Spinner:
+                                id: addLog_category
+                                text: 'Category'
+                                values: ['Materials', 'Payroll', 'Contract', 'Misc']
+                                font_size: 20
+                                size_hint: 0.7, 0.1
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.2
+
+                        Button:
+                                text: 'Insert'
+                                font_size: 20
+                                on_release:
+                                        root.addLog(addLog_type.text, addLog_amount.text, addLog_date.text, addLog_desc.text, addLog_entity.text, addLog_project.text, addLog_category.text)
+                                        addLog_amount.text = ''
+                                        addLog_date.text = ''
+                                        addLog_desc.text = ''
+                                        addLog_entity.text = ''
+                                        addLog_project.text = ''
+
+                        Button:
+                                text: 'Cancel'
+                                font_size: 20
+                                on_release:
+                                        root.dismiss_popup(root.popup)

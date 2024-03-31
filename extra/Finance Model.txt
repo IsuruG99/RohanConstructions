@@ -1,6 +1,6 @@
 Finance Model
 
-Project Acceptence
+Project Added/Created
 + Budget allocation
 
 Upon Project Completion
@@ -15,18 +15,3 @@ Monthly/Weekly?
 Unit Quantity and InStock/OutOfStock
 Manager updates manually
 Purely to keep track, will manually notify suppliers if resources are out of stock
-
-
-Tested with 145 text on Additional Char Prompt.
-Location & Time on Scenario.
-User Persona with 286.
-Own Prompt Test.
-1st try only: 12th message, 
-
-Default LZLV Test
-Each with no feelings/story detection.
-(Had lorebooks on for first 2 tries, but was not important either way).
-
-1st Try: Gave me an emoji text in 3 tries
-2nd try: Gave me a broken set of words in 2nd message
-3rd try: gave me an emoji in 2nd message

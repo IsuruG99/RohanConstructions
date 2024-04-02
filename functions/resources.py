@@ -47,3 +47,17 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
 
     print("Project updated successfully.")
     return True
+
+
+def delete_res(res_id):
+    # Get a reference to DB
+    ref = database.get_ref('resources')
+
+    if ref is not None:
+        # Delete the project
+        ref.child(res_id).delete()
+    else:
+        message_box('Error', 'Failed to delete Resource: "resources" reference not found.')
+
+    print("Resources deleted successfully.")
+    return True

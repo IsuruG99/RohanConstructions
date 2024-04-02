@@ -40,7 +40,7 @@ class ViewResource(Screen):
         if not validate_currency(qty):
             message_box('Error', 'Invalid Amount.')
             return
-        # Send data to projects.py
+        # Send data to edit_res function in resources.py
         update_res(self.res_id, name, qty, status, supplier, cost)
         message_box('Success', 'Resource updated successfully.')
         self.res_screen.populate_res(0)
@@ -48,6 +48,17 @@ class ViewResource(Screen):
 
     def dismiss_popup(self, instance):
         instance.dismiss()
+
+
+    def deleteRes(self):
+        # Send res_id to resources.py and it will delete the entity
+        if confirm_box('Delete Resource', 'Are you sure you want to delete this resource?') == 'yes':
+            if delete_res(self.res_id):
+                message_box('Success', 'Resource deleted successfully.')
+            else:
+                message_box('Error', 'Failed to delete.')
+            self.res_screen.populate_res(0)
+            self.dismiss_popup(self.popup)
 
 
 # Manpower Main UI (Opens this from main.py)

@@ -46,19 +46,19 @@
                                         text: 'Full Report'
                                         font_size: 20
                                         size_hint: 0.3, 1
-                                        on_press: root.btn_click(self)
+                                        on_release: root.btn_click(self)
 
                                 Button:
                                         text: 'Add New Supplier'
                                         font_size: 20
                                         size_hint: 0.5, 1
-                                        on_press: root.btn_click(self)
+                                        on_release: root.btn_click(self)
 
                                 Button:
                                         text: 'Back'
                                         font_size: 20
                                         size_hint: 0.2, 1
-                                        on_press:
+                                        on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 

@@ -60,6 +60,9 @@ class ViewResource(GridLayout):
             self.res_screen.populate_res(0)
             self.dismiss_popup(self.popup)
 
+    def reportRes(self):
+        message_box('Report', 'Not currently implemented.')
+
 
 # Manpower Main UI (Opens this from main.py)
 class ResourcesScreen(Screen):

@@ -46,19 +46,19 @@
                                         text: 'Filter'
                                         font_size: 20
                                         size_hint: 0.3, 1
-                                        on_press: root.btn_click(self)
+                                        on_release: root.btn_click(self)
 
                                 Button:
                                         text: 'Add'
                                         font_size: 20
                                         size_hint: 0.5, 1
-                                        on_press: root.btn_click(self)
+                                        on_release: root.btn_click(self)
 
                                 Button:
                                         text: 'Back'
                                         font_size: 20
                                         size_hint: 0.2, 1
-                                        on_press:
+                                        on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 
@@ -73,8 +73,8 @@
                 GridLayout:
                         cols: 2
                         rows: 5
-                        padding: 5
-                        spacing: 5
+                        padding: 15
+                        spacing: 15
                         size_hint: 1, 0.9
 
                         Label:
@@ -153,4 +153,4 @@
                         Button:
                                 text: 'Report'
                                 font_size: 20
-                                on_release: root.reports_popup()
+                                on_release: root.reportRes()

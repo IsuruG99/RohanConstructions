@@ -8,7 +8,7 @@ def load_resources():
     # Get reference from database
     ref = database.get_ref('resources')
 
-    # Retrieve all projects as a list of dictionaries
+    # Retrieve all resources as a list of dictionaries
     res = []
     for res_id, resource in ref.get().items():
         resource['id'] = res_id
@@ -22,7 +22,7 @@ def get_res(res_id):
     # Get a reference to DB
     ref = database.get_ref('resources')
 
-    # Retrieve the project data as a dictionary
+    # Retrieve the resource data as a dictionary
     res = ref.child(res_id).get()
 
     return res
@@ -33,7 +33,7 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
     ref = database.get_ref('resources')
 
     if ref is not None:
-        # Set the project data under the new key
+        # Set the res data under the new key
         ref.child(res_id).update({
             'name': name,
             'quantity': quantity,
@@ -43,9 +43,9 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
         })
 
     else:
-        message_box('Error', 'Failed to update project: "projects" reference not found.')
+        message_box('Error', 'Failed to update resource: "resources" reference not found.')
 
-    print("Project updated successfully.")
+    print("Resource updated successfully.")
     return True
 
 
@@ -54,7 +54,7 @@ def delete_res(res_id):
     ref = database.get_ref('resources')
 
     if ref is not None:
-        # Delete the project
+        # Delete the Resource
         ref.child(res_id).delete()
     else:
         message_box('Error', 'Failed to delete Resource: "resources" reference not found.')

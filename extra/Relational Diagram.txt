@@ -3,18 +3,18 @@ Project Management:
 + Project description
 + Start date
 + End date
-+ Client Name (reference to Client Management)
++ Client Name (may reference to Client Management)
 + Budget
 + Status (e.g., in progress, completed, pending)
 
 Client Management:
 + Client name
-+ Contact person
 + Contact email
-+ Contact phone number
-+ Company/organization name
 + Address
-+ Projects [Array of Project ID's]
++ Contact phone number
++ Projects (may reference project management)
++ Project Duration (days left)
++ Project Status (may reference project management)
 
 Supplier Management:
 + Supplier name
@@ -28,7 +28,7 @@ Resource Management:
 + Resource name
 + Quantity available
 + Unit cost
-+ Supplier Name (reference to Supplier Management)
++ Supplier Name (may reference to Supplier Management)
 + Status (e.g., in stock, out of stock)
 
 Manpower Management:

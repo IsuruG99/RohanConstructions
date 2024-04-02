@@ -1,1 +1,49 @@
+import database
+from utils import *
+
+
 # Here you will write all in depth functions
+
+def load_resources():
+    # Get reference from database
+    ref = database.get_ref('resources')
+
+    # Retrieve all projects as a list of dictionaries
+    res = []
+    for res_id, resource in ref.get().items():
+        resource['id'] = res_id
+        res.append(resource)
+
+    return res
+
+
+# Get a single Resource
+def get_res(res_id):
+    # Get a reference to DB
+    ref = database.get_ref('resources')
+
+    # Retrieve the project data as a dictionary
+    res = ref.child(res_id).get()
+
+    return res
+
+
+def update_res(res_id, name, quantity, status, supplier_name, cost):
+    # Get a reference to DB
+    ref = database.get_ref('resources')
+
+    if ref is not None:
+        # Set the project data under the new key
+        ref.child(res_id).update({
+            'name': name,
+            'quantity': quantity,
+            'status': status,
+            'supplier_name': supplier_name,
+            'cost': cost
+        })
+
+    else:
+        message_box('Error', 'Failed to update project: "projects" reference not found.')
+
+    print("Project updated successfully.")
+    return True

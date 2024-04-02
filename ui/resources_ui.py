@@ -9,7 +9,7 @@ from functools import partial
 from utils import *
 
 
-class ViewResource(Screen):
+class ViewResource(GridLayout):
     def __init__(self, res_screen, res_id, **kwargs):
         super().__init__(**kwargs)
         self.res_id = res_id

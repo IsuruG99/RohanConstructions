@@ -1,0 +1,190 @@
+{
+  "clients": {
+    "client2": {
+      "address": "123 Main St, City, Country",
+      "email": "Niar Hotels",
+      "name": "Niar Hotels",
+      "phone_number": "+1234567890",
+      "project_duration": "2 years",
+      "project_name": "Niar Highlands",
+      "project_status": "In Progress"
+    },
+    "client3": {
+      "address": "123 Main St, City, Country",
+      "email": "ABC Company",
+      "name": "ABC Company",
+      "phone_number": "+1234567890",
+      "project_duration": "1 year",
+      "project_name": "New Office Building",
+      "project_status": "In Progress"
+    },
+    "client4": {
+      "address": "123 Main St, City, Country",
+      "email": "K College Principal",
+      "name": "K College Principal",
+      "phone_number": "+1234567890",
+      "project_duration": "1 year",
+      "project_name": "School Repair Project",
+      "project_status": "In Progress"
+    }
+  },
+  "finance": {
+    "-NuIZAu01atM8IVxK3ih": {
+      "amount": "200000",
+      "category": "Contract",
+      "date": "2024-04-12",
+      "description": "Building Renovation Project",
+      "project_name": "ABC",
+      "related_entity": "ABC",
+      "type": "Income"
+    },
+    "-NuUT9RjgjdFjgVSOUTR": {
+      "amount": "12000",
+      "category": "Misc",
+      "date": "2024-12-01",
+      "description": "Fundraiser",
+      "project_name": "School Repair Project",
+      "related_entity": "School Students Council",
+      "type": "Income"
+    },
+    "transaction1": {
+      "amount": "5001",
+      "category": "Misc",
+      "date": "2024-02-01",
+      "description": "Payment to supplier for concrete",
+      "project_name": "Old Office Building",
+      "related_entity": "supplier1",
+      "type": "Expense"
+    }
+  },
+  "manpower": {
+    "employee1": {
+      "contact_email": "alice@example.com",
+      "contact_phone": "+1122334455",
+      "employment_status": "permanent",
+      "name": "Alice Johnson",
+      "project_assignments": [
+        "New Office Building"
+      ],
+      "role": "Project Manager",
+      "salary": "50000"
+    },
+    "employee2": {
+      "contact_email": "ruwan@gmail.com",
+      "contact_phone": "0711234567",
+      "employment_status": "permanent",
+      "name": "Ruwan Perera",
+      "project_assignments": [
+        "School Repair Project"
+      ],
+      "role": "Site Engineer",
+      "salary": "50000"
+    }
+  },
+  "projects": {
+    "-Nr3dnCefKCWCiHhBo02": {
+      "budget": "10000",
+      "client_name": "ABC Company",
+      "description": "Project CL is a test  project",
+      "end_date": "2022-05-11",
+      "name": "Project ClA",
+      "start_date": "2010-2-11",
+      "status": "In Progress"
+    },
+    "-Nr3eDYjz9n-Wat_fcT8": {
+      "budget": "1200000",
+      "client_name": "Niar Hotels",
+      "description": "Apartment Complex",
+      "end_date": "2032-2-11",
+      "name": "Niar Highlands",
+      "start_date": "2022-2-11",
+      "status": "In Progress"
+    },
+    "-Nr3ekhFFfkI5uluRaPd": {
+      "budget": "2345",
+      "client_name": "ABC",
+      "description": "AA",
+      "end_date": "2222-3-22",
+      "name": "AA",
+      "start_date": "2222-2-22",
+      "status": "Completed"
+    },
+    "-Nr3f4jQf6532XjvOXNm": {
+      "budget": "400000",
+      "client_name": "K College Principal",
+      "description": "K College School Repairs",
+      "end_date": "2024-12-23",
+      "name": "School Repair Project",
+      "start_date": "2023-12-23",
+      "status": "In Progress"
+    },
+    "project1": {
+      "budget": "1000000",
+      "client_name": "ABC Company",
+      "description": "Construction of a new office building",
+      "end_date": "2024-12-31",
+      "name": "New Office Building",
+      "start_date": "2024-01-01",
+      "status": "In Progress"
+    }
+  },
+  "resources": {
+    "resource1": {
+      "cost": "50",
+      "name": "Asphalt",
+      "quantity": "100",
+      "status": "Out of Stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": 50
+    },
+    "resource2": {
+      "cost": "30",
+      "name": "Wood",
+      "quantity": "120",
+      "status": "in stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": 30
+    }
+  },
+  "suppliers": {
+    "-NuUDTkxNmoZKNMNVDv7": {
+      "address": "asd",
+      "business": "ABC",
+      "contactNo": "123",
+      "email": "abc",
+      "startDealing": "2222-12-12",
+      "supplierLevel": "Supplier Ranking",
+      "supplierName": "ABC"
+    },
+    "-NuUNGXzN71FHLunmSt1": {
+      "address": "No1,MerchantRoad,Kelaniya",
+      "business": "ABC Hardware",
+      "contactNo": "071299031",
+      "email": "marlon@gmail.com",
+      "startDealing": "2024-03-29",
+      "supplierLevel": "2",
+      "supplierName": "Marlon Dias"
+    },
+    "-NuUNlLOqNa6Njg7obLd": {
+      "address": "123/1,ARBuilding,Colombo 08",
+      "business": "AR Paperworks",
+      "contactNo": "0711829101",
+      "email": "riasworks@gmail.com",
+      "startDealing": "2023-11-05",
+      "supplierLevel": "1",
+      "supplierName": "Arlon Rias"
+    }
+  },
+  "users": {
+    "user1": {
+      "admin": 1,
+      "email": "a",
+      "password": "a"
+    },
+    "user2": {
+      "admin": 0,
+      "email": "ab@cd.com",
+      "password": "abcd"
+    }
+  }
+}

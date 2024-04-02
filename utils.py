@@ -48,3 +48,4 @@ def validate_currency(amount):
         return True
     except ValueError:
         return False
+

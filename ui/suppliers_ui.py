@@ -34,7 +34,7 @@ class AddSupPopup(GridLayout):
         # Send data to supplier.py
         add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
         message_box('Success', 'New supplier added successfully.')
-        self.suppliers_screen.populate_supplierss(0)
+        self.suppliers_screen.populate_suppliers(0)
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -44,6 +44,7 @@ class AddSupPopup(GridLayout):
 class SuppliersScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.populate_suppliers(0)
 
     # Button Click Event Handler
     def btn_click(self, instance):
@@ -51,6 +52,29 @@ class SuppliersScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add New Supplier':
             self.add_popup()
+
+    def populate_suppliers(self, status):
+        # Get the suppliers from the database
+        suppliers = load_suppliers()
+
+        # Clear the existing widgets in the ScrollView
+        self.ids.Supplier_list.clear_widgets()
+
+        if status == 0:
+            for supplier in suppliers:
+                grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+                button = Button(text=supplier["business"], on_release=partial(self.view_suppliers, supplier["id"]),
+                                background_normal='',
+                                background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
+                grid.supplier = supplier
+                grid.add_widget(button)
+                grid.add_widget(Label(text=supplier["supplierName"]))
+                grid.add_widget(Label(text=supplier["contactNo"]))
+                grid.add_widget(Label(text=supplier["supplierLevel"]))
+                self.ids.Supplier_list.add_widget(grid)
+
+    def view_suppliers(self, sup_id, instance):
+        pass
 
     # Open to supplier add popup window
     def add_popup(self):

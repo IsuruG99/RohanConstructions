@@ -29,7 +29,7 @@ class ViewResource(Screen):
     def editRes(self, name, qty, status, supplier, cost):
         # Stringify inputs (Including Dates)
         name = str(name)
-        quantity = str(qty)
+        qty = str(qty)
         supplier = str(supplier)
         cost = str(cost)
 

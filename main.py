@@ -46,7 +46,7 @@ class MainApp(App):
 
         return sm
 
-    def btn_click(self, instance):  # Switch to Sub Screens
+    def btn_click(self, instance):
         if instance.text == 'Projects':
             self.root.current = 'projects'
         elif instance.text == 'Clients':
@@ -55,10 +55,10 @@ class MainApp(App):
             self.root.current = 'resources'
         elif instance.text == 'Suppliers':
             self.root.current = 'suppliers'
-        elif instance.text == 'Personnel':
-            self.root.current = 'manpower'
         elif instance.text == 'Finances':
             self.root.current = 'finances'
+        elif instance.text == 'Personnel':
+            self.root.current = 'manpower'
 
     def on_start(self):
         self.title = 'Rohan Constructions'

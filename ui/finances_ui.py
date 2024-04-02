@@ -94,7 +94,6 @@ class ViewLogPopup(GridLayout):
         message_box('Success', 'Log edited successfully.')
         self.finances_screen.populate_logs(0)
 
-
     def delete_log(self):
         if confirm_box('Delete', 'Are you sure you want to delete this log?') == 'yes':
             if delete_log(self.fin_id):
@@ -114,11 +113,6 @@ class FinancesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_logs(0)
-
-    # Button Click goes back to Main UI
-    def btn_click(self, instance):
-        if instance.text == 'Back':
-            self.parent.current = 'main'
 
     # Populate the ScrollView with the finances
     def populate_logs(self, status):

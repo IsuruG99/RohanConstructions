@@ -100,21 +100,21 @@
   "resources": {
     "resource1": {
       "name": "Concrete",
-      "quantity_available": 100,
+      "quantity": 100,
       "status": "in stock",
       "supplier_name": "XYZ Suppliers",
       "unit_cost": 50
     },
     "resource2": {
       "name": "Wood",
-      "quantity_available": 120,
+      "quantity": 120,
       "status": "in stock",
       "supplier_name": "XYZ Suppliers",
       "unit_cost": 30
     },
     "resource3": {
       "name": "Steel",
-      "quantity_available": 70,
+      "quantity": 70,
       "status": "in stock",
       "supplier_name": "XYZ Suppliers",
       "unit_cost": 90

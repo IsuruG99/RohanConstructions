@@ -1,21 +1,184 @@
-<SuppliersScreen>
+<SuppliersScreen>:
         GridLayout:
-                rows: 1
+                rows: 2
                 cols: 1
-                padding: 20
+                padding: 40
                 spacing: 20
 
                 Label:
-                        text: 'SUPPLLIERS'
+                        text: 'Suppliers'
                         size_hint: 1, 0.1
-                        font_size: 40
+                        font_size: 30
                         color: 1, 1, 1, 1
                         bold: True
 
-                Button:
-                        text: 'Back'
-                        font_size: 20
-                        size_hint: 0.2, 1
-                        on_press:
-                                root.manager.current = 'main'
-                                root.manager.transition.direction = 'right'
+                GridLayout:
+                        rows: 2
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.9
+
+                        ScrollView:
+                                size_hint: 1, 1
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: Supplier_list
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        spacing: 10
+                                        padding: 10
+                                        font_name: 'Roboto'
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                spacing: 20
+                                padding: 20
+                                size_hint: 1, 0.3
+
+                                Button:
+                                        text: 'Full Report'
+                                        font_size: 20
+                                        size_hint: 0.3, 1
+                                        on_press: root.btn_click(self)
+
+                                Button:
+                                        text: 'Add New Supplier'
+                                        font_size: 20
+                                        size_hint: 0.5, 1
+                                        on_press: root.btn_click(self)
+
+                                Button:
+                                        text: 'Back'
+                                        font_size: 20
+                                        size_hint: 0.2, 1
+                                        on_press:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
+
+
+
+
+<AddPopup>:
+        GridLayout:
+                rows: 2
+                cols: 1
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 7
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.8
+
+                        Label: # 1
+                                text: 'Name'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: supplierName
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Mr.Mahinda Mahattaya'
+
+                        Label: # 2
+                                text: 'Business'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: business
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'ABC Hardware'
+
+                        Label: # 3
+                                text: 'Contact No'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: contactNo
+                                multiline: False
+                                font_size: 20
+                                hint_text: '07xxxxxxxx'
+
+			            Label: # 4
+                                text: 'Email'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: email
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Email Address'
+
+			            Label: # 5
+                                text: 'Address'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: address
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'No01,Merchan Tower,Kollupitiya'
+
+                        Label: # 6
+                                text: 'Start Dealing'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: startDealing
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'YYYY-MM-DD'
+
+                        Label: # 7
+                                text: 'Level'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: supplierLevel
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Supplier Ranking'
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.2
+
+                        Button:
+                                text: 'Submit'
+                                font_size: 20
+                                on_release:
+                                        root.addSupplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
+                                        supplierName.text = ''
+                                        business.text = ''
+                                        contactNo.text = ''
+                                        email.text = ''
+                                        address.text = ''
+                                        startDealing.text = ''
+					                    supplierLevel.text = ''
+
+                        Button:
+                                text: 'Cancel'
+                                font_size: 20
+                                on_release:
+                                        root.dismiss_popup(root.popup)
+

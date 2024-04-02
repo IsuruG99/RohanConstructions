@@ -39,7 +39,7 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
             'quantity': quantity,
             'status': status,
             'supplier_name': supplier_name,
-            'cost': cost
+            'unit_cost': cost
         })
 
     else:
@@ -61,3 +61,28 @@ def delete_res(res_id):
 
     print("Resources deleted successfully.")
     return True
+
+
+# Add resource function
+def add_res(name, quantity, status, supplier_name, cost):
+    # Get a reference to the 'resources' collection in the database
+    ref = database.get_ref('resources')
+
+    if ref is not None:
+        # Generate a new unique key for the resource
+        new_res_ref = ref.push()
+
+        # Set the resource data under the new key
+        new_res_ref.set({
+            'name': name,
+            'quantity': quantity,
+            'status': status,
+            'supplier_name': supplier_name,
+            'unit_cost': cost
+        })
+
+        print("Resource added successfully.")
+        return True
+    else:
+        message_box('Error', 'Failed to add resource: "resources" reference not found.')
+        return False

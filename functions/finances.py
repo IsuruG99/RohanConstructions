@@ -53,7 +53,7 @@ def add_log(fin_type, amount, date, desc, entity, project, category):
 
     # Add the new log
     if ref is not None:
-        # push and set
+        # Push (Generate primary key from firebase) & Set (Add data to the key)
         ref.push().set({
             'type': fin_type,
             'amount': amount,

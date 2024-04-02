@@ -46,10 +46,6 @@ class ViewResource(GridLayout):
         self.res_screen.populate_res(0)
         self.dismiss_popup(self.popup)
 
-    def dismiss_popup(self, instance):
-        instance.dismiss()
-
-
     def deleteRes(self):
         # Send res_id to resources.py and it will delete the entity
         if confirm_box('Delete Resource', 'Are you sure you want to delete this resource?') == 'yes':
@@ -63,6 +59,9 @@ class ViewResource(GridLayout):
     def reportRes(self):
         message_box('Report', 'Not currently implemented.')
 
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
 
 # Manpower Main UI (Opens this from main.py)
 class ResourcesScreen(Screen):
@@ -75,6 +74,8 @@ class ResourcesScreen(Screen):
     def btn_click(self, instance):
         if instance.text == 'Back':
             self.parent.current = 'main'
+        elif instance.text == 'Add':
+            self.add_resource_popup()
 
     # Populate the ScrollView with the resources
     def populate_res(self, status):
@@ -96,10 +97,47 @@ class ResourcesScreen(Screen):
                 grid.add_widget(Label(text=res["supplier_name"]))
                 self.ids.resources_list.add_widget(grid)
 
+    # Triggers the ViewResource PopUp Window
     def view_res(self, res_id, instance):
         viewPop = Popup(title='View Resource', content=ViewResource(self, res_id), size_hint=(0.5, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
 
+    # Triggers the AddResourcePopup Window
+    def add_resource_popup(self):
+        addPop = AddResourcePopup(self)
+        addPop.open()
+
     def dismiss_popup(self, instance):
         instance.dismiss()
+
+
+class AddResourcePopup(Popup):
+    def __init__(self, res_screen, **kwargs):
+        super().__init__(**kwargs)
+        self.res_screen = res_screen
+
+    def add_resource(self, name, qty, status, supplier, cost):
+        # Stringify inputs (Including Dates)
+        name = str(name)
+        qty = str(qty)
+        supplier = str(supplier)
+        cost = str(cost)
+
+        # Validate inputs
+        if not validate_string(name, supplier):
+            message_box('Error', 'All fields are required.')
+            return
+        if not validate_currency(qty):
+            message_box('Error', 'Invalid Amount.')
+            return
+
+        # Add resource
+        if add_res(name, qty, status, supplier, cost):
+            message_box('Success', 'Resource added successfully.')
+            self.dismiss()
+        else:
+            message_box('Error', 'Failed to add resource.')
+        # Refresh the resources display
+        self.res_screen.populate_res(0)
+        self.dismiss()

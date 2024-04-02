@@ -20,7 +20,7 @@ Supplier Management:
 + Supplier name
 + Contact person
 + Contact email
-+ + Contact phone number
++ Contact phone number
 + Products/materials supplied
 + Address
 

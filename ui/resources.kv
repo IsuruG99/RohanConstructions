@@ -154,3 +154,67 @@
                                 text: 'Report'
                                 font_size: 20
                                 on_release: root.reportRes()
+
+<AddResourcePopup>:
+        size_hint: None, None
+        size: 400, 400
+        title: 'Add Resource'
+        auto_dismiss: False
+        GridLayout:
+                cols: 2
+                padding: 20
+                spacing: 10
+                Label:
+                        text: 'Material'
+                        font_size: 20
+                        color: 1, 1, 1, 1
+                TextInput:
+                        id: addPop_name
+                        multiline: False
+                        font_size: 20
+                        hint_text: 'Stone'
+                Label:
+                        text: 'Quantity'
+                        font_size: 20
+                        color: 1, 1, 1, 1
+                TextInput:
+                        id: addPop_qty
+                        multiline: False
+                        font_size: 20
+                        hint_text: '10'
+                Label:
+                        text: 'Supplier'
+                        font_size: 20
+                        color: 1, 1, 1, 1
+                TextInput:
+                        id: addPop_supplier
+                        multiline: False
+                        font_size: 20
+                        hint_text: 'XYZ Suppliers'
+                Label:
+                        text: 'Cost'
+                        font_size: 20
+                        color: 1, 1, 1, 1
+                TextInput:
+                        id: addPop_cost
+                        multiline: False
+                        font_size: 20
+                        hint_text: '15000'
+                Label:
+                        text: 'Status'
+                        font_size: 20
+                        color: 1, 1, 1, 1
+                Spinner:
+                        id: addPop_status
+                        text: 'In Stock'
+                        values: ['In Stock', 'Out of Stock']
+                Button:
+                        text: 'Add'
+                        font_size: 20
+                        size_hint: 0.2, 1
+                        on_release: root.add_resource(addPop_name.text, addPop_qty.text, addPop_status.text, addPop_supplier.text, addPop_cost.text)
+                Button:
+                        text: 'Cancel'
+                        font_size: 20
+                        size_hint: 0.2, 1
+                        on_release: root.dismiss()

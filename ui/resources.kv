@@ -1,28 +1,156 @@
-<ResourcesScreen>
+<ResourcesScreen>:
         GridLayout:
-                rows: 3
+                rows: 2
                 cols: 1
-                padding: 20
+                padding: 40
                 spacing: 20
 
                 Label:
-                        text: 'Resources Label'
+                        text: 'Resources'
                         size_hint: 1, 0.1
-                        font_size: 40
+                        font_size: 30
                         color: 1, 1, 1, 1
                         bold: True
 
-                Label:
-                        text: 'Thanks for beginning your part on your own'
-                        size_hint: 1, 0.1
-                        font_size: 40
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        rows: 2
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.9
 
-                Button:
-                        text: 'Back'
-                        font_size: 20
+                        ScrollView:
+                                size_hint: 1, 1
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: resources_list
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        spacing: 10
+                                        padding: 10
+                                        cols: 1
+                                        font_name: 'Roboto'
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                spacing: 20
+                                padding: 20
+                                size_hint: 1, 0.3
+
+                                Button:
+                                        text: 'Filter'
+                                        font_size: 20
+                                        size_hint: 0.3, 1
+                                        on_press: root.btn_click(self)
+
+                                Button:
+                                        text: 'Add'
+                                        font_size: 20
+                                        size_hint: 0.5, 1
+                                        on_press: root.btn_click(self)
+
+                                Button:
+                                        text: 'Back'
+                                        font_size: 20
+                                        size_hint: 0.2, 1
+                                        on_press:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
+
+<ViewResource>:
+        size: 400, 600
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 5
+                        padding: 5
+                        spacing: 5
+                        size_hint: 1, 0.9
+
+                        Label:
+                                text: 'Material'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: viewPop_name
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Stone'
+
+                        Label:
+                                text: 'Quantity'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: viewPop_qty
+                                multiline: False
+                                font_size: 20
+                                hint_text: '10'
+
+                        Label:
+                                text: 'Status'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        Spinner:
+                                id: viewPop_status
+                                text: 'In Stock'
+                                values: ['In Stock', 'Out of Stock']
+
+                        Label:
+                                text: 'Supplier'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: viewPop_supplier
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'XYZ Suppliers'
+
+                        Label:
+                                text: 'Cost'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: viewPop_cost
+                                multiline: False
+                                font_size: 20
+                                hint_text: '15000'
+
+                GridLayout:
+                        cols: 3
+                        rows: 1
+                        padding: 20
+                        spacing: 20
                         size_hint: 1, 0.2
-                        on_press:
-                                root.manager.current = 'main'
-                                root.manager.transition.direction = 'right'
+
+                        Button:
+                                text: 'Edit'
+                                font_size: 20
+                                on_release:
+                                        root.editRes(viewPop_name.text, viewPop_qty.text, viewPop_status.text, viewPop_supplier.text,viewPop_cost.text)
+
+                        Button:
+                                text: 'Delete'
+                                font_size: 20
+                                on_release:
+                                        root.deleteProj()
+
+                        Button:
+                                text: 'Report'
+                                font_size: 20
+                                on_release: root.reports_popup()

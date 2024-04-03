@@ -10,7 +10,9 @@ from ui.suppliers_ui import SuppliersScreen
 from ui.clients_ui import ClientsScreen
 from ui.login_ui import LoginScreen
 from ui.finances_ui import FinancesScreen
+
 from utils import *
+from custom import *
 
 # Load the KV file for the main screen
 Builder.load_file('main.kv')
@@ -30,6 +32,8 @@ class MainScreen(Screen):
 class MainApp(App):
     def build(self):
         Window.size = (1200, 720)
+        Window.clearcolor = (0.1, 0.1, 0.1, 1)
+        Window.set_icon('visuals/icon.png')
 
         # Screen Manager Initialized
         sm = ScreenManager()
@@ -61,7 +65,7 @@ class MainApp(App):
             self.root.current = 'manpower'
 
     def on_start(self):
-        self.title = 'Rohan Constructions'
+        Window.set_title('Rohan Constructions')
 
 
 if __name__ == '__main__':

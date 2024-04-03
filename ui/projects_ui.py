@@ -7,6 +7,7 @@ from functions.projects import *
 from functools import partial
 
 from utils import *
+from custom import *
 
 
 # Add Project Popup Window
@@ -162,13 +163,14 @@ class ProjectsScreen(Screen):
                 if not project["status"] == "Completed":
                     grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
                     button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
-                                    background_normal='',
-                                    background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
+                                     background_normal='', font_size='20sp',
+                                     background_color=(0.1, 0.1, 0.1, 0.0), font_name='Roboto', color=(1, 1, 1, 1),
+                                     bold=True)
                     grid.project = project
                     grid.add_widget(button)
-                    grid.add_widget(Label(text=project["client_name"]))
-                    grid.add_widget(Label(text=project["end_date"]))
-                    grid.add_widget(Label(text=project["status"]))
+                    grid.add_widget(CLabel(text=project["client_name"]))
+                    grid.add_widget(CLabel(text=project["end_date"]))
+                    grid.add_widget(CLabel(text=project["status"]))
                     self.ids.projects_list.add_widget(grid)
         elif status == 1:
             for project in projects:

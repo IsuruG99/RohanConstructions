@@ -1,66 +1,70 @@
 <MainScreen>:
-        BoxLayout:
-                orientation: 'vertical'
-                padding: 40
-                spacing: 40
+        GridLayout:
+                rows: 5
+                cols: 1
+                padding: 10
+                spacing: 10
 
-                Label:
+                CLabel:
                         text: 'Project Management System'
                         size_hint: 1, 0.1
-                        font_size: 30
-                        color: 1, 1, 1, 1
+                        font_size: '40sp'
                         bold: True
 
-                Label:
+                CLabel:
                         text: 'Rohan Constructions'
+                        font_size: '60sp'
                         size_hint: 1, 0.1
-                        font_size: 25
-                        color: 1, 1, 1, 1
+
+                # Make an empty space here
+                Label:
+                        size_hint: 1, 0.4
 
                 GridLayout:
+                        rows: 2
                         cols: 3
-                        spacing: 40
-                        padding: 40
-                        size_hint: 1, 0.6
+                        spacing: 30
+                        padding: 30
+                        size_hint: 1, 0.3
 
-                        Button:
+                        CButton:
                                 text: 'Projects'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
-                        Button:
+                        CButton:
                                 text: 'Clients'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
-                        Button:
+                        CButton:
                                 text: 'Suppliers'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
-                        Button:
+                        CButton:
                                 text: 'Resources'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
-                        Button:
+                        CButton:
                                 text: 'Personnel'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
-                        Button:
+                        CButton:
                                 text: 'Finances'
-                                font_size: 20
+                                font_size: '35sp'
                                 on_release:
                                         app.btn_click(self)
                                         root.manager.transition.direction = 'left'

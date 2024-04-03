@@ -5,11 +5,9 @@
                 padding: 40
                 spacing: 20
 
-                Label:
+                CLabel:
                         text: 'Projects'
                         size_hint: 1, 0.1
-                        font_size: 30
-                        color: 1, 1, 1, 1
                         bold: True
 
                 GridLayout:
@@ -42,21 +40,18 @@
                                 padding: 20
                                 size_hint: 1, 0.3
 
-                                Button:
+                                CButton:
                                         text: 'Current/Completed'
-                                        font_size: 20
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton:
                                         text: 'Add'
-                                        font_size: 20
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton:
                                         text: 'Back'
-                                        font_size: 20
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
@@ -76,70 +71,58 @@
                         spacing: 10
                         size_hint: 1, 0.8
 
-                        Label:
+                        CLabel:
                                 text: 'Name'
-                                font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_name
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Project AD'
+                                font_size: '30sp'
 
-                        Label:
+                        CLabel:
                                 text: 'Description'
-                                font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_desc
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Project is about this.'
 
-                        Label:
+                        CLabel:
                                 text: 'Start Date'
-                                font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_start
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
-                        Label:
+                        CLabel:
                                 text: 'End Date'
-                                font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_end
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
-                        Label:
+                        CLabel:
                                 text: 'Client'
-                                font_size: 20
-                                color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_client
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'ABC Company'
 
-                        Label:
+                        CLabel:
                                 text: 'Budget'
-                                font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        CText:
                                 id: project_budget
                                 multiline: False
-                                font_size: 20
                                 hint_text: '10000'
 
                 GridLayout:
@@ -149,9 +132,8 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton:
                                 text: 'Insert'
-                                font_size: 20
                                 on_release:
                                         root.addProj(project_name.text, project_desc.text, project_start.text, project_end.text, project_client.text, project_budget.text)
                                         project_name.text = ''
@@ -161,9 +143,8 @@
                                         project_client.text = ''
                                         project_budget.text = ''
 
-                        Button:
+                        CButton:
                                 text: 'Cancel'
-                                font_size: 20
                                 on_release:
                                         root.dismiss_popup(root.popup)
 
@@ -182,79 +163,53 @@
                         spacing: 5
                         size_hint: 1, 0.9
 
-                        Label:
+                        CLabel:
                                 text: 'Name'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_name
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Project AD'
 
-                        Label:
+                        CLabel:
                                 text: 'Description'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_desc
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Project is about this.'
 
-                        Label:
+                        CLabel:
                                 text: 'Start Date'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_startDate
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
-                        Label:
+                        CLabel:
                                 text: 'End Date'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_endDate
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
-                        Label:
+                        CLabel:
                                 text: 'Client'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_client
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'ABC Company'
 
-                        Label:
+                        CLabel:
                                 text: 'Budget'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: viewPop_budget
                                 multiline: False
-                                font_size: 20
                                 hint_text: '10000'
 
-                        Label:
+                        CLabel:
                                 text: 'Status'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
                         Spinner:
                                 id: viewPop_status
+                                font_size: '20sp'
                                 text: 'In Progress'
                                 values: ['In Progress', 'Completed', 'Cancelled']
 
@@ -265,21 +220,18 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton:
                                 text: 'Edit'
-                                font_size: 20
                                 on_release:
                                         root.editProj(viewPop_name.text, viewPop_desc.text, viewPop_startDate.text, viewPop_endDate.text, viewPop_client.text, viewPop_budget.text, viewPop_status.text)
 
-                        Button:
+                        CButton:
                                 text: 'Delete'
-                                font_size: 20
                                 on_release:
                                         root.deleteProj()
 
-                        Button:
+                        CButton:
                                 text: 'Report'
-                                font_size: 20
                                 on_release: root.reports_popup()
 
 <ReportsPopup>:
@@ -308,51 +260,36 @@
                                 spacing: 10
                                 padding: 10
 
-                                Label:
+                                CLabel:
                                         text: 'Project ID'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
 
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_id
-                                        color: 1, 1, 1, 1
 
-                                Label:
+                                CLabel:
                                         text: 'Project Name'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_name
-                                        color: 1, 1, 1, 1
 
-                                Label:
+                                CLabel:
                                         text: 'Client'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_client
-                                        color: 1, 1, 1, 1
 
-                                Label:
+                                CLabel:
                                         text: 'Start Date'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_start
-                                        color: 1, 1, 1, 1
 
-                                Label:
+                                CLabel:
                                         text: 'End Date'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
-                                Label:
+                                CLabel:
                                         id: proj_end
-                                        font_size: 15
-                                        color: 1, 1, 1, 1
+                                        font_size: '15sp'
 
                         GridLayout:
                                 cols: 1
@@ -360,32 +297,26 @@
                                 color: 1, 1, 1, 1
                                 padding: 10
 
-                                Label:
+                                CLabel:
                                         text: 'Description'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
                                         size_hint_y: 0.2
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_desc
                                         multiline: True
                                         size_hint_y: 0.5
 
-                                Label:
+                                CLabel:
                                         text: 'Budget'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
                                         size_hint_y: 0.2
-                                Label:
-                                        font_size: 15
+                                CLabel:
+                                        font_size: '15sp'
                                         id: proj_budget
                                         multiline: False
                                         size_hint_y: 0.2
 
-                                Label:
+                                CLabel:
                                         text: 'Assigned Members'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
                                         size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
@@ -399,10 +330,8 @@
                                                 bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
                                                 bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
 
-                                Label:
+                                CLabel:
                                         text: 'Assigned Resources'
-                                        font_size: 20
-                                        color: 1, 1, 1, 1
                                         size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
@@ -422,7 +351,6 @@
                         rows: 1
                         color: 1, 1, 1, 1
 
-                        Button:
+                        CButton:
                                 text: 'Back'
-                                font_size: 20
                                 on_release: root.dismiss_popup(root.popup)

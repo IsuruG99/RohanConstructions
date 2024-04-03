@@ -1,11 +1,14 @@
+from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
+from custom import *
 
 from functions.login import *
 from utils import *
+
 
 # Main Login Screen
 
@@ -26,5 +29,3 @@ class LoginScreen(Screen):
         else:
             message_box('Error', 'Invalid credentials.')
             return
-
-

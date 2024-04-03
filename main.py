@@ -11,6 +11,7 @@ from ui.clients_ui import ClientsScreen
 from ui.login_ui import LoginScreen
 from ui.finances_ui import FinancesScreen
 from utils import *
+from custom import *
 
 # Load the KV file for the main screen
 Builder.load_file('main.kv')
@@ -30,6 +31,7 @@ class MainScreen(Screen):
 class MainApp(App):
     def build(self):
         Window.size = (1200, 720)
+        Window.clearcolor = (0.1, 0.1, 0.1, 1)
 
         # Screen Manager Initialized
         sm = ScreenManager()

@@ -10,7 +10,7 @@ from ui.suppliers_ui import SuppliersScreen
 from ui.clients_ui import ClientsScreen
 from ui.login_ui import LoginScreen
 from ui.finances_ui import FinancesScreen
-from utils import message_box
+from utils import *
 
 # Load the KV file for the main screen
 Builder.load_file('main.kv')

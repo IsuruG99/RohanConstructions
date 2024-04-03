@@ -1,28 +1,119 @@
-<ManpowerScreen>
-        GridLayout:
-                rows: 3
-                cols: 1
-                padding: 20
-                spacing: 20
+<ManpowerScreen>:
+        BoxLayout:
+                orientation: 'vertical'
+                spacing: 10
+                padding: 10
 
-                Label:
-                        text: 'Manpower Function'
-                        size_hint: 1, 0.1
-                        font_size: 40
-                        color: 1, 1, 1, 1
-                        bold: True
-
-                Label:
-                        text: 'Under Construction'
-                        size_hint: 1, 0.1
-                        font_size: 40
-                        color: 1, 1, 1, 1
-                        bold: True
+                ScrollView:
+                        GridLayout:
+                                id: manpower_list
+                                cols: 1
+                                size_hint_y: None
+                                height: self.minimum_height
 
                 Button:
-                        text: 'Back'
-                        font_size: 20
-                        size_hint: 1, 0.2
+                        text: 'Add Employee'
+                        size_hint_y: None
+                        height: '40dp'
+                        on_press: root.add_manpower_popup()
+
+                Button:
+                        text: 'Back to Main Screen'
+                        size_hint_y: None
+                        height: '40dp'
                         on_release:
-                                root.manager.current = 'main'
+                                root.back_to_main_screen(self)
                                 root.manager.transition.direction = 'right'
+
+
+
+<ViewManpower>:
+        BoxLayout:
+                orientation: 'vertical'
+                padding: 10
+                spacing: 10
+
+                Label:
+                        id: viewPop_name
+                        text: ''
+                Label:
+                        id: viewPop_role
+                        text: ''
+                Label:
+                        id: viewPop_email
+                        text: ''
+                Label:
+                        id: viewPop_phone
+                        text: ''
+                Label:
+                        id: viewPop_status
+                        text: ''
+                Label:
+                        id: viewPop_projects
+                        text: ''
+                BoxLayout:
+                        size_hint_y: None
+                        height: '40dp'
+                        spacing: 10
+                        Button:
+                                text: 'Edit'
+                                on_press: root.edit_manpower(viewPop_name.text, viewPop_role.text, viewPop_email.text, viewPop_phone.text, viewPop_status.text, viewPop_projects.text)
+                        Button:
+                                text: 'Delete'
+                                on_release: root.delete_manpower()
+                        Button:
+                                text: 'Reports'
+                                on_release: root.reports_popup()
+
+<AddManpowerPopup>:
+        title: "Add Employee"
+        size_hint: None, None
+        size: 400, 400
+
+        GridLayout:
+                cols: 2
+                spacing: 10
+                padding: 10
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                        text: 'Name'
+                TextInput:
+                        id: name_input
+                        multiline: False
+
+                Label:
+                        text: 'Role'
+                TextInput:
+                        id: role_input
+                        multiline: False
+
+                Label:
+                        text: 'Email'
+                TextInput:
+                        id: email_input
+                        multiline: False
+
+                Label:
+                        text: 'Phone'
+                TextInput:
+                        id: phone_input
+                        multiline: False
+
+                Label:
+                        text: 'Status'
+                TextInput:
+                        id: status_input
+                        multiline: False
+
+                Label:
+                        text: 'Projects'
+                TextInput:
+                        id: projects_input
+                        multiline: False
+
+                Button:
+                        text: 'Submit'
+                        on_press: root.submit()
+

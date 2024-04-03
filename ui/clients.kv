@@ -1,28 +1,179 @@
-<ClientsScreen>
+<ClientsScreen>:
+        name: 'clients'
+
         GridLayout:
-                rows: 3
+                rows: 2
                 cols: 1
-                padding: 20
+                padding: 40
                 spacing: 20
 
                 Label:
-                        text: 'Clients Label'
+                        text: 'Clients'
                         size_hint: 1, 0.1
-                        font_size: 40
+                        font_size: 30
                         color: 1, 1, 1, 1
                         bold: True
 
-                Label:
-                        text: 'Under Construction'
-                        size_hint: 1, 0.1
-                        font_size: 40
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        rows: 2
+                        spacing: 20
+                        padding: 20
+                        size_hint: 1, 0.9
 
-                Button:
-                        text: 'Back'
-                        font_size: 20
+                        ScrollView:
+                                size_hint: 1, 1
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: clients_list
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        spacing: 10
+                                        padding: 10
+                                        cols: 1
+                                        font_name: 'Roboto'
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                Rectangle:
+                                                        pos: self.pos
+                                                        size: self.size
+
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                spacing: 20
+                                padding: 20
+                                size_hint: 1, 0.3
+
+                                Button:
+                                        text: 'Add'
+                                        font_size: 20
+                                        size_hint: 0.5, 1
+                                        on_press: root.add_client_popup()
+
+                                Button:
+                                        text: 'Back'
+                                        font_size: 20
+                                        size_hint: 0.2, 1
+                                        on_press:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
+
+
+<AddClientPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 8  # Adjusted to match the number of fields
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.8
+
+                        Label:
+                                text: 'Name'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: client_name
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Client Name'
+
+                        Label:
+                                text: 'Phone Number'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: phone_number
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Phone Number'
+
+                        Label:
+                                text: 'Email'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: email
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Email'
+
+                        Label:
+                                text: 'Address'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: address
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Address'
+
+                        Label:
+                                text: 'Project Name'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_name
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Project Name'
+
+                        Label:
+                                text: 'Project Duration'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_duration
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Project Duration'
+
+                        Label:
+                                text: 'Project Status'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: project_status
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Project Status'
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        padding: 20
+                        spacing: 20
                         size_hint: 1, 0.2
-                        on_release:
-                                root.manager.current = 'main'
-                                root.manager.transition.direction = 'right'
+
+                        Button:
+                                text: 'Insert'
+                                font_size: 20
+                                on_release:
+                                        root.add_client(client_name.text, phone_number.text, email.text, address.text, project_name.text, project_duration.text, project_status.text)
+                                        client_name.text = ''
+                                        phone_number.text = ''
+                                        email.text = ''
+                                        address.text = ''
+                                        project_name.text = ''
+                                        project_duration.text = ''
+                                        project_status.text = ''
+
+                        Button:
+                                text: 'Cancel'
+                                font_size: 20
+                                on_release:
+                                        root.dismiss_popups(root)

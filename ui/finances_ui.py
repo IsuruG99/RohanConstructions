@@ -67,7 +67,6 @@ class ViewLogPopup(GridLayout):
         self.ids.viewLog_project.text = log["project_name"]
         self.ids.viewLog_category.text = log["category"]
 
-
     def edit_log(self, fin_type, amount, date, desc, entity, project, category):
         fin_type = str(fin_type)
         amount = str(amount)
@@ -108,7 +107,7 @@ class ViewLogPopup(GridLayout):
         instance.dismiss()
 
 
-# Manpower Main UI (Opens this from main.py)
+# Financial Section Main UI (Opens this from main.py)
 class FinancesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -70,6 +70,7 @@ def add_log(fin_type, amount, date, desc, entity, project, category):
     print("Log added successfully.")
     return True
 
+
 def delete_log(fin_id):
     # Get a reference to DB
     ref = database.get_ref('finances')

@@ -40,6 +40,61 @@ class AddSupPopup(GridLayout):
         instance.dismiss()
 
 
+class ViewSupPopup(GridLayout):
+    def __init__(self, sup_screen, sup_id, **kwargs):
+        super().__init__(**kwargs)
+        self.sup_id = sup_id
+        self.populate_view()
+        self.sup_screen = sup_screen
+
+    # Populate PopUp Window
+    def populate_view(self):
+        # Get the suppliers data from the DB
+        sp = get_supplier(self.sup_id)
+        # Assign
+        self.ids.supplierName.text = sp["supplierName"]
+        self.ids.business.text = sp["business"]
+        self.ids.address.text = sp["address"]
+        self.ids.email.text = sp["email"]
+        self.ids.contactNo.text = sp["contactNo"]
+        self.ids.startDealing.text = sp["startDealing"]
+        self.ids.supplierLevel.text = sp["supplierLevel"]
+
+    # Edit Supplier
+    def editSupplier(self, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+        # Stringify inputs (Including Dates)
+        supplierName = str(supplierName)
+        business = str(business)
+        email = str(email)
+        contactNo = str(contactNo)
+        startDealing = str(startDealing)
+        supplierLevel = str(supplierLevel)
+        address = str(address)
+
+        # Validate inputs
+        if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+            message_box('Error', 'All fields are required.')
+            return
+        if not validate_date(startDealing):
+            message_box('Error', 'Invalid date format.')
+            return
+        # Send data to suppliers.py
+        message_box('Success', 'Supplier Edit Not implemented.')
+        self.sup_screen.populate_suppliers(0)
+        self.dismiss_popup(self.popup)
+
+    # Open Reports Popup Window
+    def reports_popup(self):
+        pass
+
+    # Delete Project
+    def deleteProj(self):
+        pass
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
+
 # Suppliers Main UI (Accessed by main.py)
 class SuppliersScreen(Screen):
     def __init__(self, **kwargs):
@@ -74,7 +129,9 @@ class SuppliersScreen(Screen):
                 self.ids.Supplier_list.add_widget(grid)
 
     def view_suppliers(self, sup_id, instance):
-        pass
+        viewPop = Popup(title='View Supplier', content=ViewSupPopup(self, sup_id), size_hint=(0.5, 0.8))
+        viewPop.open()
+        viewPop.content.popup = viewPop
 
     # Open to supplier add popup window
     def add_popup(self):

@@ -150,11 +150,10 @@
                                 font_size: 20
                                 color: 1, 1, 1, 1
 
-                        TextInput:
+                        Spinner:
                                 id: supplierLevel
-                                multiline: False
-                                font_size: 20
-                                hint_text: 'Supplier Ranking'
+                                text: 'Level 3'
+                                values: ['Level 1', 'Level 2', 'Level 3']
 
                 GridLayout:
                         cols: 2
@@ -182,3 +181,119 @@
                                 on_release:
                                         root.dismiss_popup(root.popup)
 
+<ViewSupPopup>:
+        size: 400, 600
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 7
+                        padding: 5
+                        spacing: 5
+                        size_hint: 1, 0.9
+
+                        Label:
+                                text: 'Name'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: supplierName
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Mr.Mahinda'
+
+                        Label:
+                                text: 'Business'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: business
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'ABC Hardware'
+
+                        Label:
+                                text: 'Contact No'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: contactNo
+                                multiline: False
+                                font_size: 20
+                                hint_text: '07x-xxxxxxx'
+
+			            Label:
+                                text: 'Email'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: email
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'Email Address'
+
+			            Label:
+                                text: 'Address'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: address
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'No01,Merchan Tower,Kollupitiya'
+
+                        Label:
+                                text: 'Start Dealing'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+                        TextInput:
+                                id: startDealing
+                                multiline: False
+                                font_size: 20
+                                hint_text: 'YYYY-MM-DD'
+
+                        Label:
+                                text: 'Level'
+                                font_size: 20
+                                color: 1, 1, 1, 1
+
+
+
+                        Spinner:
+                                id: supplierLevel
+                                text: 'Level 3'
+                                values: ['Level 1', 'Level 2', 'Level 3']
+
+                GridLayout:
+                        cols: 3
+                        rows: 1
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.2
+
+                        Button:
+                                text: 'Edit'
+                                font_size: 20
+                                on_release:
+                                        root.editSupplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
+
+                        Button:
+                                text: 'Delete'
+                                font_size: 20
+                                on_release:
+                                        root.deleteProj()
+
+                        Button:
+                                text: 'Report'
+                                font_size: 20
+                                on_release: root.reports_popup()

@@ -31,26 +31,11 @@ def load_clients():
     ref = database.get_ref('clients')
     print("reached load_clients")
 
-    if ref is None:
-        message_box('Error', 'Failed to load clients: "clients" reference not found.')
-        return []
-
-    # retrieve all clients as a list of dictionaries from the database
-    try:
-        clients_data = ref.get()
-        print("reached clients data")
-        if clients_data is None:
-            message_box('Error', 'Failed to load clients: No data found.')
-            return []
-
-        clients = []
-        for client_id, client in clients_data.items():
-            client['id'] = client_id
-            clients.append(client)
-        return clients
-    except Exception as e:
-        message_box('Error', f'Failed to load clients: {str(e)}')
-        return []
+    clients = []
+    for client_id, client in ref.get().items():
+        client['id'] = client_id
+        clients.append(client)
+    return clients
 
 
 # get client by client.id

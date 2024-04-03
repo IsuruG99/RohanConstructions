@@ -60,13 +60,13 @@ class ViewClientPopup(GridLayout):
     def populate_view(self):
         client = get_client(self.client_id)
 
-        self.ids.view_name.text = client.get("name", "")
-        self.ids.view_phone_number.text = client.get("phone_number", "")
-        self.ids.view_email.text = client.get("email", "")
-        self.ids.view_address.text = client.get("address", "")
-        self.ids.view_project_name.text = client.get("project_name", "")
-        self.ids.view_project_duration.text = client.get("project_duration", "")
-        self.ids.view_project_status.text = client.get("project_status", "")
+        self.ids.view_name.text = client['name']
+        self.ids.view_phone_number.text = client['phone_number']
+        self.ids.view_email.text = client['email']
+        self.ids.view_address.text = client['address']
+        self.ids.view_project_name.text = client['project_name']
+        self.ids.view_project_duration.text = client['project_duration']
+        self.ids.view_project_status.text = client['project_status']
 
     def edit_client(self, name, phone_number, email, address, project_name, project_duration, project_status):
         name = str(name)
@@ -105,7 +105,6 @@ class ClientsScreen(Screen):
         self.populate_clients()
         self.add_client_popup_instance = None
 
-
     def add_client_popup(self):
         add_popup = Popup(title='Add Client', content=AddClientPopup(self), size_hint=(0.5, 0.8))
         add_popup.open()
@@ -117,25 +116,23 @@ class ClientsScreen(Screen):
             self.add_client_popup_instance = None
 
     def populate_clients(self):
+        # Get all clients from the database as a list
         clients = load_clients()
 
+        # Clear the existing clients
         self.ids.clients_list.clear_widgets()
 
-        header_labels = ['Name', 'Phone Number', 'Email', 'Address', 'Project Name', 'Project Duration', 'Project Status']
+        #make a header row
 
-        header_grid = GridLayout(cols=len(header_labels), size_hint_y=None, height=50, spacing=10, padding=10)
-        for label_text in header_labels:
-            header_grid.add_widget(Label(text=label_text, bold=True, color=(1, 1, 1, 1)))
-        print("header labels done")
-        self.ids.clients_list.add_widget(header_grid)
 
+        # Add the clients to the ScrollView # Only name, phone_number and email are shown
         for client in clients:
-            print("client loop")
-            grid = GridLayout(cols=len(header_labels), spacing=10, size_hint_y=None, height=50)
-
-            for field in header_labels:
-                grid.add_widget(Label(text=str(client.get(field, ''))))
-
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
+            grid.add_widget(Label(text=client['name']))
+            grid.add_widget(Label(text=client['phone_number']))
+            grid.add_widget(Label(text=client['email']))
+            grid.add_widget(Button(text='View', on_release=partial(self.view_client, client['id'])))
+            grid.client = client
             self.ids.clients_list.add_widget(grid)
 
     def view_client(self, client_id, instance):

@@ -1,5 +1,3 @@
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
@@ -89,7 +87,6 @@ class ViewPopup(GridLayout):
         self.projects_screen.populate_projects(0)
         self.projects_screen.ids.projects_filter.text = 'In Progress'
         self.projects_screen.dismiss_popup(self.popup)
-
 
     # Open Reports Popup Window
     def reports_popup(self):
@@ -181,9 +178,9 @@ class ProjectsScreen(Screen):
             elif status == 2:
                 self.ids.projects_list.add_widget(grid)
 
+    # Open View Popup Window
     def view_project(self, project_id, instance):
-        # ViewPopup class will be called to display the project details in a popup window
-        # The project_id is passed to the ViewPopup class
+        # The project_id is passed to the ViewPopup Window
         viewPop = Popup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
@@ -196,20 +193,34 @@ class ProjectsScreen(Screen):
 
     # Button Click Event Handler
     def btn_click(self, instance):
-        if instance.text == 'Add':
+        txt = instance.text
+        if txt == 'Add':
             self.add_popup()
-        elif instance.text == 'All' or instance.text == 'In Progress' or instance.text == 'Completed':
-            if instance.text == 'In Progress':
+        elif txt == 'All' or txt == 'In Progress' or txt == 'Completed':
+            if txt == 'In Progress':
                 self.populate_projects(1)
                 self.ids.projects_filter.text = 'Completed'
-            elif instance.text == 'Completed':
+            elif txt == 'Completed':
                 self.populate_projects(2)
                 self.ids.projects_filter.text = 'All'
-            elif instance.text == 'All':
+            elif txt == 'All':
                 self.populate_projects(0)
                 self.ids.projects_filter.text = 'In Progress'
-        elif instance.text == 'Back':
+        elif txt == 'Back':
             self.parent.current = 'main'
+
+    # Font Size Adjustment Test
+    def fontSizer(self, instance):
+        for grid in self.ids.projects_list.children:
+            for child in grid.children:
+                if isinstance(child, (Label, Button)):
+                    if instance.text == '+':
+                        child.font_size += 5
+                    else:
+                        child.font_size -= 5
+                    child.size_hint_y = None
+                    child.texture_update()
+                    child.size = child.texture_size
 
     def dismiss_popup(self, instance):
         instance.dismiss()

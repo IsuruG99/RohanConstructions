@@ -2,36 +2,67 @@
         GridLayout:
                 rows: 2
                 cols: 1
-                padding: 40
+                padding: (20, 40, 20, 20)
                 spacing: 20
 
                 CLabel:
                         text: 'Projects'
-                        size_hint: 1, 0.1
+                        size_hint: 1, 0.05
                         font_size: '30sp'
                         bold: True
 
                 GridLayout:
                         rows: 2
-                        spacing: 20
-                        padding: 20
-                        size_hint: 1, 0.9
+                        spacing: 10
+                        padding: 10
+                        size_hint: 1, 0.95
 
-                        ScrollView:
-                                size_hint: 1, 0.7
-                                do_scroll_x: False
+                        GridLayout:
+                                rows: 1
+                                cols: 2
+                                size_hint: 1, 0.8
+                                ScrollView:
+                                        size_hint: 0.95, 1
+                                        do_scroll_x: False
+                                        GridLayout:
+                                                id: projects_list
+                                                cols: 1
+                                                size_hint_y: None
+                                                height: self.minimum_height
+                                # Need a + & - Sign here to increase/decrease font size of the projects_list
+
                                 GridLayout:
-                                        id: projects_list
-                                        cols: 1
-                                        size_hint_y: None
-                                        height: self.minimum_height
+                                        size_hint: 0.05, 1
+                                        rows: 4
+                                        CLabel:
+                                                text: ''
+                                                size_hint: 0.010, 1
+                                        CButton:
+                                                text: '+'
+                                                size_hint: 0.0025, 1
+                                                font_size: '30sp'
+                                                background_color: 0, 0, 0, 0
+                                                on_release: root.fontSizer(self)
+                                                valign: 'bottom'
+                                        CButton:
+                                                text: '-'
+                                                size_hint: 0.0025, 1
+                                                font_size: '30sp'
+                                                background_color: 0, 0, 0, 0
+                                                on_release: root.fontSizer(self)
+                                                valign: 'top'
+                                        CLabel:
+                                                text: ''
+                                                size_hint: 0.010, 1
+
+
 
                         GridLayout:
                                 rows: 1
                                 cols: 3
                                 spacing: 20
                                 padding: 20
-                                size_hint: 1, 0.3
+                                size_hint: 1, 0.2
 
                                 CButton:
                                         id: projects_filter

@@ -1,4 +1,4 @@
-from kivy.graphics import Color
+from kivy.graphics import Color, Rectangle
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
@@ -9,14 +9,12 @@ from kivy.utils import rgba
 class CButton(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Make it button grey
         self.background_color = (0.5, 0.5, 0.5, 0.5)
         self.background_normal = ''
         self.background_down = ''
         self.color = (1, 1, 1, 1)
         self.font_name = 'Roboto'
         self.font_size = '20sp'
-        self.border_radius = [10, 10, 10, 10]  # Set the radius for all corners
 
     def on_state(self, instance, value):
         if self.state == 'normal':
@@ -45,7 +43,6 @@ class CText(TextInput):
         self.color = (1, 1, 1, 1)
         self.font_name = 'Roboto'
         self.font_size = '20sp'
-        self.border_radius = [10, 10, 10, 10]  # Set the radius for all corners
         self.valign = 'middle'
 
 

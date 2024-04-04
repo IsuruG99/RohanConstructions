@@ -138,6 +138,12 @@ class FinancesScreen(Screen):
 
         # Clear the existing widgets in the ScrollView
         self.ids.finances_list.clear_widgets()
+        # Headers
+        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+        headers = ["Amount", "Category", "Date"]
+        for header in headers:
+            grid.add_widget(CLabel(text=header, bold=True, padding=(10, 10)))
+        self.ids.finances_list.add_widget(grid)
 
         for log in financeList:
             if log["type"] == "Expense":

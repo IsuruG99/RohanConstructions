@@ -154,8 +154,15 @@ class ProjectsScreen(Screen):
         # Get the projects from the database
         projects = load_projects()
 
-        # Clear the existing widgets in the ScrollView
+        # Clear the existing widgets in the SortScrollView
         self.ids.projects_list.clear_widgets()
+        # Headers
+        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+        headers = ['Project Name', 'Client', 'End Date', 'Status']
+        for header in headers:
+            grid.add_widget(CLabel(text=header, bold=True, padding=(10, 10)))
+        self.ids.projects_list.add_widget(grid)
+
         for project in projects:
             grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
             button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
@@ -173,8 +180,6 @@ class ProjectsScreen(Screen):
                 self.ids.projects_list.add_widget(grid)
             elif status == 2:
                 self.ids.projects_list.add_widget(grid)
-
-            # Open View Popup Window with the project_id
 
     def view_project(self, project_id, instance):
         # ViewPopup class will be called to display the project details in a popup window

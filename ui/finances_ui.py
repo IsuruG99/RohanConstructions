@@ -6,13 +6,24 @@ from kivy.uix.screenmanager import Screen
 from functools import partial
 
 from functions.finances import *
+from functions.projects import load_projects
 from utils import *
+from custom import *
 
 
 class AddLogPopup(GridLayout):
     def __init__(self, finances_screen, **kwargs):
         super().__init__(**kwargs)
         self.finances_screen = finances_screen
+        self.populate_projectNames()
+
+    def populate_projectNames(self):
+        self.ids.addLog_project.values = []
+        projects = load_projects()
+        project_names = []
+        for project in projects:
+            project_names.append(project["name"])
+        self.ids.addLog_project.values = project_names
 
     def addLog(self, fin_type, amount, date, desc, entity, project, category):
         fin_type = str(fin_type)
@@ -42,9 +53,8 @@ class AddLogPopup(GridLayout):
         add_log(fin_type, amount, date, desc, entity, project, category)
         message_box('Success', 'Log added successfully.')
         self.finances_screen.populate_logs(0)
-
-    def dismiss_popup(self, instance):
-        instance.dismiss()
+        self.finances_screen.ids.finances_filter.text = 'All'
+        self.finances_screen.dismiss_popup(self.popup)
 
 
 class ViewLogPopup(GridLayout):
@@ -56,6 +66,14 @@ class ViewLogPopup(GridLayout):
 
     # Populate PopUp Window
     def populate_view(self):
+        # Populate the project names Spinner
+        self.ids.viewLog_project.values = []
+        projects = load_projects()
+        project_names = []
+        for project in projects:
+            project_names.append(project["name"])
+        self.ids.viewLog_project.values = project_names
+
         # Get the finance log data from the DB
         log = get_log(self.fin_id)
         # Assign type, amount, date, description, related_entity, project_name, category
@@ -92,19 +110,19 @@ class ViewLogPopup(GridLayout):
         edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category)
         message_box('Success', 'Log edited successfully.')
         self.finances_screen.populate_logs(0)
+        self.finances_screen.ids.finances_filter.text = 'All'
+        self.finances_screen.dismiss_popup(self.popup)
 
     def delete_log(self):
         if confirm_box('Delete', 'Are you sure you want to delete this log?') == 'yes':
             if delete_log(self.fin_id):
                 message_box('Success', 'Log deleted successfully.')
                 self.finances_screen.populate_logs(0)
-                self.dismiss_popup(self.popup)
+                self.finances_screen.ids.finances_filter.text = 'All'
+                self.finances_screen.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to delete log.')
-                self.dismiss_popup(self.popup)
-
-    def dismiss_popup(self, instance):
-        instance.dismiss()
+                self.finances_screen.dismiss_popup(self.popup)
 
 
 # Financial Section Main UI (Opens this from main.py)
@@ -121,21 +139,27 @@ class FinancesScreen(Screen):
         # Clear the existing widgets in the ScrollView
         self.ids.finances_list.clear_widgets()
 
-        if status == 0:
-            for log in financeList:
-                if log["type"] == "Expense":
-                    # Readable Lighter Red
-                    cl = (1, 0.5, 0.5, 1)
-                else:
-                    cl = (0.5, 1, 0.5, 1)
-                grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
-                button = Button(text=convert_currency(log["amount"]), on_release=partial(self.view_log, log["id"]),
-                                background_normal='',
-                                background_color=(1, 1, 1, 0), font_name='Roboto', color=cl, bold=True)
-                grid.finance = log
-                grid.add_widget(button)
-                grid.add_widget(Label(text=log["category"]))
-                grid.add_widget(Label(text=convert_date(log["date"])))
+        for log in financeList:
+            if log["type"] == "Expense":
+                # Readable Lighter Red
+                cl = (1, 0.5, 0.5, 1)
+            else:
+                cl = (0.5, 1, 0.5, 1)
+
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            button = Button(text=convert_currency(log["amount"]), on_release=partial(self.view_log, log["id"]),
+                            background_normal='',
+                            background_color=(1, 1, 1, 0), font_name='Roboto', color=cl, bold=True)
+            grid.finance = log
+            grid.add_widget(button)
+            grid.add_widget(CLabel(text=log["category"]))
+            grid.add_widget(CLabel(text=convert_date(log["date"])))
+
+            if status == 0:
+                self.ids.finances_list.add_widget(grid)
+            elif status == 1 and log["type"] == "Income":
+                self.ids.finances_list.add_widget(grid)
+            elif status == 2 and log["type"] == "Expense":
                 self.ids.finances_list.add_widget(grid)
 
     def view_log(self, fin_id, instance):
@@ -154,7 +178,16 @@ class FinancesScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add':
             self.add_log_popup()
-        elif instance.text == 'Filter':
-            message_box('Filter', 'Filtering by Expense')
-
-
+        elif instance.text == 'All' or instance.text == 'Income' or instance.text == 'Expense':
+            if self.ids.finances_filter.text == 'All':
+                self.populate_logs(1)
+                self.ids.finances_filter.text = 'Income'
+            elif self.ids.finances_filter.text == 'Income':
+                self.populate_logs(2)
+                self.ids.finances_filter.text = 'Expense'
+            elif self.ids.finances_filter.text == 'Expense':
+                self.populate_logs(0)
+                self.ids.finances_filter.text = 'All'
+                
+    def dismiss_popup(self, instance):
+        instance.dismiss()

@@ -8,6 +8,7 @@
                 CLabel:
                         text: 'Projects'
                         size_hint: 1, 0.1
+                        font_size: '30sp'
                         bold: True
 
                 GridLayout:
@@ -41,7 +42,8 @@
                                 size_hint: 1, 0.3
 
                                 CButton:
-                                        text: 'Current/Completed'
+                                        id: projects_filter
+                                        text: 'In Progress'
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
@@ -73,60 +75,60 @@
 
                         CLabel:
                                 text: 'Name'
-                                color: 1, 1, 1, 1
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_name
                                 multiline: False
                                 hint_text: 'Project AD'
-                                font_size: '30sp'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Description'
-                                color: 1, 1, 1, 1
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_desc
                                 multiline: False
                                 hint_text: 'Project is about this.'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Start Date'
-                                color: 1, 1, 1, 1
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_start
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'End Date'
-                                color: 1, 1, 1, 1
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_end
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Client'
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_client
                                 multiline: False
                                 hint_text: 'ABC Company'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Budget'
-                                color: 1, 1, 1, 1
-
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: project_budget
                                 multiline: False
                                 hint_text: '10000'
+                                size_hint: 0.7, 0.1
 
                 GridLayout:
-                        cols: 2
+                        cols: 1
                         rows: 1
                         padding: 20
                         spacing: 20
@@ -142,11 +144,6 @@
                                         project_end.text = ''
                                         project_client.text = ''
                                         project_budget.text = ''
-
-                        CButton:
-                                text: 'Cancel'
-                                on_release:
-                                        root.dismiss_popup(root.popup)
 
 <ViewPopup>:
         size: 400, 600
@@ -165,53 +162,67 @@
 
                         CLabel:
                                 text: 'Name'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_name
                                 multiline: False
                                 hint_text: 'Project AD'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Description'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_desc
                                 multiline: False
                                 hint_text: 'Project is about this.'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Start Date'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_startDate
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'End Date'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_endDate
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Client'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_client
                                 multiline: False
                                 hint_text: 'ABC Company'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Budget'
+                                size_hint: 0.3, 0.1
                         CText:
                                 id: viewPop_budget
                                 multiline: False
                                 hint_text: '10000'
+                                size_hint: 0.7, 0.1
 
                         CLabel:
                                 text: 'Status'
+                                size_hint: 0.3, 0.1
                         Spinner:
                                 id: viewPop_status
                                 font_size: '20sp'
                                 text: 'In Progress'
                                 values: ['In Progress', 'Completed', 'Cancelled']
+                                size_hint: 0.7, 0.1
 
                 GridLayout:
                         cols: 3

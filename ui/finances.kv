@@ -5,11 +5,10 @@
                 padding: 40
                 spacing: 20
 
-                Label:
+                CLabel:
                         text: 'Finances'
                         size_hint: 1, 0.1
-                        font_size: 30
-                        color: 1, 1, 1, 1
+                        font_size: '30sp'
                         bold: True
 
                 GridLayout:
@@ -42,21 +41,19 @@
                                 padding: 20
                                 size_hint: 1, 0.3
 
-                                Button:
-                                        text: 'Filter'
-                                        font_size: 20
+                                CButton:
+                                        id: finances_filter
+                                        text: 'All'
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton:
                                         text: 'Add'
-                                        font_size: 20
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton:
                                         text: 'Back'
-                                        font_size: 20
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
@@ -78,11 +75,9 @@
                         spacing: 5
                         size_hint: 1, 0.9
 
-                        Label:
+                        CLabel:
                                 text: 'Type'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
                         Spinner:
                                 id: viewLog_type
                                 text: 'Type'
@@ -90,61 +85,47 @@
                                 font_size: 20
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Amount'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: viewLog_amount
-                                font_size: 20
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Date'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: viewLog_date
-                                font_size: 20
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Description'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: viewLog_desc
-                                font_size: 20
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Related Entity'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: viewLog_entity
-                                font_size: 20
                                 size_hint: 0.7, 0.1
 
                         Label:
                                 text: 'Project Name'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        Spinner:
                                 id: viewLog_project
-                                font_size: 20
+                                text: 'Project Name'
+                                values: ['']
+                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Category'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
                         Spinner:
                                 id: viewLog_category
                                 text: 'Category'
@@ -159,23 +140,20 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton:
                                 text: 'Edit'
-                                font_size: 20
                                 on_release:
                                         root.edit_log(viewLog_type.text, viewLog_amount.text, viewLog_date.text,
                                         viewLog_desc.text, viewLog_entity.text, viewLog_project.text,
                                         viewLog_category.text)
 
-                        Button:
+                        CButton:
                                 text: 'Delete'
-                                font_size: 20
                                 on_release:
                                         root.delete_log()
 
-                        Button:
+                        CButton:
                                 text: 'Report'
-                                font_size: 20
 
 
 <AddLogPopup>:
@@ -192,90 +170,77 @@
                         spacing: 5
                         size_hint: 1, 0.9
 
-                        Label:
+                        CLabel:
                                 text: 'Type'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
                         Spinner:
                                 id: addLog_type
                                 text: 'Type'
                                 values: ['Income', 'Expense']
-                                font_size: 20
+                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Amount'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: addLog_amount
-                                font_size: 20
                                 size_hint: 0.7, 0.1
+                                hint_text: '10000'
 
-                        Label:
+                        CLabel:
                                 text: 'Date'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: addLog_date
-                                font_size: 20
                                 size_hint: 0.7, 0.1
+                                hint_text: 'YYYY-MM-DD'
 
-                        Label:
+                        CLabel:
                                 text: 'Description'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: addLog_desc
-                                font_size: 20
                                 size_hint: 0.7, 0.1
+                                hint_text: 'Description'
 
-                        Label:
+                        CLabel:
                                 text: 'Related Entity'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        CText:
                                 id: addLog_entity
-                                font_size: 20
                                 size_hint: 0.7, 0.1
+                                hint_text: 'Employee, Supplier, etc.'
 
-                        Label:
+                        CLabel:
                                 text: 'Project Name'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
-                        TextInput:
+                        Spinner:
                                 id: addLog_project
-                                font_size: 20
+                                text: 'Project Name'
+                                values: ['']
+                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Category'
-                                font_size: 20
                                 size_hint: 0.3, 0.1
-
                         Spinner:
                                 id: addLog_category
                                 text: 'Category'
                                 values: ['Materials', 'Payroll', 'Contract', 'Misc']
-                                font_size: 20
+                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
 
                 GridLayout:
-                        cols: 2
+                        cols: 1
                         rows: 1
                         padding: 20
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton:
                                 text: 'Insert'
-                                font_size: 20
                                 on_release:
                                         root.addLog(addLog_type.text, addLog_amount.text, addLog_date.text, addLog_desc.text, addLog_entity.text, addLog_project.text, addLog_category.text)
                                         addLog_amount.text = ''
@@ -283,9 +248,3 @@
                                         addLog_desc.text = ''
                                         addLog_entity.text = ''
                                         addLog_project.text = ''
-
-                        Button:
-                                text: 'Cancel'
-                                font_size: 20
-                                on_release:
-                                        root.dismiss_popup(root.popup)

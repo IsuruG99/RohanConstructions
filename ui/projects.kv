@@ -29,7 +29,6 @@
                                                 cols: 1
                                                 size_hint_y: None
                                                 height: self.minimum_height
-                                # Need a + & - Sign here to increase/decrease font size of the projects_list
 
                                 GridLayout:
                                         size_hint: 0.05, 1
@@ -54,8 +53,6 @@
                                         CLabel:
                                                 text: ''
                                                 size_hint: 0.010, 1
-
-
 
                         GridLayout:
                                 rows: 1
@@ -83,6 +80,7 @@
                                                 root.manager.transition.direction = 'right'
 
 <AddPopup>:
+
         GridLayout:
                 cols: 1
                 rows: 2
@@ -240,7 +238,7 @@
                         CLabel:
                                 text: 'Status'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: viewPop_status
                                 font_size: '20sp'
                                 text: 'In Progress'
@@ -271,7 +269,6 @@
 <ReportsPopup>:
         title: 'Project Details'
         auto_dismiss: False
-        background_color: 0, 0, 0, 1
 
         GridLayout:
                 size: root.size
@@ -285,12 +282,10 @@
                         size_hint: 1, 0.9
                         cols: 2
                         rows: 1
-                        color: 1, 1, 1, 1
 
                         GridLayout:
                                 cols: 1
                                 rows: 10
-                                color: 1, 1, 1, 1
                                 spacing: 10
                                 padding: 10
 
@@ -327,7 +322,6 @@
                         GridLayout:
                                 cols: 1
                                 rows: 10
-                                color: 1, 1, 1, 1
                                 padding: 10
 
                                 RLabelTop:
@@ -355,7 +349,6 @@
                                                 cols: 1
                                                 size_hint_y: None
                                                 height: self.minimum_height
-                                                color: 1, 1, 1, 1
                                                 scroll_type: ['bars', 'content']
                                                 bar_width: 10
                                                 bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
@@ -370,7 +363,6 @@
                                                 cols: 1
                                                 size_hint_y: None
                                                 height: self.minimum_height
-                                                color: 1, 1, 1, 1
                                                 scroll_type: ['bars', 'content']
                                                 bar_width: 10
                                                 bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
@@ -380,7 +372,6 @@
                         size_hint: 1, 0.1
                         cols: 1
                         rows: 1
-                        color: 1, 1, 1, 1
 
                         CButton:
                                 text: 'Back'

@@ -30,9 +30,17 @@ class MainScreen(Screen):
 
 
 class MainApp(App):
+    accessLV = None
+
+    def set_accessLV(self, level):
+        self.accessLV = level
+
+    def get_accessLV(self):
+        return self.accessLV
+
     def build(self):
         Window.size = (1200, 720)
-        Window.clearcolor = (0.1, 0.1, 0.1, 1)
+        Window.clearcolor = rgba('#411f2d')
         Window.set_icon('visuals/icon.png')
 
         # Screen Manager Initialized
@@ -52,6 +60,7 @@ class MainApp(App):
 
     def btn_click(self, instance):
         if instance.text == 'Projects':
+            print(App.get_running_app().get_accessLV())
             self.root.current = 'projects'
         elif instance.text == 'Clients':
             self.root.current = 'clients'

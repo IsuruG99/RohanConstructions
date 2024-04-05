@@ -107,6 +107,9 @@ class ViewPopup(GridLayout):
             self.projects_screen.ids.projects_filter.text = 'In Progress'
             self.projects_screen.dismiss_popup(self.popup)
 
+    def dismiss_popup(self, instance):
+        self.projects_screen.dismiss_popup(self.popup)
+
 
 class ReportsPopup(GridLayout):
     def __init__(self, projects_screen, proj_id, **kwargs):
@@ -131,8 +134,8 @@ class ReportsPopup(GridLayout):
         roles = load_members(project["name"])
         for role, count in roles.items():
             grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(Label(text=role))
-            grid.add_widget(Label(text=str(count)))
+            grid.add_widget(CLabel(text=role, label_font_size='15sp'))
+            grid.add_widget(CLabel(text=str(count), label_font_size='15sp'))
             self.ids.assigned_manpower.add_widget(grid)
 
     def dismiss_popup(self, instance):
@@ -181,13 +184,13 @@ class ProjectsScreen(Screen):
     # Open View Popup Window
     def view_project(self, project_id, instance):
         # The project_id is passed to the ViewPopup Window
-        viewPop = Popup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
+        viewPop = CPopup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
 
     # Open Add Popup Window
     def add_popup(self):
-        addPop = Popup(title='Add Project', content=AddPopup(self), size_hint=(0.5, 0.8))
+        addPop = CPopup(title='Add Project', content=AddPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 

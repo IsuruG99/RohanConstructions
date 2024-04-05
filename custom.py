@@ -23,6 +23,12 @@ class CButton(Button):
             self.color = rgba('#00FFFF')
 
 
+class CButton_V2(CButton):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.background_color = (0.2, 0.2, 0.2, 0.2)
+
+
 class CLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

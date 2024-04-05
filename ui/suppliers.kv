@@ -42,21 +42,18 @@
                                 padding: 20
                                 size_hint: 1, 0.3
 
-                                Button:
+                                CButton_V2:
                                         text: 'Full Report'
-                                        font_size: 20
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton_V2:
                                         text: 'Add New Supplier'
-                                        font_size: 20
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton_V2:
                                         text: 'Back'
-                                        font_size: 20
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
@@ -152,8 +149,8 @@
 
                         Spinner:
                                 id: supplierLevel
-                                text: 'Level 3'
-                                values: ['Level 1', 'Level 2', 'Level 3']
+                                text: 'Supplier Level'
+                                values: ['1','2','3']
 
                 GridLayout:
                         cols: 2
@@ -271,8 +268,7 @@
 
                         Spinner:
                                 id: supplierLevel
-                                text: 'Level 3'
-                                values: ['Level 1', 'Level 2', 'Level 3']
+                                values: ['1','2','3']
 
                 GridLayout:
                         cols: 3
@@ -291,7 +287,7 @@
                                 text: 'Delete'
                                 font_size: 20
                                 on_release:
-                                        root.deleteProj()
+                                        root.deleteSupplier()
 
                         Button:
                                 text: 'Report'

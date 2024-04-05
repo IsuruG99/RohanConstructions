@@ -7,6 +7,7 @@ from functions.suppliers import *
 from functools import partial
 
 from utils import *
+from custom import *
 
 
 class AddSupPopup(GridLayout):
@@ -79,7 +80,7 @@ class ViewSupPopup(GridLayout):
             message_box('Error', 'Invalid date format.')
             return
         # Send data to suppliers.py
-        message_box('Success', 'Supplier Edit Not implemented.')
+        edit_supplier(self.sup_id, supplierName, business, contactNo, email, address, startDealing, supplierLevel)
         self.sup_screen.populate_suppliers(0)
         self.dismiss_popup(self.popup)
 
@@ -88,8 +89,10 @@ class ViewSupPopup(GridLayout):
         pass
 
     # Delete Project
-    def deleteProj(self):
-        pass
+    def deleteSupplier(self):
+        delete_supplier(self.sup_id)
+        self.sup_screen.populate_suppliers(0)
+        self.dismiss_popup(self.popup)
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -115,6 +118,13 @@ class SuppliersScreen(Screen):
         # Clear the existing widgets in the ScrollView
         self.ids.Supplier_list.clear_widgets()
 
+        # Headers
+        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+        headers = ['Business', 'Owner', 'Contact', 'Level']
+        for header in headers:
+            grid.add_widget(CLabel(text=header, bold=True, padding=(10, 10)))
+        self.ids.Supplier_list.add_widget(grid)
+
         if status == 0:
             for supplier in suppliers:
                 grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
@@ -138,3 +148,5 @@ class SuppliersScreen(Screen):
         addPop = Popup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
+
+

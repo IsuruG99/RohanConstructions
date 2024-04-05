@@ -1,6 +1,7 @@
 import database
 from utils import *
 
+
 def load_suppliers():
     # Get a reference to Database
     ref = database.get_ref('suppliers')
@@ -12,6 +13,7 @@ def load_suppliers():
         suppliers.append(supplier)
 
     return suppliers
+
 
 # Adding new supplier
 def add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
@@ -47,4 +49,34 @@ def get_supplier(sp_id):
     sup = ref.child(sp_id).get()
 
     return sup
+
+
+def edit_supplier(sup_id, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+    # Get a reference to Database
+    ref = database.get_ref('suppliers')
+
+    if ref is not None:
+        ref.child(sup_id).update(
+            {
+                'supplierName': supplierName,
+                'business': business,
+                'contactNo': contactNo,
+                'email': email,
+                'address': address,
+                'startDealing': startDealing,
+                'supplierLevel': supplierLevel
+            })
+        message_box('Success', 'Supplier edited')
+
+    else:
+        message_box('Error', 'Failed to connect to database.')
+
+
+def delete_supplier(sup_id):
+    ref = database.get_ref('suppliers')
+    if ref is not None:
+        ref.child(sup_id).delete()
+        message_box('Success', 'Supplier deleted')
+    else:
+        message_box('Error', 'Failed to connect to database.')
 

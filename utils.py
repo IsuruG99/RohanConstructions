@@ -1,5 +1,7 @@
 import datetime
 
+from custom import *
+
 
 # Check for Null Inputs
 def validate_string(*args):
@@ -48,4 +50,3 @@ def validate_currency(amount):
         return True
     except ValueError:
         return False
-

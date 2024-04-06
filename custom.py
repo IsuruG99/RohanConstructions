@@ -1,4 +1,5 @@
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, Rectangle, BoxShadow
+from kivy.properties import BoundedNumericProperty
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -64,10 +65,26 @@ class CButton(Button):
             self.background_color = button_down_background_color
 
 
-class CButton_V2(CButton):
+class CButton2(CButton):
+    shadow_offset = BoundedNumericProperty(30, min=0)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.background_color = (0.2, 0.2, 0.2, 0.2)
+
+        self.bind(pos=self.update_shadow_pos)
+        self.bind(size=self.update_shadow_size)
+
+        # Box Shadow Test
+        with self.canvas.before:
+            Color(0, 0, 0, 0.5)
+            self.shadow = BoxShadow(pos=self.pos, size=self.size, offset=(0, -10),
+                                    spread_radius=(-35, -35), border_radius=(0, 0, 0, 10), blur_radius=80)
+
+    def update_shadow_pos(self, instance, value):
+        self.shadow.pos = value[0], value[1] - self.shadow_offset
+
+    def update_shadow_size(self, instance, value):
+        self.shadow.size = value[0], value[1]
 
 
 class CLabel(Label):

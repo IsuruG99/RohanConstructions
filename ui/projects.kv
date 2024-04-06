@@ -61,18 +61,18 @@
                                 padding: 20
                                 size_hint: 1, 0.2
 
-                                CButton:
+                                CButton2:
                                         id: projects_filter
                                         text: 'In Progress'
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                CButton:
+                                CButton2:
                                         text: 'Add'
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                CButton:
+                                CButton2:
                                         text: 'Back'
                                         size_hint: 0.2, 1
                                         on_release:
@@ -155,7 +155,7 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        CButton:
+                        CButton2:
                                 text: 'Insert'
                                 on_release:
                                         root.addProj(project_name.text, project_desc.text, project_start.text, project_end.text, project_client.text, project_budget.text)
@@ -252,17 +252,17 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        CButton:
+                        CButton2:
                                 text: 'Edit'
                                 on_release:
                                         root.editProj(viewPop_name.text, viewPop_desc.text, viewPop_startDate.text, viewPop_endDate.text, viewPop_client.text, viewPop_budget.text, viewPop_status.text)
 
-                        CButton:
+                        CButton2:
                                 text: 'Delete'
                                 on_release:
                                         root.deleteProj()
 
-                        CButton:
+                        CButton2:
                                 text: 'Report'
                                 on_release: root.reports_popup()
 
@@ -373,6 +373,6 @@
                         cols: 1
                         rows: 1
 
-                        CButton:
+                        CButton2:
                                 text: 'Back'
                                 on_release: root.dismiss_popup(root.popup)

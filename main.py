@@ -59,17 +59,17 @@ class MainApp(App):
         return sm
 
     def btn_click(self, instance):
+        perms = App.get_running_app().get_accessLV()
         if instance.text == 'Projects':
-            print(App.get_running_app().get_accessLV())
-            self.root.current = 'projects'
+            self.root.current = 'projects' if perms <= 1 else message_box('Error', 'Access Denied')
         elif instance.text == 'Clients':
-            self.root.current = 'clients'
+            self.root.current = 'clients' if perms <= 1 else message_box('Error', 'Access Denied')
         elif instance.text == 'Resources':
             self.root.current = 'resources'
         elif instance.text == 'Suppliers':
-            self.root.current = 'suppliers'
+            self.root.current = 'suppliers' if perms <= 1 else message_box('Error', 'Access Denied')
         elif instance.text == 'Finances':
-            self.root.current = 'finances'
+            self.root.current = 'finances' if perms <= 1 else message_box('Error', 'Access Denied')
         elif instance.text == 'Personnel':
             self.root.current = 'manpower'
 

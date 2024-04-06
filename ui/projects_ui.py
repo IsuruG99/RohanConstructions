@@ -82,11 +82,14 @@ class ViewPopup(GridLayout):
             message_box('Error', 'Project name must be unique.')
             return
         # Send data to projects.py
-        update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status)
-        message_box('Success', 'Project updated successfully.')
-        self.projects_screen.populate_projects(0)
-        self.projects_screen.ids.projects_filter.text = 'In Progress'
-        self.projects_screen.dismiss_popup(self.popup)
+        if confirm_box('Update Project', 'Are you sure you want to update this project?') == 'yes':
+            if update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status):
+                message_box('Success', 'Project updated successfully.')
+                self.projects_screen.populate_projects(0)
+                self.projects_screen.ids.projects_filter.text = 'In Progress'
+                self.projects_screen.dismiss_popup(self.popup)
+            else:
+                message_box('Failed', 'Failed to update project.')
 
     # Open Reports Popup Window
     def reports_popup(self):

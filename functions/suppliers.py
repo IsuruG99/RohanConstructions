@@ -41,22 +41,22 @@ def add_supplier(supplierName, business, contactNo, email, address, startDealing
 
 
 # Get a single supplier by ID
-def get_supplier(sp_id):
+def get_supplier(suppliers_id):
     # Get a reference to DB
     ref = database.get_ref('suppliers')
 
     # Retrieve the supplier data as a dictionary
-    sup = ref.child(sp_id).get()
+    supplier = ref.child(suppliers_id).get()
 
-    return sup
+    return supplier
 
 
-def edit_supplier(sup_id, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+def edit_supplier(suppliers_id, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
     # Get a reference to Database
     ref = database.get_ref('suppliers')
 
     if ref is not None:
-        ref.child(sup_id).update(
+        ref.child(suppliers_id).update(
             {
                 'supplierName': supplierName,
                 'business': business,
@@ -66,17 +66,18 @@ def edit_supplier(sup_id, supplierName, business, contactNo, email, address, sta
                 'startDealing': startDealing,
                 'supplierLevel': supplierLevel
             })
-        message_box('Success', 'Supplier edited')
-
+        return True
     else:
         message_box('Error', 'Failed to connect to database.')
+        return False
 
 
-def delete_supplier(sup_id):
+def delete_supplier(suppliers_id):
     ref = database.get_ref('suppliers')
+
     if ref is not None:
-        ref.child(sup_id).delete()
-        message_box('Success', 'Supplier deleted')
+        ref.child(suppliers_id).delete()
+        return True
     else:
         message_box('Error', 'Failed to connect to database.')
-
+        return False

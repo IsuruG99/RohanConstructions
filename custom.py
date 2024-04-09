@@ -77,8 +77,12 @@ class CButton2(CButton):
         # Box Shadow Test
         with self.canvas.before:
             Color(0, 0, 0, 0.5)
-            self.shadow = BoxShadow(pos=self.pos, size=self.size, offset=(0, -10),
-                                    spread_radius=(-35, -35), border_radius=(0, 0, 0, 10), blur_radius=80)
+            self.shadow = BoxShadow(pos=self.pos,
+                                    size=self.size,
+                                    offset=(0, -10),
+                                    spread_radius=(-35, -35),
+                                    border_radius=(0, 0, 0, 10),
+                                    blur_radius=80)
 
     def update_shadow_pos(self, instance, value):
         self.shadow.pos = value[0], value[1] - self.shadow_offset

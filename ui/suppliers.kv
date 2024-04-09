@@ -142,12 +142,12 @@
                                 font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
-                        Label: # 7
+                        CLabel: # 7
                                 text: 'Level'
                                 font_size: 20
                                 color: 1, 1, 1, 1
 
-                        Spinner:
+                        CSpinner:
                                 id: supplierLevel
                                 text: 'Supplier Level'
                                 values: ['1','2','3']
@@ -159,7 +159,7 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton2:
                                 text: 'Submit'
                                 font_size: 20
                                 on_release:
@@ -172,7 +172,7 @@
                                         startDealing.text = ''
 					                    supplierLevel.text = ''
 
-                        Button:
+                        CButton2:
                                 text: 'Cancel'
                                 font_size: 20
                                 on_release: root.dismiss_popup(root.popup)
@@ -253,12 +253,12 @@
                                 multiline: False
                                 font_size: 20
 
-                        Label:
+                        CLabel:
                                 text: 'Level'
                                 font_size: 20
                                 color: 1, 1, 1, 1
 
-                        Spinner:
+                        CSpinner:
                                 id: supplierLevel
                                 values: ['1','2','3']
 
@@ -269,24 +269,23 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton2:
                                 text: 'Report'
                                 font_size: 20
                                 on_release: root.reports_popup()
 
-                        Button:
-                                text: 'Edit'
+                        CButton2:
+                                text: 'Save'
                                 font_size: 20
                                 on_release:
                                         root.editSupplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
 
-                        Button:
+                        CButton2:
                                 text: 'Delete'
                                 font_size: 20
-                                on_release:
-                                        root.deleteSupplier()
+                                on_release: root.deleteSupplier()
 
-                        Button:
+                        CButton2:
                                 text: 'Cancel'
                                 font_size: 20
                                 on_release: root.dismiss_popup(root.popup)

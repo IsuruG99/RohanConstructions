@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from custom import *
 
@@ -9,6 +10,14 @@ def validate_string(*args):
         if arg is None or arg == '':
             return False
     return True
+
+
+# To check mobile number
+def validate_mobileNo(mobileNo):
+    if re.fullmatch(r'^0[0-9]{9}$', mobileNo):
+        return True
+    else:
+        return False
 
 
 # Validate Date Strings

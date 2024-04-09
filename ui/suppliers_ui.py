@@ -28,6 +28,11 @@ class AddSupPopup(GridLayout):
         if not validate_string(supplierName, contactNo, email, address):
             message_box('Error', 'You missed some information !')
             return
+
+        if not validate_mobileNo(contactNo):
+            message_box('Error', 'Check the contact number')
+            return
+
         if not validate_date(startDealing):
             message_box('Error', 'Invalid date format.')
             return
@@ -76,6 +81,11 @@ class ViewSupPopup(GridLayout):
         if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
             message_box('Error', 'You missed some information !')
             return
+
+        if not validate_mobileNo(contactNo):
+            message_box('Error', 'Check the contact number')
+            return
+
         if not validate_date(startDealing):
             message_box('Error', 'Invalid date format.')
             return

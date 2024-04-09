@@ -175,8 +175,8 @@
                         Button:
                                 text: 'Cancel'
                                 font_size: 20
-                                on_release:
-                                        root.dismiss_popup(root.popup)
+                                on_release: root.dismiss_popup(root.popup)
+
 
 <ViewSupPopup>:
         size: 400, 600
@@ -202,7 +202,6 @@
                                 id: supplierName
                                 multiline: False
                                 font_size: 20
-                                hint_text: 'Mr.Mahinda'
 
                         Label:
                                 text: 'Business'
@@ -213,7 +212,6 @@
                                 id: business
                                 multiline: False
                                 font_size: 20
-                                hint_text: 'ABC Hardware'
 
                         Label:
                                 text: 'Contact No'
@@ -224,7 +222,6 @@
                                 id: contactNo
                                 multiline: False
                                 font_size: 20
-                                hint_text: '07x-xxxxxxx'
 
 			            Label:
                                 text: 'Email'
@@ -235,7 +232,6 @@
                                 id: email
                                 multiline: False
                                 font_size: 20
-                                hint_text: 'Email Address'
 
 			            Label:
                                 text: 'Address'
@@ -246,7 +242,6 @@
                                 id: address
                                 multiline: False
                                 font_size: 20
-                                hint_text: 'No01,Merchan Tower,Kollupitiya'
 
                         Label:
                                 text: 'Start Dealing'
@@ -257,25 +252,27 @@
                                 id: startDealing
                                 multiline: False
                                 font_size: 20
-                                hint_text: 'YYYY-MM-DD'
 
                         Label:
                                 text: 'Level'
                                 font_size: 20
                                 color: 1, 1, 1, 1
 
-
-
                         Spinner:
                                 id: supplierLevel
                                 values: ['1','2','3']
 
                 GridLayout:
-                        cols: 3
+                        cols: 4
                         rows: 1
                         padding: 20
                         spacing: 20
                         size_hint: 1, 0.2
+
+                        Button:
+                                text: 'Report'
+                                font_size: 20
+                                on_release: root.reports_popup()
 
                         Button:
                                 text: 'Edit'
@@ -290,6 +287,6 @@
                                         root.deleteSupplier()
 
                         Button:
-                                text: 'Report'
+                                text: 'Cancel'
                                 font_size: 20
-                                on_release: root.reports_popup()
+                                on_release: root.dismiss_popup(root.popup)

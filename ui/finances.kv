@@ -24,16 +24,8 @@
                                         id: finances_list
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        spacing: 10
-                                        padding: 10
                                         cols: 1
-                                        font_name: 'Roboto'
-                                        canvas.before:
-                                                Color:
-                                                        rgba: 0.1, 0.1, 0.1, 1
-                                                Rectangle:
-                                                        pos: self.pos
-                                                        size: self.size
+
                         GridLayout:
                                 rows: 1
                                 cols: 3
@@ -41,18 +33,18 @@
                                 padding: 20
                                 size_hint: 1, 0.3
 
-                                CButton:
+                                CButton2:
                                         id: finances_filter
                                         text: 'All'
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                CButton:
+                                CButton2:
                                         text: 'Add'
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                CButton:
+                                CButton2:
                                         text: 'Back'
                                         size_hint: 0.2, 1
                                         on_release:
@@ -78,7 +70,7 @@
                         CLabel:
                                 text: 'Type'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: viewLog_type
                                 text: 'Type'
                                 values: ['Income', 'Expense']
@@ -113,10 +105,10 @@
                                 id: viewLog_entity
                                 size_hint: 0.7, 0.1
 
-                        Label:
+                        CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: viewLog_project
                                 text: 'Project Name'
                                 values: ['']
@@ -126,7 +118,7 @@
                         CLabel:
                                 text: 'Category'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: viewLog_category
                                 text: 'Category'
                                 values: ['Materials', 'Payroll', 'Contract', 'Misc']
@@ -140,19 +132,17 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        CButton:
+                        CButton2:
                                 text: 'Edit'
                                 on_release:
-                                        root.edit_log(viewLog_type.text, viewLog_amount.text, viewLog_date.text,
-                                        viewLog_desc.text, viewLog_entity.text, viewLog_project.text,
-                                        viewLog_category.text)
+                                        root.edit_log(viewLog_type.text, viewLog_amount.text, viewLog_date.text, viewLog_desc.text, viewLog_entity.text, viewLog_project.text, viewLog_category.text)
 
-                        CButton:
+                        CButton2:
                                 text: 'Delete'
                                 on_release:
                                         root.delete_log()
 
-                        CButton:
+                        CButton2:
                                 text: 'Report'
 
 
@@ -173,7 +163,7 @@
                         CLabel:
                                 text: 'Type'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: addLog_type
                                 text: 'Type'
                                 values: ['Income', 'Expense']
@@ -215,7 +205,7 @@
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: addLog_project
                                 text: 'Project Name'
                                 values: ['']
@@ -225,7 +215,7 @@
                         CLabel:
                                 text: 'Category'
                                 size_hint: 0.3, 0.1
-                        Spinner:
+                        CSpinner:
                                 id: addLog_category
                                 text: 'Category'
                                 values: ['Materials', 'Payroll', 'Contract', 'Misc']
@@ -239,7 +229,7 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        CButton:
+                        CButton2:
                                 text: 'Insert'
                                 on_release:
                                         root.addLog(addLog_type.text, addLog_amount.text, addLog_date.text, addLog_desc.text, addLog_entity.text, addLog_project.text, addLog_category.text)

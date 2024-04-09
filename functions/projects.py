@@ -28,7 +28,7 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
 
 
 # Get all projects
-def load_projects():
+def load_projects(status=0):
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -37,6 +37,14 @@ def load_projects():
     for project_id, project in ref.get().items():
         project['id'] = project_id
         projects.append(project)
+
+    # Status 1 = In Progress, 2 = Completed, 0 = All
+    if status == 0:
+        projects = [project for project in projects if project['status'] == 'In Progress']
+    elif status == 1:
+        projects = [project for project in projects if project['status'] == 'Completed']
+    elif status == 2:
+        projects = projects
 
     return projects
 

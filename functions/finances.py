@@ -2,7 +2,7 @@ import database
 from utils import message_box
 
 
-def load_all_finances():
+def load_all_finances(status=0):
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -11,6 +11,14 @@ def load_all_finances():
     for fin_id, finance in ref.get().items():
         finance['id'] = fin_id
         finances.append(finance)
+
+    # 0 is all, 1 is income, 2 is expense
+    if status == 0:
+        finances = finances
+    elif status == 1:
+        finances = [finance for finance in finances if finance['type'] == 'Income']
+    elif status == 2:
+        finances = [finance for finance in finances if finance['type'] == 'Expense']
 
     return finances
 

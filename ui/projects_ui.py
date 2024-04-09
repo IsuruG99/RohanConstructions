@@ -3,6 +3,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from functions.projects import *
 from functools import partial
+import datetime
 
 from utils import *
 from custom import *
@@ -34,7 +35,7 @@ class AddPopup(GridLayout):
         # Send data to projects.py
         add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
         message_box('Success', 'Project added successfully.')
-        self.projects_screen.populate_projects(0)
+        self.projects_screen.populate_projects()
         self.projects_screen.ids.projects_filter.text = 'In Progress'
         self.projects_screen.dismiss_popup(self.popup)
 
@@ -85,7 +86,7 @@ class ViewPopup(GridLayout):
         if confirm_box('Update Project', 'Are you sure you want to update this project?') == 'yes':
             if update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status):
                 message_box('Success', 'Project updated successfully.')
-                self.projects_screen.populate_projects(0)
+                self.projects_screen.populate_projects()
                 self.projects_screen.ids.projects_filter.text = 'In Progress'
                 self.projects_screen.dismiss_popup(self.popup)
             else:
@@ -106,7 +107,7 @@ class ViewPopup(GridLayout):
                 message_box('Success', 'Project deleted successfully.')
             else:
                 message_box('Error', 'Failed to delete project.')
-            self.projects_screen.populate_projects(0)
+            self.projects_screen.populate_projects()
             self.projects_screen.ids.projects_filter.text = 'In Progress'
             self.projects_screen.dismiss_popup(self.popup)
 
@@ -149,23 +150,23 @@ class ReportsPopup(GridLayout):
 class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_projects(0)
-        self.switch = 0
+        self.populate_projects()
 
     # Populate the ScrollView with the projects
-    def populate_projects(self, status):
-        # Get the projects from the database
-        projects = load_projects()
-
-        # Clear the existing widgets in the SortScrollView
+    def populate_projects(self, projects=load_projects(), headers=None):
+        # Clear the ScrollView
         self.ids.projects_list.clear_widgets()
-        # Headers
+
+        # Create Headers
+        if headers is None:
+            headers = ['Project Name', 'Client', 'End Date', 'Status']
         grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
-        headers = ['Project Name', 'Client', 'End Date', 'Status']
         for header in headers:
-            grid.add_widget(CLabel(text=header, bold=True, padding=(10, 10)))
+            grid.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+                                    on_release=partial(self.sort_projects, header, projects)))
         self.ids.projects_list.add_widget(grid)
 
+        # Fill the Grid with Project Data
         for project in projects:
             grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
             button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
@@ -177,12 +178,36 @@ class ProjectsScreen(Screen):
             grid.add_widget(CLabel(text=project["client_name"]))
             grid.add_widget(CLabel(text=project["end_date"]))
             grid.add_widget(CLabel(text=project["status"]))
-            if status == 0 and project["status"] == "In Progress":
-                self.ids.projects_list.add_widget(grid)
-            elif status == 1 and project["status"] == "Completed":
-                self.ids.projects_list.add_widget(grid)
-            elif status == 2:
-                self.ids.projects_list.add_widget(grid)
+            self.ids.projects_list.add_widget(grid)
+
+    def sort_projects(self, header, projects, instance):
+        # Sort by header
+        if header == 'Project Name' or header == 'Project Name [D]':
+            projects = sorted(projects, key=lambda x: x['name'])
+            self.populate_projects(projects, headers=['Project Name [A]', 'Client', 'End Date', 'Status'])
+        elif header == 'Client' or header == 'Client [D]':
+            projects = sorted(projects, key=lambda x: x['client_name'])
+            self.populate_projects(projects, headers=['Project Name', 'Client [A]', 'End Date', 'Status'])
+        elif header == 'End Date' or header == 'End Date [D]':
+            projects = sorted(projects, key=lambda x: datetime.datetime.strptime(x['end_date'], '%Y-%m-%d'))
+            self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date [A]', 'Status'])
+        elif header == 'Status' or header == 'Status [D]':
+            projects = sorted(projects, key=lambda x: x['status'])
+            self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date', 'Status [A]'])
+        elif header == 'Project Name [A]':
+            projects = sorted(projects, key=lambda x: x['name'], reverse=True)
+            self.populate_projects(projects, headers=['Project Name [D]', 'Client', 'End Date', 'Status'])
+        elif header == 'Client [A]':
+            projects = sorted(projects, key=lambda x: x['client_name'], reverse=True)
+            self.populate_projects(projects, headers=['Project Name', 'Client [D]', 'End Date', 'Status'])
+        elif header == 'End Date [A]':
+            projects = sorted(projects, key=lambda x: datetime.datetime.strptime(x['end_date'], '%Y-%m-%d'),
+                              reverse=True)
+            self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date [D]', 'Status'])
+        elif header == 'Status [A]':
+            projects = sorted(projects, key=lambda x: x['status'], reverse=True)
+            self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date', 'Status [D]'])
+
 
     # Open View Popup Window
     def view_project(self, project_id, instance):
@@ -204,13 +229,13 @@ class ProjectsScreen(Screen):
             self.add_popup()
         elif txt == 'All' or txt == 'In Progress' or txt == 'Completed':
             if txt == 'In Progress':
-                self.populate_projects(1)
+                self.populate_projects(load_projects(1))
                 self.ids.projects_filter.text = 'Completed'
             elif txt == 'Completed':
-                self.populate_projects(2)
+                self.populate_projects(load_projects(2))
                 self.ids.projects_filter.text = 'All'
             elif txt == 'All':
-                self.populate_projects(0)
+                self.populate_projects()
                 self.ids.projects_filter.text = 'In Progress'
         elif txt == 'Back':
             self.parent.current = 'main'

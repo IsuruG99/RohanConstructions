@@ -142,7 +142,7 @@ class FinancesScreen(Screen):
         # Headers
         if headers is None:
             headers = ["Amount", "Category", "Date"]
-        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+        grid = GridLayout(cols=4, size_hint_y=None, height=50)
         for header in headers:
             grid.add_widget(CButton(text=header, bold=True, padding=(10, 10),
                                     on_release=partial(self.sort_logs, header, financeList)))
@@ -155,7 +155,7 @@ class FinancesScreen(Screen):
             else:
                 cl = (0.5, 1, 0.5, 1)
 
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=4, size_hint_y=None, height=50)
             button = Button(text=convert_currency(log["amount"]), on_release=partial(self.view_log, log["id"]),
                             background_normal='', font_size='20sp',
                             background_color=(0.1, 0.1, 0.1, 0.0), font_name='Roboto', color=cl, bold=True)

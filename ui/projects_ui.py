@@ -160,7 +160,7 @@ class ProjectsScreen(Screen):
         # Create Headers
         if headers is None:
             headers = ['Project Name', 'Client', 'End Date', 'Status']
-        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+        grid = GridLayout(cols=4, size_hint_y=None, height=50)
         for header in headers:
             grid.add_widget(CButton(text=header, bold=True, padding=(10, 10),
                                     on_release=partial(self.sort_projects, header, projects)))

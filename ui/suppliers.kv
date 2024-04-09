@@ -26,15 +26,13 @@
                                         cols: 1
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        spacing: 10
-                                        padding: 10
-                                        font_name: 'Roboto'
                                         canvas.before:
                                                 Color:
-                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                        rgba: 0, 0, 0, 0.6
                                                 Rectangle:
-                                                        pos: self.pos
                                                         size: self.size
+                                                        pos: self.pos
+
                         GridLayout:
                                 rows: 1
                                 cols: 3
@@ -76,77 +74,57 @@
                         spacing: 10
                         size_hint: 1, 0.8
 
-                        Label: # 1
+                        CLabel: # 1
                                 text: 'Name'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: supplierName
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Mr.Mahinda Mahattaya'
 
-                        Label: # 2
+                        CLabel: # 2
                                 text: 'Business'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: business
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'ABC Hardware'
 
-                        Label: # 3
+                        CLabel: # 3
                                 text: 'Contact No'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: contactNo
                                 multiline: False
-                                font_size: 20
                                 hint_text: '07xxxxxxxx'
 
-			            Label: # 4
+			            CLabel: # 4
                                 text: 'Email'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: email
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Email Address'
 
-			            Label: # 5
+			            CLabel: # 5
                                 text: 'Address'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: address
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'No01,Merchan Tower,Kollupitiya'
 
-                        Label: # 6
+                        CLabel: # 6
                                 text: 'Start Dealing'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: startDealing
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'YYYY-MM-DD'
 
                         CLabel: # 7
                                 text: 'Level'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
                         CSpinner:
                                 id: supplierLevel
                                 text: 'Supplier Level'
@@ -161,7 +139,6 @@
 
                         CButton2:
                                 text: 'Submit'
-                                font_size: 20
                                 on_release:
                                         root.add_Supplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
                                         supplierName.text = ''
@@ -174,7 +151,6 @@
 
                         CButton2:
                                 text: 'Cancel'
-                                font_size: 20
                                 on_release: root.dismiss_popup(root.popup)
 
 
@@ -193,71 +169,51 @@
                         spacing: 5
                         size_hint: 1, 0.9
 
-                        Label:
+                        CLabel:
                                 text: 'Name'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: supplierName
                                 multiline: False
-                                font_size: 20
 
-                        Label:
+                        CLabel:
                                 text: 'Business'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: business
                                 multiline: False
-                                font_size: 20
 
-                        Label:
+                        CLabel:
                                 text: 'Contact No'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: contactNo
                                 multiline: False
-                                font_size: 20
 
-			            Label:
+			            CLabel:
                                 text: 'Email'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: email
                                 multiline: False
-                                font_size: 20
 
-			            Label:
+			            CLabel:
                                 text: 'Address'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: address
                                 multiline: False
-                                font_size: 20
 
-                        Label:
+                        CLabel:
                                 text: 'Start Dealing'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
-                        TextInput:
+                        CText:
                                 id: startDealing
                                 multiline: False
-                                font_size: 20
 
                         CLabel:
                                 text: 'Level'
-                                font_size: 20
                                 color: 1, 1, 1, 1
-
                         CSpinner:
                                 id: supplierLevel
                                 values: ['1','2','3']
@@ -271,21 +227,17 @@
 
                         CButton2:
                                 text: 'Report'
-                                font_size: 20
                                 on_release: root.reports_popup()
 
                         CButton2:
                                 text: 'Save'
-                                font_size: 20
                                 on_release:
                                         root.editSupplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
 
                         CButton2:
                                 text: 'Delete'
-                                font_size: 20
                                 on_release: root.deleteSupplier()
 
                         CButton2:
                                 text: 'Cancel'
-                                font_size: 20
                                 on_release: root.dismiss_popup(root.popup)

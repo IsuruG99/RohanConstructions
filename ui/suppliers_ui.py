@@ -40,7 +40,7 @@ class AddSupPopup(GridLayout):
         # Send data to supplier.py
         add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
         message_box('Success', 'New supplier added successfully.')
-        self.suppliers_screen.populate_suppliers(0)
+        self.suppliers_screen.populate_suppliers()
 
     def dismiss_popup(self, instance):
         self.suppliers_screen.dismiss_popup(self.popup)
@@ -94,14 +94,13 @@ class ViewSupPopup(GridLayout):
 
                 # Send data to suppliers.py
                 edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
-                                  supplierLevel)
+                              supplierLevel)
 
                 message_box('Success', 'Supplier modified successfully.')
             else:
                 message_box('Error', 'Not saved !')
-            self.suppliers_screen.populate_suppliers(0)
+            self.suppliers_screen.populate_suppliers()
             self.suppliers_screen.dismiss_popup(self.popup)
-
 
     # Open Reports Popup Window
     def reports_popup(self):
@@ -112,12 +111,12 @@ class ViewSupPopup(GridLayout):
         if confirm_box('Delete Supplier', 'Do you want to delete supplier ?') == 'yes':
             if delete_supplier(self.suppliers_id):
                 message_box('Success', 'Supplier deleted successfully.')
+                self.suppliers_screen.populate_suppliers()
+                self.suppliers_screen.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Delete failed !')
-            self.suppliers_screen.populate_suppliers(0)
-            self.suppliers_screen.dismiss_popup(self.popup)
         else:
-            message_box('Error', 'Canceled.')
+            message_box('Error', 'Delete Canceled.')
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -127,7 +126,7 @@ class ViewSupPopup(GridLayout):
 class SuppliersScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_suppliers(0)
+        self.populate_suppliers()
 
     # Button Click Event Handler
     def btn_click(self, instance):
@@ -136,7 +135,7 @@ class SuppliersScreen(Screen):
         elif instance.text == 'Add New Supplier':
             self.add_popup()
 
-    def populate_suppliers(self, status):
+    def populate_suppliers(self):
         # Get the suppliers from the database
         suppliers = load_suppliers()
 
@@ -144,37 +143,35 @@ class SuppliersScreen(Screen):
         self.ids.Supplier_list.clear_widgets()
 
         # Headers
-        grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
         headers = ['Business', 'Owner', 'Contact', 'Level']
+        grid = GridLayout(cols=4, size_hint_y=None, height=50)
         for header in headers:
-            grid.add_widget(CLabel(text=header, bold=True, padding=(10, 10)))
+            grid.add_widget(CButton(text=header, bold=True))
         self.ids.Supplier_list.add_widget(grid)
-
-        if status == 0:
-            for supplier in suppliers:
-                grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
-                button = Button(text=supplier["business"],
-                                on_release=partial(self.view_suppliers, supplier["id"]),
-                                background_normal='',
-                                background_color=(1, 1, 1, 0),
-                                font_name='Roboto',
-                                color=(1, 1, 1, 1),
-                                bold=True)
-                grid.supplier = supplier
-                grid.add_widget(button)
-                grid.add_widget(Label(text=supplier["supplierName"]))
-                grid.add_widget(Label(text=supplier["contactNo"]))
-                grid.add_widget(Label(text=supplier["supplierLevel"]))
-                self.ids.Supplier_list.add_widget(grid)
+        for supplier in suppliers:
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            button = Button(text=supplier["business"],
+                            on_release=partial(self.view_suppliers, supplier["id"]),
+                            background_normal='', font_size='20sp',
+                            background_color=(0.1, 0.1, 0.1, 0.0),
+                            font_name='Roboto',
+                            color=(1, 1, 1, 1),
+                            bold=True)
+            grid.supplier = supplier
+            grid.add_widget(button)
+            grid.add_widget(CLabel(text=supplier["supplierName"]))
+            grid.add_widget(CLabel(text=supplier["contactNo"]))
+            grid.add_widget(CLabel(text=supplier["supplierLevel"]))
+            self.ids.Supplier_list.add_widget(grid)
 
     def view_suppliers(self, suppliers_id, instance):
-        viewPop = Popup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.5, 0.8))
+        viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.5, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
 
     # Open to supplier add popup window
     def add_popup(self):
-        addPop = Popup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.5, 0.8))
+        addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 

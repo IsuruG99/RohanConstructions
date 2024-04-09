@@ -25,6 +25,12 @@
                                         size_hint_y: None
                                         height: self.minimum_height
                                         cols: 1
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
 
                         GridLayout:
                                 rows: 1

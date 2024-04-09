@@ -27,9 +27,9 @@ popup_title_font_name = 'Roboto'
 text_input_font_name = 'Roboto'
 
 popup_title_font_size = '30sp'
-spinner_font_size = '20sp'
-label_font_size = '20sp'
-text_input_font_size = '20sp'
+spinner_font_size = '18sp'
+label_font_size = '18sp'
+text_input_font_size = '18sp'
 
 
 class CPopup(Popup):

@@ -1,65 +1,48 @@
-<LoginScreen>:
+<LogInPopUp>:
         GridLayout:
-                rows: 3
-                padding: 40
-                spacing: 40
-                size_hint: 1, 1
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-
-                CLabel:
-                        text: 'Log In'
-                        font_size: '40sp'
-                        size_hint: 1, 0.1
-                        bold: True
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
 
                 GridLayout:
                         cols: 2
                         rows: 2
-                        spacing: 30
-                        padding: 40
-                        size_hint: 0.5, 0.5
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.6
 
                         CLabel:
                                 text: 'Email'
-                                font_size: '40sp'
-                                size_hint: 0.3, 0.1
-                                bold: True
-
+                                size_hint: 0.4, 0.2
                         CText:
                                 id: email
-                                font_size: '60sp'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                size_hint: 0.5, 0.1
+                                size_hint: 0.6, 0.2
 
                         CLabel:
                                 text: 'Password'
-                                font_size: '40sp'
-                                size_hint: 0.3, 0.1
+                                size_hint: 0.4, 0.2
                                 bold: True
-
                         CText:
                                 id: password
-                                size_hint: 0.5, 0.1
+                                size_hint: 0.6, 0.2
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                font_size: '60sp'
                                 password: True
+
 
                 GridLayout:
                         cols: 2
                         rows: 1
-                        spacing: 40
-                        padding: 40
-                        size_hint: 1, 0.2
+                        size_hint: 1, 0.4
+                        padding: 20
+                        spacing: 20
 
                         CButton2:
                                 text: 'Exit'
-                                on_release: app.stop()
-                                bold: True
-                                valign: 'center'
+                                on_release: root.dismiss_popup()
 
 
                         CButton2:
                                 text: 'Log In'
                                 on_release: root.login(email.text, password.text)
-                                bold: True
-                                valign: 'center'

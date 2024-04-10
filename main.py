@@ -8,7 +8,7 @@ from ui.projects_ui import ProjectsScreen
 from ui.resources_ui import ResourcesScreen
 from ui.suppliers_ui import SuppliersScreen
 from ui.clients_ui import ClientsScreen
-from ui.login_ui import LoginScreen
+from ui.login_ui import *
 from ui.finances_ui import FinancesScreen
 
 from utils import *
@@ -26,17 +26,96 @@ Builder.load_file('ui/finances.kv')
 
 
 class MainScreen(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        self.loggedIn()
+
+    def btn_click(self, instance):
+        perms = App.get_running_app().get_accessLV()
+        if instance.text == 'LogOut' or instance.text == 'LogIn':
+            self.openLogPopup(instance.text)
+        elif perms is None:
+            message_box('Error', 'Please login to continue.')
+            return
+        else:
+            if instance.text == 'Projects':
+                self.parent.current = 'projects'
+            elif instance.text == 'Clients':
+                self.parent.current = 'clients'
+            elif instance.text == 'Resources':
+                self.parent.current = 'resources'
+            elif instance.text == 'Suppliers':
+                self.parent.current = 'suppliers'
+            elif instance.text == 'Finances':
+                self.parent.current = 'finances'
+            elif instance.text == 'Personnel':
+                self.parent.current = 'manpower'
+
+    def openLogPopup(self, request):
+        if request == 'LogIn':
+            logPop = CPopup(title='LogIn', content=LogInPopUp(self), size_hint=(0.5, 0.4))
+            logPop.open()
+            logPop.content.popup = logPop
+        elif request == 'LogOut':
+            message_box('LogOut', 'You have been logged out.')
+            App.get_running_app().set_accessLV(None)
+            App.get_running_app().set_accessName(None)
+            self.ids.logBtn.text = 'LogIn'
+            self.ids.logStatus.text = 'Not Logged In.'
+            self.ids.projectsBtn.disabled = True
+            self.ids.clientsBtn.disabled = True
+            self.ids.suppliersBtn.disabled = True
+            self.ids.financesBtn.disabled = True
+            self.ids.personnelBtn.disabled = True
+            self.ids.resourcesBtn.disabled = True
+        else:
+            message_box('Error', 'Invalid Request')
+
+    def loggedIn(self, email=None):
+        perms = App.get_running_app().get_accessLV()
+        if perms is not None:
+            self.ids.logBtn.text = 'LogOut'
+            self.ids.logStatus.text = 'Welcome, ' + cutEmail(email) + '!'
+            if perms > 1:
+                self.ids.projectsBtn.disabled = True
+                self.ids.clientsBtn.disabled = True
+                self.ids.suppliersBtn.disabled = True
+                self.ids.financesBtn.disabled = True
+                self.ids.personnelBtn.disabled = False
+                self.ids.resourcesBtn.disabled = False
+            else:
+                self.ids.projectsBtn.disabled = False
+                self.ids.clientsBtn.disabled = False
+                self.ids.suppliersBtn.disabled = False
+                self.ids.financesBtn.disabled = False
+                self.ids.personnelBtn.disabled = False
+                self.ids.resourcesBtn.disabled = False
+        else:
+            self.ids.logBtn.text = 'LogIn'
+            self.ids.logStatus.text = 'Not Logged In.'
+            self.ids.projectsBtn.disabled = True
+            self.ids.clientsBtn.disabled = True
+            self.ids.suppliersBtn.disabled = True
+            self.ids.financesBtn.disabled = True
+            self.ids.personnelBtn.disabled = True
+            self.ids.resourcesBtn.disabled = True
 
 
 class MainApp(App):
     accessLV = None
+    accessName = None
 
     def set_accessLV(self, level):
         self.accessLV = level
 
     def get_accessLV(self):
         return self.accessLV
+
+    def set_accessName(self, name):
+        self.accessName = name
+
+    def get_accessName(self):
+        return self.accessName
 
     def build(self):
         Window.size = (1200, 720)
@@ -47,7 +126,6 @@ class MainApp(App):
         sm = ScreenManager()
 
         # Screens are added to Manager
-        sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(MainScreen(name='main'))
         sm.add_widget(ProjectsScreen(name='projects'))
         sm.add_widget(SuppliersScreen(name='suppliers'))
@@ -57,21 +135,6 @@ class MainApp(App):
         sm.add_widget(FinancesScreen(name='finances'))
 
         return sm
-
-    def btn_click(self, instance):
-        perms = App.get_running_app().get_accessLV()
-        if instance.text == 'Projects':
-            self.root.current = 'projects' if perms <= 1 else message_box('Error', 'Access Denied')
-        elif instance.text == 'Clients':
-            self.root.current = 'clients' if perms <= 1 else message_box('Error', 'Access Denied')
-        elif instance.text == 'Resources':
-            self.root.current = 'resources'
-        elif instance.text == 'Suppliers':
-            self.root.current = 'suppliers' if perms <= 1 else message_box('Error', 'Access Denied')
-        elif instance.text == 'Finances':
-            self.root.current = 'finances' if perms <= 1 else message_box('Error', 'Access Denied')
-        elif instance.text == 'Personnel':
-            self.root.current = 'manpower'
 
     def on_start(self):
         Window.set_title('Rohan Constructions')

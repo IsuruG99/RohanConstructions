@@ -15,3 +15,6 @@ Monthly/Weekly?
 Unit Quantity and InStock/OutOfStock
 Manager updates manually
 Purely to keep track, will manually notify suppliers if resources are out of stock
+
+User Tracking
+- Every Finance Log will have a Related_User field, to track who made the changes

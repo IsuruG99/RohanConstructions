@@ -22,3 +22,13 @@ def getAccessLV(email):
             return users[user]['access']
 
     return False
+
+
+def getAccessName(email):
+    ref = database.get_ref('users')
+    users = ref.get()
+    for user in users:
+        if users[user]['email'] == email:
+            return users[user]['email']
+
+    return False

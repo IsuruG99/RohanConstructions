@@ -1,3 +1,5 @@
+from kivy.app import App
+
 import database
 from utils import *
 from functions.finances import add_log
@@ -69,7 +71,7 @@ def update_project(project_id, name, description, start_date, end_date, client_n
         # Ask to add a note to finances
         if confirm_box('Project Completed', 'Would you like to add a note to the finances?') == 'yes':
             # Add a log to finances (fin_type, amount, date, desc, entity, project, category)
-            add_log('Income', budget, end_date, 'Project Completion', client_name, name, 'Contract')
+            add_log('Income', budget, end_date, 'Project Completion', client_name, name, 'Contract', App.get_running_app().get_accessName())
 
     if ref is not None:
         # Set the project data under the new key

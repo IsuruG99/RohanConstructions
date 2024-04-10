@@ -35,7 +35,7 @@ class AddPopup(GridLayout):
         # Send data to projects.py
         add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
         message_box('Success', 'Project added successfully.')
-        self.projects_screen.populate_projects()
+        self.projects_screen.populate_projects(load_projects(0))
         self.projects_screen.ids.projects_filter.text = 'In Progress'
         self.projects_screen.dismiss_popup(self.popup)
 
@@ -86,7 +86,7 @@ class ViewPopup(GridLayout):
         if confirm_box('Update Project', 'Are you sure you want to update this project?') == 'yes':
             if update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status):
                 message_box('Success', 'Project updated successfully.')
-                self.projects_screen.populate_projects()
+                self.projects_screen.populate_projects(load_projects(0))
                 self.projects_screen.ids.projects_filter.text = 'In Progress'
                 self.projects_screen.dismiss_popup(self.popup)
             else:
@@ -107,7 +107,7 @@ class ViewPopup(GridLayout):
                 message_box('Success', 'Project deleted successfully.')
             else:
                 message_box('Error', 'Failed to delete project.')
-            self.projects_screen.populate_projects()
+            self.projects_screen.populate_projects(load_projects(0))
             self.projects_screen.ids.projects_filter.text = 'In Progress'
             self.projects_screen.dismiss_popup(self.popup)
 
@@ -150,21 +150,20 @@ class ReportsPopup(GridLayout):
 class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_projects()
+        self.populate_projects(load_projects(0))
 
     # Populate the ScrollView with the projects
     def populate_projects(self, projects=load_projects(0), headers=None):
         # Clear the ScrollView
         self.ids.projects_list.clear_widgets()
+        self.ids.projects_headers.clear_widgets()
 
         # Create Headers
         if headers is None:
             headers = ['Project Name', 'Client', 'End Date', 'Status']
-        grid = GridLayout(cols=4, size_hint_y=None, height=50)
         for header in headers:
-            grid.add_widget(CButton(text=header, bold=True, padding=(10, 10),
-                                    on_release=partial(self.sort_projects, header, projects)))
-        self.ids.projects_list.add_widget(grid)
+            self.ids.projects_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+                                                         on_release=partial(self.sort_projects, header, projects)))
 
         # Fill the Grid with Project Data
         for project in projects:
@@ -215,10 +214,7 @@ class ProjectsScreen(Screen):
             projects = load_projects()
             projects = [project for project in projects if searchValue.lower() in project['name'].lower() or
                         searchValue.lower() in project['client_name'].lower() or searchValue.lower() in
-                        project['SndDate'].lower()]
-            # Print how many projects were found
-            print(len(projects))
-            print(searchValue)
+                        project['end_date'].lower()]
             self.populate_projects(projects)
 
     # Open View Popup Window
@@ -247,23 +243,23 @@ class ProjectsScreen(Screen):
                 self.populate_projects(load_projects(2))
                 self.ids.projects_filter.text = 'All'
             elif txt == 'All':
-                self.populate_projects()
+                self.populate_projects(load_projects(0))
                 self.ids.projects_filter.text = 'In Progress'
         elif txt == 'Back':
             self.parent.current = 'main'
 
     # Font Size Adjustment Test
-    def fontSizer(self, instance):
-        for grid in self.ids.projects_list.children:
-            for child in grid.children:
-                if isinstance(child, (Label, Button)):
-                    if instance.text == '+':
-                        child.font_size += 5
-                    else:
-                        child.font_size -= 5
-                    child.size_hint_y = None
-                    child.texture_update()
-                    child.size = child.texture_size
+    #     def fontSizer(self, instance):
+    #         for grid in self.ids.projects_list.children:
+    #             for child in grid.children:
+    #                 if isinstance(child, (Label, Button)):
+    #                     if instance.text == '+':
+    #                         child.font_size += 5
+    #                     else:
+    #                         child.font_size -= 5
+    #                     child.size_hint_y = None
+    #                     child.texture_update()
+    #                     child.size = child.texture_size
 
     def dismiss_popup(self, instance):
         instance.dismiss()

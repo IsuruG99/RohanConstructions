@@ -53,7 +53,7 @@ class AddLogPopup(GridLayout):
         # Send data to finances.py
         add_log(fin_type, amount, date, desc, entity, project, category)
         message_box('Success', 'Log added successfully.')
-        self.finances_screen.populate_logs()
+        self.finances_screen.populate_logs(load_all_finances(0))
         self.finances_screen.ids.finances_filter.text = 'All'
         self.finances_screen.dismiss_popup(self.popup)
 
@@ -111,7 +111,7 @@ class ViewLogPopup(GridLayout):
         if confirm_box('Edit', 'Are you sure you want to edit this log?') == 'yes':
             if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category):
                 message_box('Success', 'Log edited successfully.')
-                self.finances_screen.populate_logs()
+                self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
@@ -121,7 +121,7 @@ class ViewLogPopup(GridLayout):
         if confirm_box('Delete', 'Are you sure you want to delete this log?') == 'yes':
             if delete_log(self.fin_id):
                 message_box('Success', 'Log deleted successfully.')
-                self.finances_screen.populate_logs()
+                self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
@@ -139,14 +139,15 @@ class FinancesScreen(Screen):
     def populate_logs(self, financeList=load_all_finances(), headers=None):
         # Clear the existing widgets in the ScrollView
         self.ids.finances_list.clear_widgets()
+        self.ids.finance_headers.clear_widgets()
+
         # Headers
         if headers is None:
             headers = ["Amount", "Category", "Date"]
-        grid = GridLayout(cols=4, size_hint_y=None, height=50)
+        # Dynamically regenerate headers, made for Sorting name changes
         for header in headers:
-            grid.add_widget(CButton(text=header, bold=True, padding=(10, 10),
-                                    on_release=partial(self.sort_logs, header, financeList)))
-        self.ids.finances_list.add_widget(grid)
+            self.ids.finance_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+                                                        on_release=partial(self.sort_logs, header, financeList)))
 
         for log in financeList:
             if log["type"] == "Expense":

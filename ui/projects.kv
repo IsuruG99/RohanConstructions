@@ -32,53 +32,29 @@
                                         on_release: root.searchProj(search.text)
 
                 GridLayout:
-                        rows: 2
+                        rows: 3
                         size_hint: 1, 0.95
 
                         GridLayout:
-                                spacing: 10
-                                padding: (30, 20, 20, 20)
+                                size_hint: 1, 0.1
+                                id: projects_headers
                                 rows: 1
-                                cols: 2
-                                size_hint: 1, 0.8
-                                ScrollView:
-                                        size_hint: 0.95, 1
-                                        do_scroll_x: False
-                                        GridLayout:
-                                                id: projects_list
-                                                cols: 1
-                                                size_hint_y: None
-                                                height: self.minimum_height
-                                                canvas.before:
-                                                        Color:
-                                                                rgba: 0, 0, 0, 0.6
-                                                        Rectangle:
-                                                                size: self.size
-                                                                pos: self.pos
+                                height: 50
 
+                        ScrollView:
+                                size_hint: 0.95, 1
+                                do_scroll_x: False
                                 GridLayout:
-                                        size_hint: 0.05, 1
-                                        rows: 4
-                                        CLabel:
-                                                text: ''
-                                                size_hint: 0.010, 1
-                                        CButton:
-                                                text: '+'
-                                                size_hint: 0.0025, 1
-                                                font_size: '30sp'
-                                                background_color: 0, 0, 0, 0
-                                                on_release: root.fontSizer(self)
-                                                valign: 'bottom'
-                                        CButton:
-                                                text: '-'
-                                                size_hint: 0.0025, 1
-                                                font_size: '30sp'
-                                                background_color: 0, 0, 0, 0
-                                                on_release: root.fontSizer(self)
-                                                valign: 'top'
-                                        CLabel:
-                                                text: ''
-                                                size_hint: 0.010, 1
+                                        id: projects_list
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
 
                         GridLayout:
                                 rows: 1

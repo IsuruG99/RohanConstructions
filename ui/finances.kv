@@ -32,10 +32,15 @@
                                         on_release: root.searchLogs(search.text)
 
                 GridLayout:
-                        rows: 2
-                        spacing: 20
+                        rows: 3
                         padding: 20
                         size_hint: 1, 0.9
+
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: finance_headers
+                                rows: 1
+                                height: 50
 
                         ScrollView:
                                 size_hint: 1, 1

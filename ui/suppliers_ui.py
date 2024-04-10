@@ -40,7 +40,7 @@ class AddSupPopup(GridLayout):
         # Send data to supplier.py
         add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
         message_box('Success', 'New supplier added successfully.')
-        self.suppliers_screen.populate_suppliers()
+        self.suppliers_screen.populate_suppliers(load_suppliers())
 
     def dismiss_popup(self, instance):
         self.suppliers_screen.dismiss_popup(self.popup)
@@ -99,7 +99,7 @@ class ViewSupPopup(GridLayout):
                 message_box('Success', 'Supplier modified successfully.')
             else:
                 message_box('Error', 'Not saved !')
-            self.suppliers_screen.populate_suppliers()
+            self.suppliers_screen.populate_suppliers(load_suppliers())
             self.suppliers_screen.dismiss_popup(self.popup)
 
     # Open Reports Popup Window
@@ -111,7 +111,7 @@ class ViewSupPopup(GridLayout):
         if confirm_box('Delete Supplier', 'Do you want to delete supplier ?') == 'yes':
             if delete_supplier(self.suppliers_id):
                 message_box('Success', 'Supplier deleted successfully.')
-                self.suppliers_screen.populate_suppliers()
+                self.suppliers_screen.populate_suppliers(load_suppliers())
                 self.suppliers_screen.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Delete failed !')
@@ -126,20 +126,20 @@ class ViewSupPopup(GridLayout):
 class SuppliersScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_suppliers()
+        self.populate_suppliers(load_suppliers())
 
     def populate_suppliers(self, suppliers=load_suppliers(), headers=None):
-        # Clear the existing widgets in the ScrollView
+        # Clear the existing widgets in the ScrollView & Headers
         self.ids.Supplier_list.clear_widgets()
+        self.ids.Supplier_headers.clear_widgets()
 
-        # Headers
+        # Header Default Set
         if headers is None:
             headers = ['Business', 'Owner', 'Contact', 'Level']
-        grid = GridLayout(cols=4, size_hint_y=None, height=50)
+        # Fill header list (Made to rewrite [A] [D] Sorting Header custom names in sorting)
         for header in headers:
-            grid.add_widget(CButton(text=header, bold=True, padding=(10,10),
-                                    on_release=partial(self.sort_suppliers, suppliers, header)))
-        self.ids.Supplier_list.add_widget(grid)
+            self.ids.Supplier_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+                                                         on_release=partial(self.sort_suppliers, suppliers, header)))
 
         # Fill the grid with Supplier Data
         for supplier in suppliers:
@@ -158,6 +158,7 @@ class SuppliersScreen(Screen):
             grid.add_widget(CLabel(text=supplier["supplierLevel"]))
             self.ids.Supplier_list.add_widget(grid)
 
+    # Main Sorting Function, take header list, supplier list, call populate function with sorted supplier list
     def sort_suppliers(self, suppliers, header, instance):
         if header == 'Business' or header == 'Business [D]':
             suppliers = sorted(suppliers, key=lambda x: x['business'])
@@ -184,6 +185,18 @@ class SuppliersScreen(Screen):
             suppliers = sorted(suppliers, key=lambda x: str(x['supplierLevel']), reverse=True)
             self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [D]'])
 
+    # Search Function, take search text, call populate function with filtered supplier list
+    def searchSuppliers(self, search_text):
+        search_text = search_text.lower()
+        suppliers = load_suppliers()
+        suppliers = [supplier for supplier in suppliers if
+                     search_text in supplier['business'].lower() or
+                     search_text in supplier['supplierName'].lower() or
+                     search_text in supplier['contactNo'].lower() or
+                     search_text in supplier['email'].lower() or
+                     search_text in supplier['startDealing'].lower()]
+        self.populate_suppliers(suppliers)
+
     def view_suppliers(self, suppliers_id, instance):
         viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.5, 0.8))
         viewPop.open()
@@ -201,6 +214,7 @@ class SuppliersScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add New Supplier':
             self.add_popup()
+        # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
         elif instance.text == 'All' or instance.text == 'Level 1' or instance.text == 'Level 2' or instance.text == 'Level 3':
             if instance.text == 'All':
                 self.populate_suppliers(load_suppliers(1))

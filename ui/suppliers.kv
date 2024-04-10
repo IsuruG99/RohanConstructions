@@ -5,21 +5,45 @@
                 padding: 40
                 spacing: 20
 
-                Label:
-                        text: 'Suppliers'
-                        size_hint: 1, 0.1
-                        font_size: '30sp'
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        cols: 2
+                        size_hint: 1, 0.05
+                        CLabel:
+                                text: 'Suppliers'
+                                size_hint: 0.7, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                                padding: 10
+
+                        GridLayout:
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10, 0
+                                padding: (0, 0, 30, 0)
+                                CText:
+                                        id: searchBar
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.75, 1
+                                CButton2:
+                                        text: 'Search'
+                                        size_hint: 0.25, 1
+                                        on_release: root.searchSuppliers(searchBar.text)
 
                 GridLayout:
-                        rows: 2
-                        spacing: 20
+                        rows: 3
                         padding: 20
                         size_hint: 1, 0.9
 
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: Supplier_headers
+                                rows: 1
+                                height: 50
+
                         ScrollView:
-                                size_hint: 1, 1
+                                size_hint: 1, 0.9
                                 do_scroll_x: False
                                 GridLayout:
                                         id: Supplier_list
@@ -43,6 +67,7 @@
                                 CButton2:
                                         text: 'All'
                                         id: supplierFilter
+                                        size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:

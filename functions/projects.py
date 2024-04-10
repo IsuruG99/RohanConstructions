@@ -82,12 +82,11 @@ def update_project(project_id, name, description, start_date, end_date, client_n
             'budget': budget,
             'status': status
         })
+        return True
 
     else:
         message_box('Error', 'Failed to update project: "projects" reference not found.')
-
-    print("Project updated successfully.")
-    return True
+        return False
 
 
 # Delete a project by ID

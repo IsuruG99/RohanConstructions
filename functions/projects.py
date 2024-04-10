@@ -28,7 +28,7 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
 
 
 # Get all projects
-def load_projects(status=0):
+def load_projects(status=2):
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -105,7 +105,6 @@ def delete_project(project_id):
     return True
 
 
-# very specific function here
 # Check if the project name is unique with an exception to the current project id
 def name_unique_check(status, name, proj_id=None):
     # load all projects

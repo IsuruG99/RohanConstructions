@@ -5,19 +5,39 @@
                 padding: (20, 40, 20, 20)
                 spacing: 20
 
-                CLabel:
-                        text: 'Projects'
+                GridLayout:
+                        cols: 2
                         size_hint: 1, 0.05
-                        font_size: '30sp'
-                        bold: True
+                        CLabel:
+                                text: 'Projects'
+                                size_hint: 0.7, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                                padding: 10
+
+                        GridLayout:
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10, 0
+                                padding: (0, 0, 30, 0)
+                                CText:
+                                        id: search
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.75, 1
+                                CButton2:
+                                        text: 'Search'
+                                        size_hint: 0.25, 1
+                                        on_release: root.searchProj(search.text)
 
                 GridLayout:
                         rows: 2
-                        spacing: 10
-                        padding: 10
                         size_hint: 1, 0.95
 
                         GridLayout:
+                                spacing: 10
+                                padding: (30, 20, 20, 20)
                                 rows: 1
                                 cols: 2
                                 size_hint: 1, 0.8

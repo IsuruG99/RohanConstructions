@@ -128,26 +128,20 @@ class SuppliersScreen(Screen):
         super().__init__(**kwargs)
         self.populate_suppliers()
 
-    # Button Click Event Handler
-    def btn_click(self, instance):
-        if instance.text == 'Back':
-            self.parent.current = 'main'
-        elif instance.text == 'Add New Supplier':
-            self.add_popup()
-
-    def populate_suppliers(self):
-        # Get the suppliers from the database
-        suppliers = load_suppliers()
-
+    def populate_suppliers(self, suppliers=load_suppliers(), headers=None):
         # Clear the existing widgets in the ScrollView
         self.ids.Supplier_list.clear_widgets()
 
         # Headers
-        headers = ['Business', 'Owner', 'Contact', 'Level']
+        if headers is None:
+            headers = ['Business', 'Owner', 'Contact', 'Level']
         grid = GridLayout(cols=4, size_hint_y=None, height=50)
         for header in headers:
-            grid.add_widget(CButton(text=header, bold=True))
+            grid.add_widget(CButton(text=header, bold=True, padding=(10,10),
+                                    on_release=partial(self.sort_suppliers, suppliers, header)))
         self.ids.Supplier_list.add_widget(grid)
+
+        # Fill the grid with Supplier Data
         for supplier in suppliers:
             grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
             button = Button(text=supplier["business"],
@@ -164,6 +158,32 @@ class SuppliersScreen(Screen):
             grid.add_widget(CLabel(text=supplier["supplierLevel"]))
             self.ids.Supplier_list.add_widget(grid)
 
+    def sort_suppliers(self, suppliers, header, instance):
+        if header == 'Business' or header == 'Business [D]':
+            suppliers = sorted(suppliers, key=lambda x: x['business'])
+            self.populate_suppliers(suppliers, headers=['Business [A]', 'Owner', 'Contact', 'Level'])
+        elif header == 'Owner' or header == 'Owner [D]':
+            suppliers = sorted(suppliers, key=lambda x: x['supplierName'])
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner [A]', 'Contact', 'Level'])
+        elif header == 'Contact' or header == 'Contact [D]':
+            suppliers = sorted(suppliers, key=lambda x: str(x['contactNo']))
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact [A]', 'Level'])
+        elif header == 'Level' or header == 'Level [D]':
+            suppliers = sorted(suppliers, key=lambda x: str(x['supplierLevel']))
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [A]'])
+        elif header == 'Business [A]':
+            suppliers = sorted(suppliers, key=lambda x: x['business'], reverse=True)
+            self.populate_suppliers(suppliers, headers=['Business [D]', 'Owner', 'Contact', 'Level'])
+        elif header == 'Owner [A]':
+            suppliers = sorted(suppliers, key=lambda x: x['supplierName'], reverse=True)
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner [D]', 'Contact', 'Level'])
+        elif header == 'Contact [A]':
+            suppliers = sorted(suppliers, key=lambda x: str(x['contactNo']), reverse=True)
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact [D]', 'Level'])
+        elif header == 'Level [A]':
+            suppliers = sorted(suppliers, key=lambda x: str(x['supplierLevel']), reverse=True)
+            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [D]'])
+
     def view_suppliers(self, suppliers_id, instance):
         viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.5, 0.8))
         viewPop.open()
@@ -174,6 +194,26 @@ class SuppliersScreen(Screen):
         addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
+
+    # Button Click Event Handler
+    def btn_click(self, instance):
+        if instance.text == 'Back':
+            self.parent.current = 'main'
+        elif instance.text == 'Add New Supplier':
+            self.add_popup()
+        elif instance.text == 'All' or instance.text == 'Level 1' or instance.text == 'Level 2' or instance.text == 'Level 3':
+            if instance.text == 'All':
+                self.populate_suppliers(load_suppliers(1))
+                self.ids.supplierFilter.text = 'Level 1'
+            elif instance.text == 'Level 1':
+                self.populate_suppliers(load_suppliers(2))
+                self.ids.supplierFilter.text = 'Level 2'
+            elif instance.text == 'Level 2':
+                self.populate_suppliers(load_suppliers(3))
+                self.ids.supplierFilter.text = 'Level 3'
+            elif instance.text == 'Level 3':
+                self.populate_suppliers(load_suppliers(0))
+                self.ids.supplierFilter.text = 'All'
 
     def dismiss_popup(self, instance):
         instance.dismiss()

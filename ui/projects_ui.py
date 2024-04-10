@@ -153,7 +153,7 @@ class ProjectsScreen(Screen):
         self.populate_projects()
 
     # Populate the ScrollView with the projects
-    def populate_projects(self, projects=load_projects(), headers=None):
+    def populate_projects(self, projects=load_projects(0), headers=None):
         # Clear the ScrollView
         self.ids.projects_list.clear_widgets()
 
@@ -180,6 +180,7 @@ class ProjectsScreen(Screen):
             grid.add_widget(CLabel(text=project["status"]))
             self.ids.projects_list.add_widget(grid)
 
+    # Sort Projects, called by the header buttons, calls populate_projects with matching Projects List
     def sort_projects(self, header, projects, instance):
         # Sort by header
         if header == 'Project Name' or header == 'Project Name [D]':
@@ -208,6 +209,17 @@ class ProjectsScreen(Screen):
             projects = sorted(projects, key=lambda x: x['status'], reverse=True)
             self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date', 'Status [D]'])
 
+    # Search Projects by given String, calls populate_projects with matching Projects List
+    def searchProj(self, searchValue):
+        if not searchValue == '':
+            projects = load_projects()
+            projects = [project for project in projects if searchValue.lower() in project['name'].lower() or
+                        searchValue.lower() in project['client_name'].lower() or searchValue.lower() in
+                        project['SndDate'].lower()]
+            # Print how many projects were found
+            print(len(projects))
+            print(searchValue)
+            self.populate_projects(projects)
 
     # Open View Popup Window
     def view_project(self, project_id, instance):

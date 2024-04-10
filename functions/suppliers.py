@@ -2,7 +2,7 @@ import database
 from utils import *
 
 
-def load_suppliers():
+def load_suppliers(status=0):
     # Get a reference to Database
     ref = database.get_ref('suppliers')
 
@@ -11,6 +11,15 @@ def load_suppliers():
     for supplier_id, supplier in ref.get().items():
         supplier['id'] = supplier_id
         suppliers.append(supplier)
+
+    if status == 0:
+        suppliers = suppliers
+    elif status == 1:
+        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '1']
+    elif status == 2:
+        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '2']
+    elif status == 3:
+        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '3']
 
     return suppliers
 

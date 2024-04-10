@@ -187,6 +187,17 @@ class FinancesScreen(Screen):
             finances = sorted(finances, key=lambda x: datetime.datetime.strptime(x["date"], '%Y-%m-%d'), reverse=True)
             self.populate_logs(finances, headers=['Amount', 'Category', 'Date [D]'])
 
+    def searchLogs(self, searchValue):
+        if not searchValue == '':
+            searchValue = searchValue.lower()
+            finances = load_all_finances()
+            searchResults = []
+            for log in finances:
+                if (searchValue in log['project_name'].lower() or searchValue in str(log['amount']).lower() or
+                        searchValue in log['date'].lower()):
+                    searchResults.append(log)
+            self.populate_logs(searchResults)
+
     def view_log(self, fin_id, instance):
         # Message Box to display the finance id
         viewPop = CPopup(title='View Finance Log', content=ViewLogPopup(self, fin_id), size_hint=(0.5, 0.8))

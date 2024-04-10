@@ -111,7 +111,7 @@ class CText(TextInput):
         self.background_color = text_input_background_color
         self.background_normal = ''
         self.background_active = ''
-        self.valign = 'middle'
+        self.multiline = False
 
 
 class RLabelTop(CLabel):

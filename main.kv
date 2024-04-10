@@ -2,21 +2,37 @@
         GridLayout:
                 rows: 5
                 cols: 1
-                padding: 10
+                padding: 20
                 spacing: 10
 
-                CLabel:
-                        text: 'Project Management System'
+                GridLayout:
                         size_hint: 1, 0.1
-                        font_size: '40sp'
-                        bold: True
+                        rows: 1
+                        cols: 2
+                        CLabel:
+                                text: 'Project Management System'
+                                size_hint: 0.8, 1
+                                font_size: '40sp'
+                                bold: True
+
+                        GridLayout:
+                                rows: 2
+                                size_hint: 0.2, 1
+                                CButton2:
+                                        id: logBtn
+                                        size_hint: 0.1, 0.5
+                                        text: 'LogIn'
+                                        on_release: root.btn_click(self)
+                                CLabel:
+                                        id: logStatus
+                                        size_hint: 0.1, 0.5
 
                 CLabel:
                         text: 'Rohan Constructions'
                         font_size: '60sp'
                         size_hint: 1, 0.1
 
-                # Make an empty space here
+                # Empty Space in Middle
                 Label:
                         size_hint: 1, 0.4
 
@@ -28,43 +44,49 @@
                         size_hint: 1, 0.3
 
                         CButton2:
+                                id: projectsBtn
                                 text: 'Projects'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
                         CButton2:
+                                id: clientsBtn
                                 text: 'Clients'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
                         CButton2:
+                                id: suppliersBtn
                                 text: 'Suppliers'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
                         CButton2:
+                                id: resourcesBtn
                                 text: 'Resources'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
                         CButton2:
+                                id: personnelBtn
                                 text: 'Personnel'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'
 
                         CButton2:
+                                id: financesBtn
                                 text: 'Finances'
                                 font_size: '32sp'
                                 on_release:
-                                        app.btn_click(self)
+                                        root.btn_click(self)
                                         root.manager.transition.direction = 'left'

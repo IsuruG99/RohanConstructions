@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -67,6 +68,7 @@ class ViewLogPopup(GridLayout):
 
     # Populate PopUp Window
     def populate_view(self):
+        print(App.get_running_app().get_accessName())
         # Populate the project names Spinner
         self.ids.viewLog_project.values = []
         projects = load_projects()
@@ -109,7 +111,7 @@ class ViewLogPopup(GridLayout):
             return
         # Send data to finances.py
         if confirm_box('Edit', 'Are you sure you want to edit this log?') == 'yes':
-            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category):
+            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category, App.get_running_app().get_accessName()):
                 message_box('Success', 'Log edited successfully.')
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'All'
@@ -133,7 +135,7 @@ class ViewLogPopup(GridLayout):
 class FinancesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_logs()
+        self.sort_logs("Date", load_all_finances(0), None)
 
     # Populate the ScrollView with the finances
     def populate_logs(self, financeList=load_all_finances(), headers=None):
@@ -143,7 +145,7 @@ class FinancesScreen(Screen):
 
         # Headers
         if headers is None:
-            headers = ["Amount", "Category", "Date"]
+            headers = ["Amount", "Category", "Date", "User"]
         # Dynamically regenerate headers, made for Sorting name changes
         for header in headers:
             self.ids.finance_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
@@ -164,29 +166,35 @@ class FinancesScreen(Screen):
             grid.add_widget(button)
             grid.add_widget(CLabel(text=log["category"]))
             grid.add_widget(CLabel(text=convert_date(log["date"])))
+            grid.add_widget(CLabel(text=log["user"]))
             self.ids.finances_list.add_widget(grid)
 
     def sort_logs(self, header, finances, instance):
         # Sort by header
         if header == "Amount" or header == "Amount [D]":
             finances = sorted(finances, key=lambda x: currencyStringToFloat(x["amount"]))
-            self.populate_logs(finances, headers=['Amount [A]', 'Category', 'Date'])
-
+            self.populate_logs(finances, headers=['Amount [A]', 'Category', 'Date', 'User'])
         elif header == "Category" or header == "Category [D]":
             finances = sorted(finances, key=lambda x: x["category"])
-            self.populate_logs(finances, headers=['Amount', 'Category [A]', 'Date'])
+            self.populate_logs(finances, headers=['Amount', 'Category [A]', 'Date', 'User'])
         elif header == "Date" or header == "Date [D]":
             finances = sorted(finances, key=lambda x: datetime.datetime.strptime(x["date"], '%Y-%m-%d'))
-            self.populate_logs(finances, headers=['Amount', 'Category', 'Date [A]'])
+            self.populate_logs(finances, headers=['Amount', 'Category', 'Date [A]', 'User'])
+        elif header == "User" or header == "User [D]":
+            finances = sorted(finances, key=lambda x: x["user"])
+            self.populate_logs(finances, headers=['Amount', 'Category', 'Date', 'User [A]'])
         elif header == "Amount [A]":
             finances = sorted(finances, key=lambda x: currencyStringToFloat(x["amount"]), reverse=True)
-            self.populate_logs(finances, headers=['Amount [D]', 'Category', 'Date'])
+            self.populate_logs(finances, headers=['Amount [D]', 'Category', 'Date', 'User'])
         elif header == "Category [A]":
             finances = sorted(finances, key=lambda x: x["category"], reverse=True)
-            self.populate_logs(finances, headers=['Amount', 'Category [D]', 'Date'])
+            self.populate_logs(finances, headers=['Amount', 'Category [D]', 'Date', 'User'])
         elif header == "Date [A]":
             finances = sorted(finances, key=lambda x: datetime.datetime.strptime(x["date"], '%Y-%m-%d'), reverse=True)
-            self.populate_logs(finances, headers=['Amount', 'Category', 'Date [D]'])
+            self.populate_logs(finances, headers=['Amount', 'Category', 'Date [D]', 'User'])
+        elif header == "User [A]":
+            finances = sorted(finances, key=lambda x: x["user"], reverse=True)
+            self.populate_logs(finances, headers=['Amount', 'Category', 'Date', 'User [D]'])
 
     def searchLogs(self, searchValue):
         if not searchValue == '':

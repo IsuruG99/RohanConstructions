@@ -15,3 +15,14 @@ Monthly/Weekly?
 Unit Quantity and InStock/OutOfStock
 Manager updates manually
 Purely to keep track, will manually notify suppliers if resources are out of stock
+
+User Tracking
+- Every Finance Log will have a Related_User f  ield, to track who made   the changes
+
+
+To-do (For Myself) :
+- Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
+- Export a Report (?)
+- Create Account Functionality? (Delete too i guess)
+- Project Report Revamp (Postponed til resource and manpower function complete)
+- Access Controls V3+ (Postponed till every function complete)

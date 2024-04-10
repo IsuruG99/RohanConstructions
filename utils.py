@@ -67,3 +67,10 @@ def validate_currency(amount):
         return True
     except ValueError:
         return False
+
+
+def cutEmail(email):
+    if '@' not in email:
+        return email
+    else:
+        return email.split('@')[0]

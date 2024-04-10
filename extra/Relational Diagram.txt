@@ -47,3 +47,4 @@ Finance Management:
 + Related entity (e.g., employee Name, supplier Name, client Name)
 + Project Name (if applicable)
 + Transaction category (e.g., salaries, materials, revenue)
++ User (employee) responsible for the transaction, may be None for automated transactions

@@ -33,7 +33,7 @@ def get_log(fin_id):
     return finance
 
 
-def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category):
+def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category, user="None"):
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -46,7 +46,8 @@ def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category):
             'description': desc,
             'related_entity': entity,
             'project_name': project,
-            'category': category
+            'category': category,
+            'user': user
         })
     else:
         message_box('Error', 'Failed to update log: "finances" reference not found.')
@@ -55,7 +56,7 @@ def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category):
     return True
 
 
-def add_log(fin_type, amount, date, desc, entity, project, category):
+def add_log(fin_type, amount, date, desc, entity, project, category, user="None"):
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -69,7 +70,8 @@ def add_log(fin_type, amount, date, desc, entity, project, category):
             'description': desc,
             'related_entity': entity,
             'project_name': project,
-            'category': category
+            'category': category,
+            'user': user
         })
 
     else:

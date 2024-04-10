@@ -6,6 +6,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from custom import *
+from main import MainScreen
 
 from functions.login import *
 from utils import *
@@ -13,9 +14,10 @@ from utils import *
 # Main Login Screen
 
 
-class LoginScreen(Screen):
-    def __init__(self, **kwargs):
+class LogInPopUp(GridLayout):
+    def __init__(self, mainScreen, **kwargs):
         super().__init__(**kwargs)
+        self.mainScreen = mainScreen
 
     def login(self, email, password):
         email = str(email)
@@ -24,12 +26,16 @@ class LoginScreen(Screen):
         if not validate_string(email, password):
             message_box('Error', 'All fields are required.')
             return
-        # Check if the user is valid
+            # Check if the user is valid
         if checkCredentials(email, password):
             app = App.get_running_app()
             app.set_accessLV(getAccessLV(email))
-            self.manager.current = 'main'
-
+            app.set_accessName(getAccessName(email))
+            message_box('Success', 'Welcome, ' + email)
+            self.dismiss_popup()
+            self.mainScreen.loggedIn(email)
         else:
             message_box('Error', 'Invalid credentials.')
-            return
+
+    def dismiss_popup(self):
+        self.popup.dismiss()

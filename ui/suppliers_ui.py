@@ -138,7 +138,9 @@ class SuppliersScreen(Screen):
             headers = ['Business', 'Owner', 'Contact', 'Level']
         # Fill header list (Made to rewrite [A] [D] Sorting Header custom names in sorting)
         for header in headers:
-            self.ids.Supplier_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+            self.ids.Supplier_headers.add_widget(CButton(text=header,
+                                                         bold=True,
+                                                         padding=(10, 10),
                                                          on_release=partial(self.sort_suppliers, suppliers, header)))
 
         # Fill the grid with Supplier Data
@@ -166,9 +168,6 @@ class SuppliersScreen(Screen):
         elif header == 'Owner' or header == 'Owner [D]':
             suppliers = sorted(suppliers, key=lambda x: x['supplierName'])
             self.populate_suppliers(suppliers, headers=['Business', 'Owner [A]', 'Contact', 'Level'])
-        elif header == 'Contact' or header == 'Contact [D]':
-            suppliers = sorted(suppliers, key=lambda x: str(x['contactNo']))
-            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact [A]', 'Level'])
         elif header == 'Level' or header == 'Level [D]':
             suppliers = sorted(suppliers, key=lambda x: str(x['supplierLevel']))
             self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [A]'])
@@ -178,9 +177,6 @@ class SuppliersScreen(Screen):
         elif header == 'Owner [A]':
             suppliers = sorted(suppliers, key=lambda x: x['supplierName'], reverse=True)
             self.populate_suppliers(suppliers, headers=['Business', 'Owner [D]', 'Contact', 'Level'])
-        elif header == 'Contact [A]':
-            suppliers = sorted(suppliers, key=lambda x: str(x['contactNo']), reverse=True)
-            self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact [D]', 'Level'])
         elif header == 'Level [A]':
             suppliers = sorted(suppliers, key=lambda x: str(x['supplierLevel']), reverse=True)
             self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [D]'])

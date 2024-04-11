@@ -90,3 +90,11 @@ def delete_supplier(suppliers_id):
     else:
         message_box('Error', 'Failed to connect to database.')
         return False
+
+# For other functions, export a list of supplier names
+def load_supplier_names():
+    load_suppliers(0)
+    supplier_names = []
+    for supplier in load_suppliers(0):
+        supplier_names.append(supplier['supplierName'])
+    return supplier_names

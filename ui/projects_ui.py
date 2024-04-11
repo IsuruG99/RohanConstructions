@@ -93,9 +93,9 @@ class ViewPopup(GridLayout):
                 message_box('Failed', 'Failed to update project.')
 
     # Open Reports Popup Window
-    def reports_popup(self):
+    def reports_popup(self, project_name):
         self.projects_screen.dismiss_popup(self.popup)
-        reportsPop = Popup(title='Project Reports', content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
+        reportsPop = CPopup(title=project_name, content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
         reportsPop.open()
         reportsPop.content.popup = reportsPop
 
@@ -127,8 +127,6 @@ class ReportsPopup(GridLayout):
         project = get_project(pid)
 
         # Assign
-        self.ids.proj_id.text = pid
-        self.ids.proj_name.text = project["name"]
         self.ids.proj_desc.text = project["description"]
         self.ids.proj_start.text = project["start_date"]
         self.ids.proj_end.text = project["end_date"]
@@ -138,13 +136,19 @@ class ReportsPopup(GridLayout):
         roles = load_members(project["name"])
         for role, count in roles.items():
             grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(CLabel(text=role, label_font_size='15sp'))
-            grid.add_widget(CLabel(text=str(count), label_font_size='15sp'))
+            grid.add_widget(CLabel(text=role, font_size='15sp'))
+            grid.add_widget(CLabel(text=str(count), font_size='15sp'))
             self.ids.assigned_manpower.add_widget(grid)
+        # Get resource data (resource name, amount)
+        res = load_res(project["name"])
+        for resource, amount in res.items():
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+            grid.add_widget(CLabel(text=resource, font_size='15sp'))
+            grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
+            self.ids.assigned_resources.add_widget(grid)
 
     def dismiss_popup(self, instance):
-        self.projects_screen.dismiss_popup(self.popup)
-
+        instance.dismiss()
 
 # Projects Main UI (Accessed by main.py)
 class ProjectsScreen(Screen):

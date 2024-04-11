@@ -5,33 +5,53 @@
                 padding: 40
                 spacing: 20
 
-                Label:
-                        text: 'Resources'
-                        size_hint: 1, 0.1
-                        font_size: 30
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        cols: 2
+                        size_hint: 1, 0.05
+                        CLabel:
+                                text: 'Resources'
+                                size_hint: 0.7, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                                padding: 10
+
+                        GridLayout:
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10, 0
+                                padding: (0, 0, 30, 0)
+                                CText:
+                                        id: search
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.75, 1
+                                CButton2:
+                                        text: 'Search'
+                                        size_hint: 0.25, 1
+                                        on_release: root.search_res(search.text)
 
                 GridLayout:
-                        rows: 2
-                        spacing: 20
-                        padding: 20
-                        size_hint: 1, 0.9
+                        rows: 3
+                        size_hint: 1, 0.95
+
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: resource_headers
+                                rows: 1
+                                height: 50
 
                         ScrollView:
-                                size_hint: 1, 1
+                                size_hint: 0.95, 1
                                 do_scroll_x: False
                                 GridLayout:
                                         id: resources_list
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        spacing: 10
-                                        padding: 10
                                         cols: 1
-                                        font_name: 'Roboto'
                                         canvas.before:
                                                 Color:
-                                                        rgba: 0.1, 0.1, 0.1, 1
+                                                        rgba: 0, 0, 0, 0.6
                                                 Rectangle:
                                                         pos: self.pos
                                                         size: self.size
@@ -40,30 +60,27 @@
                                 cols: 3
                                 spacing: 20
                                 padding: 20
-                                size_hint: 1, 0.3
+                                size_hint: 1, 0.2
 
-                                Button:
-                                        text: 'Filter'
-                                        font_size: 20
+                                CButton2:
+                                        id: resource_filter
+                                        text: 'All'
                                         size_hint: 0.3, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton2:
                                         text: 'Add'
-                                        font_size: 20
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
 
-                                Button:
+                                CButton2:
                                         text: 'Back'
-                                        font_size: 20
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 
 <ViewResource>:
-        size: 400, 600
         GridLayout:
                 cols: 1
                 rows: 2
@@ -71,150 +88,188 @@
                 pos: root.pos
 
                 GridLayout:
-                        cols: 2
-                        rows: 5
-                        padding: 15
-                        spacing: 15
-                        size_hint: 1, 0.9
+                        cols: 4
+                        rows: 3
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.35
 
-                        Label:
+                        CLabel:
                                 text: 'Material'
-                                font_size: 20
-                                color: 1, 1, 1, 1
+                                size_hint: 0.3, 1
 
-                        TextInput:
+                        CText:
                                 id: viewPop_name
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Stone'
+                                size_hint: 0.7, 1
 
-                        Label:
+                        CLabel:
                                 text: 'Quantity'
-                                font_size: 20
-                                color: 1, 1, 1, 1
+                                size_hint: 0.3, 1
 
-                        TextInput:
+                        CText:
                                 id: viewPop_qty
                                 multiline: False
-                                font_size: 20
                                 hint_text: '10'
+                                size_hint: 0.7, 1
 
-                        Label:
+                        CLabel:
                                 text: 'Supplier'
-                                font_size: 20
-                                color: 1, 1, 1, 1
+                                size_hint: 0.3, 1
 
-                        TextInput:
+                        CSpinner:
                                 id: viewPop_supplier
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'XYZ Suppliers'
+                                size_hint: 0.7, 1
+                                values: root.load_suppliers()
 
-                        Label:
+                        CLabel:
                                 text: 'Cost'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
+                                size_hint: 0.3, 1
+                        CText:
                                 id: viewPop_cost
                                 multiline: False
-                                font_size: 20
                                 hint_text: '15000'
+                                size_hint: 0.7, 1
 
-                        Label:
+                        CLabel:
                                 text: 'Status'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        Spinner:
+                                size_hint: 0.3, 1
+                        CSpinner:
                                 id: viewPop_status
                                 text: 'In Stock'
                                 values: ['In Stock', 'Out of Stock']
+                                size_hint: 0.7, 1
 
                 GridLayout:
-                        cols: 3
-                        rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
+                        cols: 1
+                        rows: 3
+                        size_hint: 1, 0.6
+                        padding: 10
 
-                        Button:
-                                text: 'Edit'
-                                font_size: 20
-                                on_release:
-                                        root.editRes(viewPop_name.text, viewPop_qty.text, viewPop_status.text, viewPop_supplier.text,viewPop_cost.text)
+                        GridLayout:
+                                rows: 1
+                                cols: 4
+                                size_hint: 1, 0.2
+                                padding: 10
+                                spacing: 10
 
-                        Button:
-                                text: 'Delete'
-                                font_size: 20
-                                on_release:
-                                        root.deleteRes()
+                                CLabel:
+                                        text: 'Assign to Project'
+                                        size_hint_x: 0.2
+                                        bold: True
+                                AutoFillText:
+                                        id: projectList
+                                        text: ''
+                                        size_hint_x: 0.4
+                                        completions: root.load_projects()
+                                CText:
+                                        id: projectQty
+                                        hint_text: '10'
+                                        size_hint_x: 0.1
+                                CButton:
+                                        text: '+'
+                                        size_hint_x: 0.1
+                                        on_release: root.reload(projectQty.text, projectList.text, "Add", self)
 
-                        Button:
-                                text: 'Report'
-                                font_size: 20
-                                on_release: root.reportRes()
+                        ScrollView:
+                                size_hint: 1, 0.6
+                                padding: 10
+                                spacing: 10
+                                GridLayout:
+                                        id: viewRes_projects
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
+                        GridLayout:
+                                cols: 3
+                                size_hint: 1, 0.2
+                                padding: 10
+                                spacing: 10
 
-<AddResourcePopup>:
-        size_hint: None, None
-        size: 400, 400
-        title: 'Add Resource'
-        auto_dismiss: False
+                                CButton2:
+                                        text: 'Edit'
+                                        on_release:
+                                                root.editRes(viewPop_name.text, viewPop_qty.text, viewPop_status.text, viewPop_supplier.text,viewPop_cost.text)
+                                CButton2:
+                                        text: 'Delete'
+                                        on_release: root.deleteRes()
+
+                                CButton2:
+                                        text: 'Report'
+                                        on_release: root.reportRes()
+
+<AddResource>:
+        # name, qty, supplier, cost, (spinner)status
         GridLayout:
-                cols: 2
-                padding: 20
-                spacing: 10
-                Label:
-                        text: 'Material'
-                        font_size: 20
-                        color: 1, 1, 1, 1
-                TextInput:
-                        id: addPop_name
-                        multiline: False
-                        font_size: 20
-                        hint_text: 'Stone'
-                Label:
-                        text: 'Quantity'
-                        font_size: 20
-                        color: 1, 1, 1, 1
-                TextInput:
-                        id: addPop_qty
-                        multiline: False
-                        font_size: 20
-                        hint_text: '10'
-                Label:
-                        text: 'Supplier'
-                        font_size: 20
-                        color: 1, 1, 1, 1
-                TextInput:
-                        id: addPop_supplier
-                        multiline: False
-                        font_size: 20
-                        hint_text: 'XYZ Suppliers'
-                Label:
-                        text: 'Cost'
-                        font_size: 20
-                        color: 1, 1, 1, 1
-                TextInput:
-                        id: addPop_cost
-                        multiline: False
-                        font_size: 20
-                        hint_text: '15000'
-                Label:
-                        text: 'Status'
-                        font_size: 20
-                        color: 1, 1, 1, 1
-                Spinner:
-                        id: addPop_status
-                        text: 'In Stock'
-                        values: ['In Stock', 'Out of Stock']
-                Button:
-                        text: 'Add'
-                        font_size: 20
-                        size_hint: 0.2, 1
-                        on_release: root.add_resource(addPop_name.text, addPop_qty.text, addPop_status.text, addPop_supplier.text, addPop_cost.text)
-                Button:
-                        text: 'Cancel'
-                        font_size: 20
-                        size_hint: 0.2, 1
-                        on_release: root.dismiss()
+                cols: 1
+                rows: 3
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 6
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.85
+
+                        CLabel:
+                                text: 'Name'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addRes_name
+                                hint_text: 'Person or Group'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Quantity'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addRes_qty
+                                hint_text: 'Unit Count'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Supplier'
+                                size_hint: 0.3, 1
+                        AutoFillText:
+                                id: addRes_supplier
+                                hint_text: 'XYZ Suppliers'
+                                size_hint: 0.7, 1
+                                completions: root.load_suppliers()
+
+                        CLabel:
+                                text: 'Cost'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addRes_cost
+                                hint_text: '10500.00'
+
+                        CLabel:
+                                text: 'Status'
+                                size_hint: 0.3, 1
+                        CSpinner:
+                                id: addRes_status
+                                hint_text: 'Permanent'
+                                values: ['In Stock', 'Out of Stock']
+                                size_hint: 0.8, 1
+
+                GridLayout:
+                        cols: 1
+                        rows: 1
+                        size_hint: 1, 0.15
+                        padding: 10
+
+                        CButton2:
+                                text: 'Add'
+                                size_hint: 1, 0.1
+                                on_release: root.add_resource(addRes_name.text, addRes_qty.text, addRes_status.text, addRes_supplier.text, addRes_cost.text)

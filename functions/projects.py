@@ -3,6 +3,7 @@ from kivy.app import App
 import database
 from utils import *
 from functions.finances import add_log
+from functions.resources import load_resources
 
 
 # Add a new project
@@ -71,7 +72,8 @@ def update_project(project_id, name, description, start_date, end_date, client_n
         # Ask to add a note to finances
         if confirm_box('Project Completed', 'Would you like to add a note to the finances?') == 'yes':
             # Add a log to finances (fin_type, amount, date, desc, entity, project, category)
-            add_log('Income', budget, end_date, 'Project Completion', client_name, name, 'Contract', App.get_running_app().get_accessName())
+            add_log('Income', budget, end_date, 'Project Completion', client_name, name, 'Contract',
+                    App.get_running_app().get_accessName())
 
     if ref is not None:
         # Set the project data under the new key
@@ -135,9 +137,8 @@ def load_manpower():
 
     return manpower_list
 
-# now we use the manpower dictionary to get the roles and count for a specific project
-# in manpower, every employee would have their assigned project name in 'project_assignments' array
-# we would loop through the manpower and check if the project name matches the project we are looking for
+
+# Output Roles - Count style List from manpower
 def load_members(project_name):
     # Get a reference to DB
     manpower = load_manpower()
@@ -148,14 +149,33 @@ def load_members(project_name):
                 roles[employee['role']] += 1
             else:
                 roles[employee['role']] = 1
+
     return roles
 
 
+# Output Resource - Count style list from Resources
+def load_res(project_name):
+    # Retrieve all resources as a list of dictionaries
+    resources = load_resources(0)
+    # in Resource JSON, 'resource_assignments': [{"amount": "10", "project": "Project A"}]
+    # check resources for the project name, if it is there, add the amount to the resource list along with resource name
+    # Must output a dictionary with Resource Name and Amount
+    resource_list = {}
+    for resource in resources:
+        for assignment in resource['resource_assignments']:
+            if project_name in assignment['project']:
+                if resource['name'] in resource_list:
+                    resource_list[resource['name']] += int(assignment['amount'])
+                else:
+                    resource_list[resource['name']] = int(assignment['amount'])
+
+    return resource_list
+
+
+# For other functions, export a list of project names
 def load_project_names():
     projects = load_projects()
     project_names = []
     for project in projects:
         project_names.append(project['name'])
     return project_names
-
-

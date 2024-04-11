@@ -264,84 +264,86 @@
 
                         CButton2:
                                 text: 'Report'
-                                on_release: root.reports_popup()
+                                on_release: root.reports_popup(viewPop_name.text)
 
 <ReportsPopup>:
-        title: 'Project Details'
-        auto_dismiss: False
-
         GridLayout:
                 size: root.size
                 pos: root.pos
                 cols: 1
                 rows: 2
                 padding: 30
-                spacing: 30
+                spacing: 10
 
                 GridLayout:
                         size_hint: 1, 0.9
-                        cols: 2
-                        rows: 1
+                        cols: 1
+                        rows: 3
 
                         GridLayout:
-                                cols: 1
-                                rows: 10
+                                cols: 4
+                                rows: 2
+                                padding: 10
                                 spacing: 10
-                                padding: 10
+                                size_hint: 1, 0.15
 
-                                RLabelTop:
-                                        text: 'Project ID'
-                                RLabelBot:
-                                        font_size: '15sp'
-                                        id: proj_id
-
-                                RLabelTop:
-                                        text: 'Project Name'
-                                RLabelBot:
-                                        font_size: '15sp'
-                                        id: proj_name
-
-                                RLabelTop:
+                                CLabel:
                                         text: 'Client'
-                                RLabelBot:
-                                        font_size: '15sp'
-                                        id: proj_client
-
-                                RLabelTop:
+                                        size_hint: 0.25, 1
+                                        valign: 'bottom'
+                                CLabel:
                                         text: 'Start Date'
-                                RLabelBot:
-                                        font_size: '15sp'
-                                        id: proj_start
-
-                                RLabelTop:
+                                        size_hint: 0.25, 1
+                                        valign: 'bottom'
+                                CLabel:
                                         text: 'End Date'
-                                RLabelBot:
-                                        id: proj_end
-                                        font_size: '15sp'
-
-                        GridLayout:
-                                cols: 1
-                                rows: 10
-                                padding: 10
-
-                                RLabelTop:
-                                        text: 'Description'
-                                        size_hint_y: 0.2
-                                RLabelBot:
-                                        id: proj_desc
-                                        multiline: True
-                                        size_hint_y: 0.5
-
-                                RLabelTop:
+                                        size_hint: 0.25, 1
+                                        valign: 'bottom'
+                                CLabel:
                                         text: 'Budget'
-                                        size_hint_y: 0.2
-                                RLabelBot:
+                                        size_hint: 0.25, 1
+                                        valign: 'bottom'
+
+                                CLabel:
+                                        id: proj_client
+                                        size_hint: 0.25, 1
+                                        valign: 'top'
+                                CLabel:
+                                        id: proj_start
+                                        size_hint: 0.25, 1
+                                        valign: 'top'
+                                CLabel:
+                                        id: proj_end
+                                        size_hint: 0.25, 1
+                                        valign: 'top'
+                                CLabel:
                                         id: proj_budget
                                         multiline: False
-                                        size_hint_y: 0.5
-
+                                        size_hint: 0.25, 1
+                                        valign: 'top'
+                        GridLayout:
+                                cols: 1
+                                rows: 2
+                                padding: 20
+                                spacing: 10
+                                size_hint: 1, 0.15
+                                CLabel:
+                                        text: 'Description'
+                                        size_hint: 1, 0.2
+                                CLabel:
+                                        id: proj_desc
+                                        size_hint: 1, 0.8
+                                        font_size: '20sp'
+                        GridLayout:
+                                cols: 2
+                                rows: 4
+                                padding: 10
+                                size_hint: 1, 0.7
                                 RLabelTop:
                                         text: 'Assigned Members'
+                                        size_hint_y: 0.2
+                                RLabelTop:
+                                        text: 'Assigned Resources'
                                         size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
@@ -353,10 +355,6 @@
                                                 bar_width: 10
                                                 bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
                                                 bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
-
-                                RLabelTop:
-                                        text: 'Assigned Resources'
-                                        size_hint_y: 0.2
                                 ScrollView:
                                         GridLayout:
                                                 id: assigned_resources

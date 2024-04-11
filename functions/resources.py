@@ -4,7 +4,7 @@ from utils import *
 
 # Here you will write all in depth functions
 
-def load_resources():
+def load_resources(status=0):
     # Get reference from database
     ref = database.get_ref('resources')
 
@@ -13,6 +13,13 @@ def load_resources():
     for res_id, resource in ref.get().items():
         resource['id'] = res_id
         res.append(resource)
+
+    if status == 0:
+        res = res
+    elif status == 1:
+        res = [resource for resource in res if resource['status'] == 'In Stock']
+    elif status == 2:
+        res = [resource for resource in res if resource['status'] == 'Out of Stock']
 
     return res
 
@@ -41,12 +48,10 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
             'supplier_name': supplier_name,
             'unit_cost': cost
         })
-
+        return True
     else:
         message_box('Error', 'Failed to update resource: "resources" reference not found.')
-
-    print("Resource updated successfully.")
-    return True
+        return False
 
 
 def delete_res(res_id):
@@ -78,7 +83,8 @@ def add_res(name, quantity, status, supplier_name, cost):
             'quantity': quantity,
             'status': status,
             'supplier_name': supplier_name,
-            'unit_cost': cost
+            'unit_cost': cost,
+            'resource_assignments': [{"amount": "", "project": ""}]
         })
 
         print("Resource added successfully.")
@@ -86,3 +92,33 @@ def add_res(name, quantity, status, supplier_name, cost):
     else:
         message_box('Error', 'Failed to add resource: "resources" reference not found.')
         return False
+
+
+def resource_assignment(res_id, amount, project_name, action):
+    ref = database.get_ref('resources')
+    # json structure 'resource_assignments': [{"amount": "11", "project": "ABC"}]
+    assignments = ref.child(res_id).child('resource_assignments').get()
+    # if assignments have only 1 {amount, project} pair left, when removing, replace with a {amount: "", project: ""}
+    if action == "Remove":
+        if len(assignments) == 1:
+            assignments = [{"amount": "", "project": ""}]
+            ref.child(res_id).update({'resource_assignments': assignments})
+            print("Resource removed from project successfully.")
+            return True
+        else:
+            for assignment in assignments:
+                if assignment['project'] == project_name:
+                    assignments.remove(assignment)
+                    ref.child(res_id).update({'resource_assignments': assignments})
+                    print("Resource removed from project successfully.")
+                    return True
+    if action == "Add":
+        assignments.append({"amount": amount, "project": project_name})
+        ref.child(res_id).update({'resource_assignments': assignments})
+        print("Resource added to project successfully.")
+        return True
+    else:
+        message_box('Error', 'Failed to perform action')
+        return False
+
+    message_box('Error', 'Failed to connect to Database.')

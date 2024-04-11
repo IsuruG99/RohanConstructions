@@ -194,13 +194,13 @@ class SuppliersScreen(Screen):
         self.populate_suppliers(suppliers)
 
     def view_suppliers(self, suppliers_id, instance):
-        viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.5, 0.8))
+        viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.6, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
 
     # Open to supplier add popup window
     def add_popup(self):
-        addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.5, 0.8))
+        addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.6, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 

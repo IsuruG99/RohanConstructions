@@ -92,48 +92,26 @@
   "manpower": {
     "-NuVw6msFd_YvRuYty78": {
       "email": "alicia333@yahoo.mail",
-      "employment_status": "",
+      "employment_status": "Permanent",
       "name": "Alicia Key",
-      "phone_number": "",
-      "project_assignments": "",
-      "role": "Manager"
+      "phone_number": "0711234567",
+      "project_assignments": [""],
+      "role": "Manager",
+      "salary": "12500"
     },
     "-NuXcxSCDqC1VGDWwt0j": {
       "email": "david12345@msn.net",
-      "employment_status": "",
-      "name": "David Beckem",
-      "phone_number": "",
-      "project_assignments": "",
-      "role": "Footballer"
-    },
-    "-NuYpb7-YbnYhTk672wi": {
-      "email": "",
-      "employment_status": "",
-      "name": "",
-      "phone_number": "",
-      "project_assignments": "",
-      "role": ""
-    },
-    "-NuYpc5Yebl0NjxLRCu2": {
-      "email": "",
-      "employment_status": "",
-      "name": "",
-      "phone_number": "",
-      "project_assignments": "",
-      "role": ""
-    },
-    "-NunTD1uanS9T1VU9eeT": {
-      "email": "abc",
       "employment_status": "Permanent",
-      "name": "abc",
-      "phone_number": "1112",
-      "project_assignments": "",
-      "role": "abc"
+      "name": "David Beckem",
+      "phone_number": "0711234567",
+      "project_assignments": [""],
+      "role": "Architect",
+      "salary": "10000"
     },
     "employee1": {
-      "contact_email": "alice@example.com",
-      "contact_phone": "+1122334455",
-      "employment_status": "permanent",
+      "email": "alice@example.com",
+      "phone_number": "+1122334455",
+      "employment_status": "Permanent",
       "name": "Alice Johnson",
       "project_assignments": [
         "New Office Building"
@@ -142,11 +120,23 @@
       "salary": "50000"
     },
     "employee2": {
-      "contact_email": "ruwan@gmail.com",
-      "contact_phone": "0711234567",
-      "employment_status": "permanent",
+      "email": "ruwan@gmail.com",
+      "phone_number": "0711234567",
+      "employment_status": "Permanent",
       "name": "Ruwan Perera",
       "project_assignments": [
+        "School Repair Project"
+      ],
+      "role": "Site Engineer",
+      "salary": "50000"
+    },
+    "employee3": {
+      "email": "abbey@gmail.com",
+      "phone_number": "0711234567",
+      "employment_status": "Temp",
+      "name": "Abbey Grange",
+      "project_assignments": [
+        "New Office Building",
         "School Repair Project"
       ],
       "role": "Site Engineer",

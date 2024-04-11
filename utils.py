@@ -20,6 +20,13 @@ def validate_mobileNo(mobileNo):
         return False
 
 
+def validate_email(email):
+    if re.fullmatch(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+        return True
+    else:
+        return False
+
+
 # Validate Date Strings
 def validate_date(*args):
     for arg in args:

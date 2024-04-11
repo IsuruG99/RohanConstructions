@@ -211,7 +211,7 @@ class ProjectsScreen(Screen):
     # Search Projects by given String, calls populate_projects with matching Projects List
     def searchProj(self, searchValue):
         if not searchValue == '':
-            projects = load_projects()
+            projects = load_projects(0)
             projects = [project for project in projects if searchValue.lower() in project['name'].lower() or
                         searchValue.lower() in project['client_name'].lower() or searchValue.lower() in
                         project['end_date'].lower()]

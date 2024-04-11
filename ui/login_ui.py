@@ -7,6 +7,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from custom import *
 from main import MainScreen
+from functions.projects import load_projects
 
 from functions.login import *
 from utils import *

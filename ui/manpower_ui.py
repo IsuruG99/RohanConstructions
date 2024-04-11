@@ -1,170 +1,212 @@
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
-from kivy.uix.textinput import TextInput
-from kivy.uix.boxlayout import BoxLayout
 from functools import partial
-import functions.manpower as manpower
-from utils import message_box
+from functions.manpower import *
+from functions.projects import load_project_names
+import datetime
+from utils import *
+from custom import *
+
+
+class AddManpower(GridLayout):
+    def __init__(self, manpower_screen, **kwargs):
+        super().__init__(**kwargs)
+        self.manpower_screen = manpower_screen
+
+    def add_employee(self, name, email, phone_number, role, employment_status, salary):
+        # Stringify
+        name = str(name)
+        email = str(email)
+        phone_number = str(phone_number)
+        role = str(role)
+        status = str(employment_status)
+        salary = str(salary)
+
+        # Check if all fields are full, except assignments
+        if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
+            message_box('Error', 'All fields are required.')
+            return
+        if not validate_email(email):
+            message_box('Error', 'Invalid email.')
+            return
+        if not validate_mobileNo(phone_number):
+            message_box('Error', 'Invalid phone number.')
+            return
+        if confirm_box('Add Employee', 'Are you sure you want to add employee ' + name + '?') == 'yes':
+            if add_employee(name, role, email, phone_number, status, [""], salary):
+                message_box('Success', 'Employee added successfully.')
+                self.manpower_screen.populate_manpower(load_manpower(0))
+                self.popup.dismiss()
+            else:
+                message_box('Error', 'Failed to add Employee.')
+
+
+class ViewManpower(GridLayout):
+    def __init__(self, manpower_screen, emp_id, **kwargs):
+        super().__init__(**kwargs)
+        self.emp_id = emp_id
+        self.manpower_screen = manpower_screen
+        self.populateEmp()
+
+    def populateEmp(self):
+        emp = get_employee(self.emp_id)
+
+        self.ids.viewEmp_name.text = emp["name"]
+        self.ids.viewEmp_role.text = emp["role"]
+        self.ids.viewEmp_status.text = emp["employment_status"]
+        self.ids.viewEmp_salary.text = emp["salary"]
+        self.ids.viewEmp_email.text = emp["email"]
+        self.ids.viewEmp_phone.text = emp["phone_number"]
+
+        # emp["project_assignments"] is a list of projects, we display them in ScrollView named viewEmp_projects
+        for project in emp["project_assignments"]:
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+            grid.add_widget(CLabel(text=project, size_hint_x=0.8))
+            grid.add_widget(
+                Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
+                       font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
+            self.ids.viewEmp_projects.add_widget(grid)
+
+    def reload(self, project_name, action, instance):
+        print(project_name, action)
+        project_assignment(self.emp_id, project_name, action)
+        # Clear all widgets from viewEmp_projects
+        self.ids.viewEmp_projects.clear_widgets()
+        self.populateEmp()
+
+    def edit_employee(self, name, email, phone_number, role, employment_status, salary):
+        # Project assignments is a list of projects
+        # Stringify inputs
+        name = str(name)
+        email = str(email)
+        phone_number = str(phone_number)
+        role = str(role)
+        status = str(employment_status)
+        salary = str(salary)
+
+        # Check if all fields are full, except assignments
+        if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
+            message_box('Error', 'All fields are required.')
+            return
+        if not validate_email(email):
+            message_box('Error', 'Invalid email.')
+            return
+        if not validate_mobileNo(phone_number):
+            message_box('Error', 'Invalid phone number.')
+            return
+        if confirm_box('Edit Employee', 'Are you sure you want to edit employee ' + name + '?') == 'yes':
+            if update_employee(self.emp_id, name, role, email, phone_number, status, salary):
+                message_box('Success', 'Employee edited successfully.')
+                self.manpower_screen.populate_manpower(load_manpower(0))
+                self.popup.dismiss()
+            else:
+                message_box('Error', 'Failed to edit Employee.')
+
+    def load_projects(self):
+        return load_project_names()
+
+    def dismiss_popup(self, instance):
+        instance.dismiss
 
 
 class ManpowerScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.populate_manpower(0)
+        self.populate_manpower(load_manpower(0))
 
-    def set_screen_manager(self, screen_manager):
-        self.screen_manager = screen_manager
-
-    def populate_manpower(self, status):
-        # Get the employees from the database
-        employees = manpower.load_manpower()
-
+    def populate_manpower(self, employees=load_manpower(0), headers=None):
         # Clear the existing widgets in the ScrollView
         self.ids.manpower_list.clear_widgets()
+        self.ids.manpower_headers.clear_widgets()
 
-        if status == 0:
-            for emp in employees:
-                grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
-                button = Button(text=emp.get("name", ""), on_release=partial(self.view_emp, emp["id"]),
-                                background_normal='',
-                                background_color=(1, 1, 1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
-                grid.emp = emp
-                grid.add_widget(button)
-                grid.add_widget(Label(text=emp.get("role", "")))
-                grid.add_widget(Label(text=emp.get("email", "")))
-                delete_button = Button(text='Delete', on_release=partial(self.delete_employee, emp["id"]))
-                grid.add_widget(delete_button)
-                self.ids.manpower_list.add_widget(grid)
+        # headers
+        if headers is None:
+            headers = ['Name', 'Role', 'Email', '', '']
+        for header in headers:
+            self.ids.manpower_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+                                                         on_release=partial(self.sort_manpower, employees, header)))
 
-    def back_to_main_screen(self, instance):
-        if instance.text == 'Back to Main Screen':
-            self.parent.current = "main"
+        for emp in employees:
+            grid = GridLayout(cols=5, spacing=10, size_hint_y=None, height=50)
+            grid.add_widget(CLabel(text=emp["name"]))
+            grid.add_widget(CLabel(text=emp["role"]))
+            grid.add_widget(CLabel(text=emp["email"]))
+            grid.add_widget(Button(text='View', on_release=partial(self.view_emp, emp["id"]),
+                                   background_normal='', font_size='20sp',
+                                   background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
+                                   bold=True))
+            grid.add_widget(Button(text='Delete', on_release=partial(self.delete_employee, emp["id"]),
+                                   background_normal='', font_size='20sp',
+                                   background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
+                                   bold=True))
+            grid.emp = emp
+            self.ids.manpower_list.add_widget(grid)
 
-    def view_emp(self, emp_id):
-        viewPop = Popup(title='View Employee', content=ViewManpower(emp_id), size_hint=(0.5, 0.8))
-        viewPop.open()
+    def sort_manpower(self, manpower, header, instance):
+        if header == 'Name' or header == 'Name [D]':
+            manpower = sorted(manpower, key=lambda x: x['name'])
+            self.populate_manpower(manpower, ['Name [A]', 'Role', 'Email', '', ''])
+        elif header == 'Name [A]':
+            manpower = sorted(manpower, key=lambda x: x['name'], reverse=True)
+            self.populate_manpower(manpower, ['Name [D]', 'Role', 'Email', '', ''])
+        elif header == 'Role' or header == 'Role [D]':
+            manpower = sorted(manpower, key=lambda x: x['role'])
+            self.populate_manpower(manpower, ['Name', 'Role [A]', 'Email', '', ''])
+        elif header == 'Role [A]':
+            manpower = sorted(manpower, key=lambda x: x['role'], reverse=True)
+            self.populate_manpower(manpower, ['Name', 'Role [D]', 'Email', '', ''])
+        elif header == 'Email' or header == 'Email [D]':
+            manpower = sorted(manpower, key=lambda x: x['email'])
+            self.populate_manpower(manpower, ['Name', 'Role', 'Email [A]', '', ''])
+        elif header == 'Email [A]':
+            manpower = sorted(manpower, key=lambda x: x['email'], reverse=True)
+            self.populate_manpower(manpower, ['Name', 'Role', 'Email [D]', '', ''])
 
-    def add_manpower_popup(self):
-        addPop = AddManpowerPopup(title='Add Employee', screen_manager=self)
-        addPop.bind(on_dismiss=self.populate_manpower)  # Refresh the manpower list after adding
-        addPop.open()
+    def search_manpower(self, search_text):
+        if not search_text == '':
+            manpower = load_manpower(0)
+            results = []
+            for emp in manpower:
+                if (search_text.lower() in emp['name'].lower() or search_text.lower() in emp[
+                    'role'].lower() or search_text.lower() in emp['email'].lower() or search_text.lower()
+                        in emp['phone_number'].lower()):
+                    results.append(emp)
+            self.populate_manpower(results)
 
-    def delete_employee(self, emp_id, instance=None):
-        confirm_box = self.confirm_box("Confirmation", "Are you sure you want to delete this employee?", emp_id)
+    def view_emp(self, emp_id, instance):
+        viewEmp = CPopup(title='View Employee', content=ViewManpower(self, emp_id), size_hint=(0.6, 0.8))
+        viewEmp.open()
+        viewEmp.content.popup = viewEmp
 
-    def perform_delete(self, emp_id):
-        if manpower.delete_employee(emp_id):
-            self.populate_manpower(0)
-            success_popup = Popup(title='Success', content=Label(text='Employee deleted successfully.'),
-                                  size_hint=(None, None), size=(400, 200))
-            success_popup.open()
+    def add_emp(self):
+        addEmp = CPopup(title='Add Employee', content=AddManpower(self), size_hint=(0.5, 0.8))
+        addEmp.open()
+        addEmp.content.popup = addEmp
+
+    def delete_employee(self, emp_id, instance):
+        if confirm_box('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?') == 'yes':
+            delete_employee(emp_id)
+            self.populate_manpower(load_manpower(0))
+            self.ids.manpower_filter.text = 'All'
         else:
-            error_popup = Popup(title='Error', content=Label(text='Failed to delete employee.'), size_hint=(None, None),
-                                size=(400, 200))
-            error_popup.open()
+            message_box('Error', 'Failed to delete Employee.')
 
-    def confirm_box(self, title, message, emp_id):
-        confirm_popup_content = BoxLayout(orientation="vertical", padding=10, spacing=10)
-        confirm_popup_content.add_widget(Label(text=message))
-        button_layout = BoxLayout(spacing=10)
+    def btn_click(self, instance):
+        text = instance.text
+        if text == 'Back':
+            self.parent.current = 'main'
+        elif text == 'Add':
+            self.add_emp()
+        elif text == 'All' or text == 'Perm' or text == 'Temp':
+            if text == 'All':
+                self.populate_manpower(load_manpower(1))
+                self.ids.manpower_filter.text = 'Perm'
+            elif text == 'Perm':
+                self.populate_manpower(load_manpower(2))
+                self.ids.manpower_filter.text = 'Temp'
+            elif text == 'Temp':
+                self.populate_manpower(load_manpower(0))
+                self.ids.manpower_filter.text = 'All'
 
-        def on_confirm(instance):
-            self.perform_delete(emp_id)
-            confirm_popup.dismiss()
-
-        def on_cancel(instance):
-            confirm_popup.dismiss()
-
-        confirm_button = Button(text="Confirm")
-        cancel_button = Button(text="Cancel")
-
-        confirm_button.bind(on_release=on_confirm)
-        cancel_button.bind(on_release=on_cancel)
-
-        button_layout.add_widget(confirm_button)
-        button_layout.add_widget(cancel_button)
-
-        confirm_popup_content.add_widget(button_layout)
-
-        confirm_popup = Popup(title=title, content=confirm_popup_content, size_hint=(0.5, 0.5))
-        confirm_popup.open()
-        confirm_popup.bind(on_dismiss=lambda instance: setattr(self, "confirm_response", "no"))
-
-        return confirm_popup
-
-
-class AddManpowerPopup(Popup):
-    def __init__(self, **kwargs):
-        self.screen_manager = kwargs.pop('screen_manager', None)  # Get screen_manager from kwargs
-        super().__init__(**kwargs)
-        self.create_content()
-
-    def create_content(self):
-        layout = GridLayout(cols=2, spacing=10, padding=10, size_hint_y=None)
-        layout.bind(minimum_height=layout.setter('height'))
-
-        layout.add_widget(Label(text='Name', size_hint=(None, None), size=(100, 40)))
-        self.name_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.name_input)
-
-        layout.add_widget(Label(text='Role', size_hint=(None, None), size=(100, 40)))
-        self.role_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.role_input)
-
-        layout.add_widget(Label(text='Email', size_hint=(None, None), size=(100, 40)))
-        self.email_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.email_input)
-
-        layout.add_widget(Label(text='Phone', size_hint=(None, None), size=(100, 40)))
-        self.phone_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.phone_input)
-
-        layout.add_widget(Label(text='Status', size_hint=(None, None), size=(100, 40)))
-        self.status_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.status_input)
-
-        layout.add_widget(Label(text='Projects', size_hint=(None, None), size=(100, 40)))
-        self.projects_input = TextInput(multiline=False, size_hint=(None, None), size=(200, 40))
-        layout.add_widget(self.projects_input)
-
-        submit_button = Button(text='Submit', size_hint=(None, None), size=(100, 40))
-        submit_button.bind(on_press=self.submit)
-        layout.add_widget(submit_button)
-
-        # Add back button
-        back_button = Button(text='Back', size_hint=(None, None), size=(100, 40))
-        back_button.bind(on_press=self.dismiss)
-        layout.add_widget(back_button)
-
-        self.content = layout
-
-    def submit(self, instance):
-        name = self.name_input.text
-        role = self.role_input.text
-        email = self.email_input.text
-        phone = self.phone_input.text
-        status = self.status_input.text
-        projects = self.projects_input.text
-        if manpower.add_employee(name, role, email, phone, status, projects):
-            self.dismiss()  # Dismiss the popup after successfully adding an employee
-            if self.screen_manager:
-                self.screen_manager.populate_manpower(0)  # Update the manpower list
-        else:
-            message_box('Error', 'Failed to add employee')
-
-
-class ViewManpower(BoxLayout):
-    def __init__(self, emp_id, **kwargs):
-        super().__init__(**kwargs)
-        self.emp_id = emp_id
-        employee = manpower.get_employee(emp_id)
-        if employee:
-            self.ids.viewPop_name.text = employee.get('name', '')
-            self.ids.viewPop_role.text = employee.get('role', '')
-            self.ids.viewPop_email.text = employee.get('email', '')
-            self.ids.viewPop_phone.text = employee.get('phone_number', '')
-            self.ids.viewPop_status.text = employee.get('employment_status', '')
-            self.ids.viewPop_projects.text = ', '.join(employee.get('project_assignments', []))
+    def dismiss_popup(self, instance):
+        instance.dismiss

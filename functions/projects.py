@@ -151,3 +151,11 @@ def load_members(project_name):
     return roles
 
 
+def load_project_names():
+    projects = load_projects()
+    project_names = []
+    for project in projects:
+        project_names.append(project['name'])
+    return project_names
+
+

@@ -6,6 +6,9 @@ from kivy.uix.popup import Popup
 from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 from kivy.utils import rgba
+from kivy.uix.dropdown import DropDown
+
+import database
 
 main_background_color = rgba('#411f2d')
 button_normal_text_color = rgba('#ffffff')
@@ -142,3 +145,35 @@ class CSpinner(Spinner):
         self.padding = (10, 10)
         # scroll bar
         self.scroll_width = 20
+
+
+class AutoFillText(CText):
+    def __init__(self, completions=["A"], **kwargs):
+        super().__init__(**kwargs)
+        self.completions = completions
+        self.dropdown = DropDown()
+        self.bind(text=self.on_text)
+        self.dropdown.bind(on_select=self.on_dropdown_select)
+
+    def on_text(self, instance, value):
+        matches = [completion for completion in self.completions if completion.startswith(value)]
+        if matches:
+            self.dropdown.clear_widgets()
+            for match in matches:
+                btn = CButton(text=match, size_hint_y=None, height=44)
+                btn.bind(on_release=lambda btn: self.dropdown.select(btn.text))
+                self.dropdown.add_widget(btn)
+            if not self.dropdown.parent:
+                self.dropdown.open(self)
+        else:
+            self.dropdown.dismiss()
+
+    def on_dropdown_select(self, instance, data):
+        self.text = data
+        self.dropdown.dismiss()
+
+    def on_focus(self, instance, value):
+        if value:
+            self.on_text(instance, self.text)
+        else:
+            self.dropdown.dismiss()

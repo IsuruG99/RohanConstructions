@@ -1,119 +1,278 @@
 <ManpowerScreen>:
-        BoxLayout:
-                orientation: 'vertical'
-                spacing: 10
-                padding: 10
+        GridLayout:
+                rows: 2
+                cols: 1
+                padding: (20, 40, 20, 20)
+                spacing: 20
 
-                ScrollView:
+                GridLayout:
+                        cols: 2
+                        size_hint: 1, 0.05
+                        CLabel:
+                                text: 'Employees'
+                                size_hint: 0.7, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                                padding: 10
+
                         GridLayout:
-                                id: manpower_list
-                                cols: 1
-                                size_hint_y: None
-                                height: self.minimum_height
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10, 0
+                                padding: (0, 0, 30, 0)
+                                CText:
+                                        id: search
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.75, 1
+                                CButton2:
+                                        text: 'Search'
+                                        size_hint: 0.25, 1
+                                        on_release: root.search_manpower(search.text)
 
-                Button:
-                        text: 'Add Employee'
-                        size_hint_y: None
-                        height: '40dp'
-                        on_press: root.add_manpower_popup()
+                GridLayout:
+                        rows: 3
+                        size_hint: 1, 0.95
 
-                Button:
-                        text: 'Back to Main Screen'
-                        size_hint_y: None
-                        height: '40dp'
-                        on_release:
-                                root.back_to_main_screen(self)
-                                root.manager.transition.direction = 'right'
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: manpower_headers
+                                rows: 1
+                                height: 50
+
+                        ScrollView:
+                                size_hint: 0.95, 1
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: manpower_list
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
+
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                spacing: 20
+                                padding: 20
+                                size_hint: 1, 0.2
+
+                                CButton2:
+                                        id: manpower_filter
+                                        text: 'All'
+                                        size_hint: 0.3, 1
+                                        on_release: root.btn_click(self)
+
+                                CButton2:
+                                        text: 'Add'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+
+                                CButton2:
+                                        text: 'Back'
+                                        size_hint: 0.2, 1
+                                        on_release:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
 
 
+
+<AddManpower>:
+        GridLayout:
+                cols: 1
+                rows: 3
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 6
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.85
+
+                        CLabel:
+                                text: 'Name'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addEmp_name
+                                hint_text: 'M. Ali'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Role'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addEmp_role
+                                hint_text: 'Manager'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Salary'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addEmp_salary
+                                hint_text: '1500.00'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Email'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addEmp_email
+                                hint_text: 'abc@def.com'
+
+                        CLabel:
+                                text: 'Phone Number'
+                                size_hint: 0.3, 1
+                        CText:
+                                id: addEmp_phone
+                                hint_text: '1234567890'
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Status'
+                                size_hint: 0.2, 1
+                        CSpinner:
+                                id: addEmp_status
+                                hint_text: 'Permanent'
+                                values: ['Permanent', 'Temp']
+                                size_hint: 0.8, 1
+
+                GridLayout:
+                        cols: 1
+                        rows: 1
+                        size_hint: 1, 0.15
+                        padding: 10
+
+                        CButton2:
+                                text: 'Add Project'
+                                size_hint: 1, 0.1
+                                on_release: root.add_employee(addEmp_name.text, addEmp_email.text, addEmp_phone.text, addEmp_role.text, addEmp_status.text, addEmp_salary.text)
 
 <ViewManpower>:
-        BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                spacing: 10
-
-                Label:
-                        id: viewPop_name
-                        text: ''
-                Label:
-                        id: viewPop_role
-                        text: ''
-                Label:
-                        id: viewPop_email
-                        text: ''
-                Label:
-                        id: viewPop_phone
-                        text: ''
-                Label:
-                        id: viewPop_status
-                        text: ''
-                Label:
-                        id: viewPop_projects
-                        text: ''
-                BoxLayout:
-                        size_hint_y: None
-                        height: '40dp'
-                        spacing: 10
-                        Button:
-                                text: 'Edit'
-                                on_press: root.edit_manpower(viewPop_name.text, viewPop_role.text, viewPop_email.text, viewPop_phone.text, viewPop_status.text, viewPop_projects.text)
-                        Button:
-                                text: 'Delete'
-                                on_release: root.delete_manpower()
-                        Button:
-                                text: 'Reports'
-                                on_release: root.reports_popup()
-
-<AddManpowerPopup>:
-        title: "Add Employee"
-        size_hint: None, None
-        size: 400, 400
-
         GridLayout:
-                cols: 2
-                spacing: 10
-                padding: 10
-                size_hint_y: None
-                height: self.minimum_height
+                cols: 1
+                rows: 3
+                size: root.size
+                pos: root.pos
 
-                Label:
-                        text: 'Name'
-                TextInput:
-                        id: name_input
-                        multiline: False
+                GridLayout:
+                        cols: 4
+                        rows: 3
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.35
 
-                Label:
-                        text: 'Role'
-                TextInput:
-                        id: role_input
-                        multiline: False
+                        CLabel:
+                                text: 'Name'
+                                size_hint: 0.2, 1
+                        CText:
+                                id: viewEmp_name
+                                hint_text: 'M. Ali'
+                                size_hint: 0.8, 1
 
-                Label:
-                        text: 'Email'
-                TextInput:
-                        id: email_input
-                        multiline: False
+                        CLabel:
+                                text: 'Role'
+                                size_hint: 0.2, 1
+                        CText:
+                                id: viewEmp_role
+                                hint_text: 'Manager'
+                                size_hint: 0.8, 1
 
-                Label:
-                        text: 'Phone'
-                TextInput:
-                        id: phone_input
-                        multiline: False
+                        CLabel:
+                                text: 'Salary'
+                                size_hint: 0.2, 1
+                        CText:
+                                id: viewEmp_salary
+                                hint_text: '1500.00'
+                                size_hint: 0.8, 1
 
-                Label:
-                        text: 'Status'
-                TextInput:
-                        id: status_input
-                        multiline: False
+                        CLabel:
+                                text: 'Email'
+                                size_hint: 0.2, 1
+                        CText:
+                                id: viewEmp_email
+                                hint_text: 'abc@def.com'
+                                size_hint: 0.8, 1
 
-                Label:
-                        text: 'Projects'
-                TextInput:
-                        id: projects_input
-                        multiline: False
+                        CLabel:
+                                text: 'Phone'
+                                size_hint: 0.2, 1
+                        CText:
+                                id: viewEmp_phone
+                                hint_text: '1234567890'
+                                size_hint: 0.8, 1
 
-                Button:
-                        text: 'Submit'
-                        on_press: root.submit()
+                        CLabel:
+                                text: 'Status'
+                                size_hint: 0.2, 1
+                        CSpinner:
+                                id: viewEmp_status
+                                hint_text: 'Permanent'
+                                values: ['Permanent', 'Temp']
+                                size_hint: 0.8, 1
+
+                GridLayout:
+                        cols: 1
+                        rows: 3
+                        size_hint: 1, 0.6
+                        padding: 10
+
+                        GridLayout:
+                                rows: 1
+                                cols: 3
+                                size_hint: 1, 0.2
+                                padding: 10
+                                spacing: 10
+
+                                CLabel:
+                                        text: 'Project Assignments'
+                                        size_hint: 1, 0.4
+                                        bold: True
+
+                                AutoFillText:
+                                        id: pList
+                                        text: ''
+                                        size_hint_x: 0.5
+                                        completions: root.load_projects()
+
+                                CButton:
+                                        text: '+'
+                                        size_hint_x: 0.1
+                                        on_release: root.reload(pList.text, "Add", self)
+
+                        ScrollView:
+                                size_hint: 1, 0.6
+                                padding: 10
+                                spacing: 10
+                                GridLayout:
+                                        id: viewEmp_projects
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
+
+                        GridLayout:
+                                cols: 1
+                                size_hint: 1, 0.2
+                                padding: 10
+                                spacing: 10
+                                CButton2:
+                                        text: 'Edit'
+                                        size_hint: 1, 1
+                                        on_release: root.edit_employee(viewEmp_name.text, viewEmp_email.text, viewEmp_phone.text, viewEmp_role.text, viewEmp_status.text, viewEmp_salary.text)
+
+
 

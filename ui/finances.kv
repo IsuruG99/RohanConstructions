@@ -139,12 +139,10 @@
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        CSpinner:
+                        AutoFillText:
                                 id: viewLog_project
-                                text: 'Project Name'
-                                values: ['']
-                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
+                                completions: root.load_projects()
 
                         CLabel:
                                 text: 'Category'

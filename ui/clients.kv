@@ -1,37 +1,55 @@
 <ClientsScreen>:
-        name: 'clients'
-
         GridLayout:
                 rows: 2
                 cols: 1
                 padding: 40
                 spacing: 20
 
-                Label:
-                        text: 'Clients'
-                        size_hint: 1, 0.1
-                        font_size: 30
-                        color: 1, 1, 1, 1
-                        bold: True
+                GridLayout:
+                        cols: 2
+                        size_hint: 1, 0.05
+                        CLabel:
+                                text: 'Clients'
+                                size_hint: 0.7, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                                padding: 10
+
+                        GridLayout:
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10, 0
+                                padding: (0, 0, 30, 0)
+                                CText:
+                                        id: search
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.75, 1
+                                CButton2:
+                                        text: 'Search'
+                                        size_hint: 0.25, 1
+                                        on_release: root.search_clients(search.text)
 
                 GridLayout:
-                        rows: 2
-                        spacing: 20
-                        padding: 20
-                        size_hint: 1, 0.9
+                        rows: 3
+                        size_hint: 1, 0.95
+
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: clients_headers
+                                rows: 1
+                                height: 50
 
                         ScrollView:
-                                size_hint: 1, 1
+                                size_hint: 0.95, 1
                                 do_scroll_x: False
                                 GridLayout:
                                         id: clients_list
                                         cols: 1
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        spacing: 10
-                                        padding: 10
                                         cols: 1
-                                        font_name: 'Roboto'
                                         canvas.before:
                                                 Color:
                                                         rgba: 0.1, 0.1, 0.1, 1
@@ -46,15 +64,19 @@
                                 padding: 20
                                 size_hint: 1, 0.3
 
-                                Button:
+                                CButton2:
+                                        id: clients_filter
+                                        text: 'All'
+                                        size_hint: 0.2, 1
+                                        on_press: root.btn_click(self)
+
+                                CButton2:
                                         text: 'Add'
-                                        font_size: 20
                                         size_hint: 0.5, 1
                                         on_press: root.add_client_popup()
 
-                                Button:
+                                CButton2:
                                         text: 'Back'
-                                        font_size: 20
                                         size_hint: 0.2, 1
                                         on_press:
                                                 root.manager.current = 'main'
@@ -75,82 +97,64 @@
                         spacing: 10
                         size_hint: 1, 0.8
 
-                        Label:
+                        CLabel:
                                 text: 'Name'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: client_name
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_name
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Client Name'
 
-                        Label:
+                        CLabel:
                                 text: 'Phone Number'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: phone_number
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_phone_number
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Phone Number'
 
-                        Label:
+                        CLabel:
                                 text: 'Email'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: email
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_email
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Email'
 
-                        Label:
+                        CLabel:
                                 text: 'Address'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: address
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_address
                                 multiline: False
-                                font_size: 20
                                 hint_text: 'Address'
 
-                        Label:
+                        CLabel:
                                 text: 'Project Name'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: project_name
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_project_name
                                 multiline: False
-                                font_size: 20
-                                hint_text: 'Project Name'
+                                hint_text: 'None'
+                                disabled: True
 
-                        Label:
+                        CLabel:
                                 text: 'Project Duration'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: project_duration
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: add_client_project_duration
                                 multiline: False
-                                font_size: 20
-                                hint_text: 'Project Duration'
+                                hint_text: 'None'
+                                disabled: True
 
-                        Label:
+                        CLabel:
                                 text: 'Project Status'
-                                font_size: 20
-                                color: 1, 1, 1, 1
-
-                        TextInput:
-                                id: project_status
-                                multiline: False
-                                font_size: 20
-                                hint_text: 'Project Status'
+                                size_hint: 0.3, 0.1
+                        CSpinner:
+                                id: add_client_project_status
+                                text: 'Status'
+                                values: ['None']
+                                disabled: True
 
                 GridLayout:
                         cols: 2
@@ -159,21 +163,104 @@
                         spacing: 20
                         size_hint: 1, 0.2
 
-                        Button:
+                        CButton2:
                                 text: 'Insert'
-                                font_size: 20
                                 on_release:
-                                        root.add_client(client_name.text, phone_number.text, email.text, address.text, project_name.text, project_duration.text, project_status.text)
-                                        client_name.text = ''
-                                        phone_number.text = ''
-                                        email.text = ''
-                                        address.text = ''
-                                        project_name.text = ''
-                                        project_duration.text = ''
-                                        project_status.text = ''
+                                        root.add_client(add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text)
 
-                        Button:
+                        CButton2:
                                 text: 'Cancel'
-                                font_size: 20
                                 on_release:
-                                        root.dismiss_popups(root)
+                                        root.dismiss_popups(self)
+
+<ViewClientPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        rows: 8  # Adjusted to match the number of fields
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.8
+
+                        CLabel:
+                                text: 'Name'
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: view_client_name
+                                multiline: False
+                                hint_text: 'Client Name'
+
+                        CLabel:
+                                text: 'Phone Number'
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: view_client_phone_number
+                                multiline: False
+                                hint_text: 'Phone Number'
+
+                        CLabel:
+                                text: 'Email'
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: view_client_email
+                                multiline: False
+                                hint_text: 'Email'
+
+                        CLabel:
+                                text: 'Address'
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: view_client_address
+                                multiline: False
+                                hint_text: 'Address'
+
+                        CLabel:
+                                text: 'Project Name'
+                                size_hint: 0.3, 0.1
+                        CSpinner:
+                                id: view_client_project_name
+                                text: 'Project Name'
+                                values: ['']
+
+                        CLabel:
+                                text: 'Project Duration'
+                                size_hint: 0.3, 0.1
+                        CText:
+                                id: view_client_project_duration
+                                multiline: False
+                                hint_text: 'None'
+
+                        CLabel:
+                                text: 'Project Status'
+                                size_hint: 0.3, 0.1
+                        CSpinner:
+                                id: view_client_project_status
+                                text: 'Status'
+                                values: ['None', 'In Progress', 'Completed']
+                                # When user clicks on the spinner sub_option, trigger event
+
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        padding: 20
+                        spacing: 20
+                        size_hint: 1, 0.2
+
+                        CButton2:
+                                text: 'Edit'
+                                on_release:
+                                        root.edit_client(view_client_name.text, view_client_phone_number.text,
+                                        view_client_email.text, view_client_address.text, view_client_project_name.text,
+                                        view_client_project_duration.text, view_client_project_status.text)
+
+                        CButton2:
+                                text: 'Delete'
+                                on_release:
+                                        root.delete_client()
+

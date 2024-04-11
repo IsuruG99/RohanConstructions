@@ -68,10 +68,9 @@ class ViewLogPopup(GridLayout):
 
     # Populate PopUp Window
     def populate_view(self):
-        print(App.get_running_app().get_accessName())
         # Populate the project names Spinner
         self.ids.viewLog_project.values = []
-        projects = load_projects()
+        projects = load_projects(2)
         project_names = []
         for project in projects:
             project_names.append(project["name"])

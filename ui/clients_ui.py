@@ -3,6 +3,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from functions.clients import *
+from functions.projects import load_project_names
 from functools import partial
 from kivy.uix.screenmanager import Screen
 
@@ -36,6 +37,9 @@ class AddClientPopup(GridLayout):
             self.clients_screen.populate_clients(load_clients(0))
             self.clients_screen.ids.clients_filter.text = 'All'
             self.dismiss_popup(self.popup)
+
+    def load_project_list(self):
+        return load_project_names()
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -106,6 +110,8 @@ class ViewClientPopup(GridLayout):
                 message_box('Error', 'Failed to delete client.')
                 self.dismiss_popup(self.popup)
 
+    def load_project_list(self):
+        return load_project_names()
 
     def dismiss_popup(self,instance):
         instance.dismiss()
@@ -185,18 +191,18 @@ class ClientsScreen(Screen):
         txt = instance.text
         if txt == 'Add':
             self.add_client_popup()
-        elif txt == 'All' or txt == 'In Progress' or txt == 'Completed' or txt == 'None':
-            if txt == 'All':
+        elif txt == 'Filter: All' or txt == 'Filter: In Progress' or txt == 'Filter: Completed' or txt == 'Filter: None':
+            if txt == 'Filter: All':
                 self.populate_clients(load_clients(1))
-                self.ids.clients_filter.text = 'In Progress'
-            elif txt == 'In Progress':
+                self.ids.clients_filter.text = 'Filter: In Progress'
+            elif txt == 'Filter: In Progress':
                 self.populate_clients(load_clients(2))
-                self.ids.clients_filter.text = 'Completed'
-            elif txt == 'Completed':
+                self.ids.clients_filter.text = 'Filter: Completed'
+            elif txt == 'Filter: Completed':
                 self.populate_clients(load_clients(3))
-                self.ids.clients_filter.text = 'None'
-            elif txt == 'None':
+                self.ids.clients_filter.text = 'Filter: None'
+            elif txt == 'Filter: None':
                 self.populate_clients(load_clients(0))
-                self.ids.clients_filter.text = 'All'
+                self.ids.clients_filter.text = 'Filter: All'
         elif txt == 'Back':
             self.parent.current = 'main'

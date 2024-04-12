@@ -90,3 +90,15 @@ def delete_client(client_id):
     else:
         message_box('Error', 'Failed to delete client: "clients" reference not found.')
         return False
+
+
+# For other functions, a list of client names
+def load_client_names():
+    ref = database.get_ref('clients')
+
+    clients = []
+    for client_id, client in ref.get().items():
+        client['id'] = client_id
+        clients.append(client['name'])
+
+    return clients

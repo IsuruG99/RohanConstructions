@@ -197,16 +197,16 @@ class ManpowerScreen(Screen):
             self.parent.current = 'main'
         elif text == 'Add':
             self.add_emp()
-        elif text == 'All' or text == 'Perm' or text == 'Temp':
-            if text == 'All':
+        elif text == 'Filter: All' or text == 'Filter: Perm' or text == 'Filter: Temp':
+            if text == 'Filter: All':
                 self.populate_manpower(load_manpower(1))
-                self.ids.manpower_filter.text = 'Perm'
-            elif text == 'Perm':
+                self.ids.manpower_filter.text = 'Filter: Perm'
+            elif text == 'Filter: Perm':
                 self.populate_manpower(load_manpower(2))
-                self.ids.manpower_filter.text = 'Temp'
-            elif text == 'Temp':
+                self.ids.manpower_filter.text = 'Filter: Temp'
+            elif text == 'Filter: Temp':
                 self.populate_manpower(load_manpower(0))
-                self.ids.manpower_filter.text = 'All'
+                self.ids.manpower_filter.text = 'Filter: All'
 
     def dismiss_popup(self, instance):
         instance.dismiss

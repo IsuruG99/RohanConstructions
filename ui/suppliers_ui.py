@@ -211,19 +211,19 @@ class SuppliersScreen(Screen):
         elif instance.text == 'Add New Supplier':
             self.add_popup()
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
-        elif instance.text == 'All' or instance.text == 'Level 1' or instance.text == 'Level 2' or instance.text == 'Level 3':
-            if instance.text == 'All':
+        elif instance.text == 'Filter: All' or instance.text == 'Filter: Level 1' or instance.text == 'Filter: Level 2' or instance.text == 'Filter: Level 3':
+            if instance.text == 'Filter: All':
                 self.populate_suppliers(load_suppliers(1))
-                self.ids.supplierFilter.text = 'Level 1'
-            elif instance.text == 'Level 1':
+                self.ids.supplierFilter.text = 'Filter: Level 1'
+            elif instance.text == 'Filter: Level 1':
                 self.populate_suppliers(load_suppliers(2))
-                self.ids.supplierFilter.text = 'Level 2'
-            elif instance.text == 'Level 2':
+                self.ids.supplierFilter.text = 'Filter: Level 2'
+            elif instance.text == 'Filter: Level 2':
                 self.populate_suppliers(load_suppliers(3))
-                self.ids.supplierFilter.text = 'Level 3'
-            elif instance.text == 'Level 3':
+                self.ids.supplierFilter.text = 'Filter: Level 3'
+            elif instance.text == 'Filter: Level 3':
                 self.populate_suppliers(load_suppliers(0))
-                self.ids.supplierFilter.text = 'All'
+                self.ids.supplierFilter.text = 'Filter: All'
 
     def dismiss_popup(self, instance):
         instance.dismiss()

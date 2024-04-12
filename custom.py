@@ -152,19 +152,22 @@ class AutoFillText(CText):
         super().__init__(**kwargs)
         self.completions = completions
         self.dropdown = DropDown()
-        self.bind(text=self.on_text)
+        self.bind(focus=self.on_focus)
         self.dropdown.bind(on_select=self.on_dropdown_select)
 
     def on_text(self, instance, value):
-        matches = [completion for completion in self.completions if completion.startswith(value)]
-        if matches:
-            self.dropdown.clear_widgets()
-            for match in matches:
-                btn = CButton(text=match, size_hint_y=None, height=44)
-                btn.bind(on_release=lambda btn: self.dropdown.select(btn.text))
-                self.dropdown.add_widget(btn)
-            if not self.dropdown.parent:
-                self.dropdown.open(self)
+        if self.focus:
+            matches = [completion for completion in self.completions if completion.startswith(value)]
+            if matches:
+                self.dropdown.clear_widgets()
+                for match in matches:
+                    btn = CButton(text=match, size_hint_y=None, height=44)
+                    btn.bind(on_release=lambda btn: self.dropdown.select(btn.text))
+                    self.dropdown.add_widget(btn)
+                if not self.dropdown.parent:
+                    self.dropdown.open(self)
+            else:
+                self.dropdown.dismiss()
         else:
             self.dropdown.dismiss()
 
@@ -174,6 +177,6 @@ class AutoFillText(CText):
 
     def on_focus(self, instance, value):
         if value:
-            self.on_text(instance, self.text)
+            self.bind(text=self.on_text)
         else:
             self.dropdown.dismiss()

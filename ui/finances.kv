@@ -6,8 +6,13 @@
                 spacing: 20
 
                 GridLayout:
-                        cols: 2
+                        cols: 3
                         size_hint: 1, 0.05
+                        CButton2:
+                                id: finances_filter
+                                text: 'Filter: All'
+                                size_hint: 0.3, 1
+                                on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Finances'
                                 size_hint: 0.7, 1
@@ -59,25 +64,19 @@
 
                         GridLayout:
                                 rows: 1
-                                cols: 3
+                                cols: 2
                                 spacing: 20
                                 padding: 20
                                 size_hint: 1, 0.3
 
                                 CButton2:
-                                        id: finances_filter
-                                        text: 'All'
-                                        size_hint: 0.3, 1
-                                        on_release: root.btn_click(self)
-
-                                CButton2:
                                         text: 'Add'
-                                        size_hint: 0.5, 1
+                                        size_hint: 0.6, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:
                                         text: 'Back'
-                                        size_hint: 0.2, 1
+                                        size_hint: 0.3, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
@@ -142,7 +141,7 @@
                         AutoFillText:
                                 id: viewLog_project
                                 size_hint: 0.7, 0.1
-                                completions: root.load_projects()
+                                completions: root.load_project_list()
 
                         CLabel:
                                 text: 'Category'

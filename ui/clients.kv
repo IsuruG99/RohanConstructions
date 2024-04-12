@@ -6,8 +6,13 @@
                 spacing: 20
 
                 GridLayout:
-                        cols: 2
+                        cols: 3
                         size_hint: 1, 0.05
+                        CButton2:
+                                id: clients_filter
+                                text: 'Filter: All'
+                                size_hint: 0.3, 1
+                                on_press: root.btn_click(self)
                         CLabel:
                                 text: 'Clients'
                                 size_hint: 0.7, 1
@@ -65,14 +70,12 @@
                                 size_hint: 1, 0.3
 
                                 CButton2:
-                                        id: clients_filter
-                                        text: 'All'
-                                        size_hint: 0.2, 1
-                                        on_press: root.btn_click(self)
+                                        text: 'Report'
+                                        size_hint: 0.4, 1
 
                                 CButton2:
                                         text: 'Add'
-                                        size_hint: 0.5, 1
+                                        size_hint: 0.4, 1
                                         on_press: root.add_client_popup()
 
                                 CButton2:
@@ -132,11 +135,12 @@
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        AutoFillText:
                                 id: add_client_project_name
                                 multiline: False
                                 hint_text: 'None'
-                                disabled: True
+                                completions: root.load_project_list()
+                                disabled: False
 
                         CLabel:
                                 text: 'Project Duration'
@@ -222,10 +226,9 @@
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        CSpinner:
+                        AutoFillText:
                                 id: view_client_project_name
-                                text: 'Project Name'
-                                values: ['']
+                                completions: root.load_project_list()
 
                         CLabel:
                                 text: 'Project Duration'

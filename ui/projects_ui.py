@@ -2,6 +2,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from functions.projects import *
+from functions.clients import load_client_names
 from functools import partial
 import datetime
 
@@ -98,6 +99,9 @@ class ViewPopup(GridLayout):
         reportsPop = CPopup(title=project_name, content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
         reportsPop.open()
         reportsPop.content.popup = reportsPop
+
+    def load_clients(self):
+        return load_client_names()
 
     # Delete Project
     def deleteProj(self):
@@ -239,16 +243,16 @@ class ProjectsScreen(Screen):
         txt = instance.text
         if txt == 'Add':
             self.add_popup()
-        elif txt == 'All' or txt == 'In Progress' or txt == 'Completed':
-            if txt == 'In Progress':
+        elif txt == 'Filter: All' or txt == 'Filter: In Progress' or txt == 'Filter: Completed':
+            if txt == 'Filter: In Progress':
                 self.populate_projects(load_projects(1))
-                self.ids.projects_filter.text = 'Completed'
-            elif txt == 'Completed':
+                self.ids.projects_filter.text = 'Filter: Completed'
+            elif txt == 'Filter: Completed':
                 self.populate_projects(load_projects(2))
-                self.ids.projects_filter.text = 'All'
-            elif txt == 'All':
+                self.ids.projects_filter.text = 'Filter: All'
+            elif txt == 'Filter: All':
                 self.populate_projects(load_projects(0))
-                self.ids.projects_filter.text = 'In Progress'
+                self.ids.projects_filter.text = 'Filter: In Progress'
         elif txt == 'Back':
             self.parent.current = 'main'
 

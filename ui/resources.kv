@@ -6,11 +6,16 @@
                 spacing: 20
 
                 GridLayout:
-                        cols: 2
+                        cols: 3
                         size_hint: 1, 0.05
+                        CButton2:
+                                id: resource_filter
+                                text: 'Filter: All'
+                                size_hint: 0.2, 1
+                                on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Resources'
-                                size_hint: 0.7, 1
+                                size_hint: 0.5, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
@@ -57,25 +62,19 @@
                                                         size: self.size
                         GridLayout:
                                 rows: 1
-                                cols: 3
+                                cols: 2
                                 spacing: 20
                                 padding: 20
                                 size_hint: 1, 0.2
 
                                 CButton2:
-                                        id: resource_filter
-                                        text: 'All'
-                                        size_hint: 0.3, 1
-                                        on_release: root.btn_click(self)
-
-                                CButton2:
                                         text: 'Add'
-                                        size_hint: 0.5, 1
+                                        size_hint: 0.6, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:
                                         text: 'Back'
-                                        size_hint: 0.2, 1
+                                        size_hint: 0.4, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
@@ -118,12 +117,11 @@
                                 text: 'Supplier'
                                 size_hint: 0.3, 1
 
-                        CSpinner:
+                        AutoFillText:
                                 id: viewPop_supplier
-                                multiline: False
+                                size_hint: 0.7, 0.1
                                 hint_text: 'XYZ Suppliers'
-                                size_hint: 0.7, 1
-                                values: root.load_suppliers()
+                                completions: root.load_suppliers()
 
                         CLabel:
                                 text: 'Cost'
@@ -273,3 +271,86 @@
                                 text: 'Add'
                                 size_hint: 1, 0.1
                                 on_release: root.add_resource(addRes_name.text, addRes_qty.text, addRes_status.text, addRes_supplier.text, addRes_cost.text)
+
+<ReportResource>:
+        GridLayout:
+                size: root.size
+                pos: root.pos
+                cols: 1
+                rows: 2
+                padding: 20
+                spacing: 10
+
+                GridLayout:
+                        size_hint: 1, 0.9
+                        cols: 2
+                        rows: 1
+                        GridLayout:
+                                cols: 2
+                                rows: 5
+                                padding: 10
+                                spacing: 10
+                                size_hint: 1, 0.15
+
+                                CLabel:
+                                        text: 'Name'
+                                        size_hint: 0.3, 1
+                                CLabel:
+                                        id: reportRes_name
+                                        size_hint: 0.7, 1
+                                CLabel:
+                                        text: 'Quantity'
+                                        size_hint: 0.2, 1
+                                CLabel:
+                                        id: reportRes_qty
+                                        size_hint: 0.3, 1
+                                CLabel:
+                                        text: 'Status'
+                                        size_hint: 0.2, 1
+                                CLabel:
+                                        id: reportRes_status
+                                        size_hint: 0.3, 1
+                                CLabel:
+                                        text: 'Supplier'
+                                        size_hint: 0.4, 1
+                                CLabel:
+                                        id: reportRes_supplier
+                                        size_hint: 0.6, 1
+                                CLabel:
+                                        text: 'Cost'
+                                        size_hint: 0.2, 1
+                                CLabel:
+                                        id: reportRes_cost
+                                        size_hint: 0.3, 1
+
+
+                        GridLayout:
+                                cols: 1
+                                rows: 2
+                                size_hint: 1, 0.15
+                                CLabel:
+                                        text: 'Assigned Projects'
+                                        size_hint: 1, 0.1
+                                ScrollView:
+                                        size_hint: 1, 0.9
+                                        do_scroll_x: False
+                                        GridLayout:
+                                                id: assigned_projects
+                                                size_hint_y: None
+                                                height: self.minimum_height
+                                                cols: 1
+                                                canvas.before:
+                                                        Color:
+                                                                rgba: 0, 0, 0, 0.6
+                                                        Rectangle:
+                                                                pos: self.pos
+                                                                size: self.size
+
+                GridLayout:
+                        size_hint: 1, 0.1
+                        cols: 1
+                        rows: 1
+
+                        CButton2:
+                                text: 'Back'
+                                on_release: root.dismiss_popup(root.popup)

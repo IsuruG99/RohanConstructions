@@ -85,7 +85,34 @@ class ViewResource(GridLayout):
         return load_project_names()
 
     def reportRes(self):
-        message_box('Report', 'Not currently implemented.')
+        reportPop = CPopup(title='Report Resource', content=ReportResource(self.res_id), size_hint=(0.5, 0.8))
+        reportPop.open()
+        reportPop.content.popup = reportPop
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
+
+class ReportResource(GridLayout):
+    # Report Popup, you will see an overview of the resource, that is all
+    def __init__(self, res_id, **kwargs):
+        super().__init__(**kwargs)
+        self.res_id = res_id
+        self.populate_report()
+
+    def populate_report(self):
+        res = get_res(self.res_id)
+        self.ids.reportRes_name.text = res["name"]
+        self.ids.reportRes_qty.text = str(res["quantity"])
+        self.ids.reportRes_status.text = res["status"]
+        self.ids.reportRes_supplier.text = res["supplier_name"]
+        self.ids.reportRes_cost.text = str(res["unit_cost"])
+
+        for assignment in res["resource_assignments"]:
+            grid = GridLayout(cols=2, size_hint_y=None, height=60)
+            grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.8))
+            grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
+            self.ids.assigned_projects.add_widget(grid)
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -176,15 +203,15 @@ class ResourcesScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add':
             self.add_resource_popup()
-        elif instance.text == 'All' or instance.text == 'In Stock' or instance.text == 'Out of Stock':
-            if instance.text == 'All':
-                self.ids.resource_filter.text = 'In Stock'
+        elif instance.text == 'Filter: All' or instance.text == 'Filter: In Stock' or instance.text == 'Filter: Out of Stock':
+            if instance.text == 'Filter: All':
+                self.ids.resource_filter.text = 'Filter: In Stock'
                 self.populate_res(load_resources(1))
-            elif instance.text == 'In Stock':
-                self.ids.resource_filter.text = 'Out of Stock'
+            elif instance.text == 'Filter: In Stock':
+                self.ids.resource_filter.text = 'Filter: Out of Stock'
                 self.populate_res(load_resources(2))
-            elif instance.text == 'Out of Stock':
-                self.ids.resource_filter.text = 'All'
+            elif instance.text == 'Filter: Out of Stock':
+                self.ids.resource_filter.text = 'Filter: All'
                 self.populate_res(load_resources(3))
 
     def dismiss_popup(self, instance):

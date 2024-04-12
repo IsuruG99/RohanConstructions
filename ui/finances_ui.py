@@ -7,7 +7,7 @@ from kivy.uix.screenmanager import Screen
 from functools import partial
 
 from functions.finances import *
-from functions.projects import load_projects
+from functions.projects import load_projects, load_project_names
 from utils import *
 from custom import *
 import datetime
@@ -118,6 +118,9 @@ class ViewLogPopup(GridLayout):
             else:
                 message_box('Error', 'Failed to edit log.')
 
+    def load_project_list(self):
+        return load_project_names()
+
     def delete_log(self):
         if confirm_box('Delete', 'Are you sure you want to delete this log?') == 'yes':
             if delete_log(self.fin_id):
@@ -222,16 +225,16 @@ class FinancesScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add':
             self.add_log_popup()
-        elif instance.text == 'All' or instance.text == 'Income' or instance.text == 'Expense':
-            if self.ids.finances_filter.text == 'All':
+        elif instance.text == 'Filter: All' or instance.text == 'Filter: Income' or instance.text == 'Filter: Expense':
+            if self.ids.finances_filter.text == 'Filter: All':
                 self.populate_logs(load_all_finances(1))
-                self.ids.finances_filter.text = 'Income'
-            elif self.ids.finances_filter.text == 'Income':
+                self.ids.finances_filter.text = 'Filter: Income'
+            elif self.ids.finances_filter.text == 'Filter: Income':
                 self.populate_logs(load_all_finances(2))
-                self.ids.finances_filter.text = 'Expense'
-            elif self.ids.finances_filter.text == 'Expense':
+                self.ids.finances_filter.text = 'Filter: Expense'
+            elif self.ids.finances_filter.text == 'Filter: Expense':
                 self.populate_logs(load_all_finances(0))
-                self.ids.finances_filter.text = 'All'
+                self.ids.finances_filter.text = 'Filter: All'
 
     def dismiss_popup(self, instance):
         instance.dismiss()

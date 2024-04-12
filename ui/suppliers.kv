@@ -6,11 +6,16 @@
                 spacing: 20
 
                 GridLayout:
-                        cols: 2
+                        cols: 3
                         size_hint: 1, 0.05
+                        CButton2:
+                                text: 'Filter: All'
+                                id: supplierFilter
+                                size_hint: 0.2, 1
+                                on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Suppliers'
-                                size_hint: 0.7, 1
+                                size_hint: 0.5, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
@@ -59,25 +64,19 @@
 
                         GridLayout:
                                 rows: 1
-                                cols: 3
+                                cols: 2
                                 spacing: 20
                                 padding: 20
                                 size_hint: 1, 0.3
 
                                 CButton2:
-                                        text: 'All'
-                                        id: supplierFilter
-                                        size_hint: 0.3, 1
-                                        on_release: root.btn_click(self)
-
-                                CButton2:
                                         text: 'Add New Supplier'
-                                        size_hint: 0.4, 1
+                                        size_hint: 0.6, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:
                                         text: 'Back'
-                                        size_hint: 0.3, 1
+                                        size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'

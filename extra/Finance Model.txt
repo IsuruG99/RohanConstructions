@@ -21,10 +21,10 @@ User Tracking
 
 
 To-do (For Myself) :
-- Client Function Revamp, Button on Name, Project's end date by days left instead of Action Field.
-- When adding/removing resource assignment, change Quantity accordingly
+- Resources: Subtract function on assignment
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
 - Export a Report (?)
 - Create Account Functionality? (Delete too i guess)
 - Access Controls V3+ (Postponed till every function complete)
+- Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
 

@@ -174,8 +174,19 @@ def load_res(project_name):
 
 # For other functions, export a list of project names
 def load_project_names():
-    projects = load_projects()
+    projects = load_projects(2)
     project_names = []
     for project in projects:
         project_names.append(project['name'])
     return project_names
+
+
+# For other functions, export a list of project names matching client
+def load_project_list(self, client_name):
+    if client_name is not None:
+        projectList = []
+        projects = load_projects(2)
+        for project in projects:
+            if project['client_name'] == client_name:
+                projectList.append(project['name'])
+        return projectList

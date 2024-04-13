@@ -60,12 +60,14 @@ class ViewManpower(GridLayout):
 
         # emp["project_assignments"] is a list of projects, we display them in ScrollView named viewEmp_projects
         for project in emp["project_assignments"]:
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(CLabel(text=project, size_hint_x=0.8))
-            grid.add_widget(
-                Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
-                       font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
-            self.ids.viewEmp_projects.add_widget(grid)
+            # there is one blank project assignment, where project: "", skip it
+            if not project == "":
+                grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+                grid.add_widget(CLabel(text=project, size_hint_x=0.8))
+                grid.add_widget(
+                    Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
+                           font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
+                self.ids.viewEmp_projects.add_widget(grid)
 
     def reload(self, project_name, action, instance):
         print(project_name, action)

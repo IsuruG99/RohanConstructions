@@ -113,10 +113,11 @@ class ReportResource(GridLayout):
         self.ids.reportRes_cost.text = str(res["unit_cost"])
 
         for assignment in res["resource_assignments"]:
-            grid = GridLayout(cols=2, size_hint_y=None, height=60)
-            grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.8))
-            grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
-            self.ids.assigned_projects.add_widget(grid)
+            if not assignment["project"] == "":
+                grid = GridLayout(cols=2, size_hint_y=None, height=60)
+                grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.8))
+                grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
+                self.ids.assigned_projects.add_widget(grid)
 
     def dismiss_popup(self, instance):
         instance.dismiss()

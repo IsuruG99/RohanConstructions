@@ -35,7 +35,6 @@ class AddClientPopup(GridLayout):
         if add_client(name, phone_number, email, address):
             message_box('Success', 'Client added successfully.')
             self.clients_screen.populate_clients(load_clients(0))
-            self.clients_screen.ids.clients_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
 
     def load_project_list(self):
@@ -54,12 +53,6 @@ class ViewClientPopup(GridLayout):
         self.populate_view()
 
     def populate_view(self):
-        # Populate Spinner with projects from the database
-        self.ids.view_client_project_name.values = []
-        projects = load_projects(2)
-        for project in projects:
-            self.ids.view_client_project_name.values.append(project['name'])
-
         # Get the client data from the database
         client = get_client(self.client_id)
         # Populate View
@@ -67,20 +60,14 @@ class ViewClientPopup(GridLayout):
         self.ids.view_client_phone_number.text = str(client['phone_number'])
         self.ids.view_client_email.text = client['email']
         self.ids.view_client_address.text = client['address']
-        self.ids.view_client_project_name.text = client['project_name']
-        self.ids.view_client_project_duration.text = client['project_duration']
-        self.ids.view_client_project_status.text = client['project_status']
 
-    def edit_client(self, name, phone_number, email, address, proj_name="None", proj_duration="None", proj_status="None"):
+    def edit_client(self, name, phone_number, email, address):
         name = str(name)
         phone_number = str(phone_number)
         email = str(email)
         address = str(address)
-        proj_name = str(proj_name)
-        proj_duration = str(proj_duration)
-        proj_status = str(proj_status)
 
-        if not validate_string(name, phone_number, email, address, proj_name, proj_duration, proj_status):
+        if not validate_string(name, phone_number, email, address):
             message_box('Error', 'All fields are required.')
             return
         if not validate_mobileNo(phone_number):
@@ -91,10 +78,9 @@ class ViewClientPopup(GridLayout):
             return
 
         if confirm_box('Update Client', 'Are you sure you want to update this client?') == 'yes':
-            if update_client(self.client_id, name, phone_number, email, address, proj_name, proj_duration, proj_status):
+            if update_client(self.client_id, name, phone_number, email, address):
                 message_box('Success', 'Client updated successfully.')
                 self.clients_screen.populate_clients(load_clients(0))
-                self.clients_screen.ids.clients_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to update client.')
@@ -104,14 +90,10 @@ class ViewClientPopup(GridLayout):
             if delete_client(self.client_id):
                 message_box('Success', 'Client deleted successfully.')
                 self.clients_screen.populate_clients(load_clients(0))
-                self.clients_screen.ids.clients_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to delete client.')
                 self.dismiss_popup(self.popup)
-
-    def load_project_list(self):
-        return load_project_names()
 
     def dismiss_popup(self,instance):
         instance.dismiss()
@@ -179,7 +161,10 @@ class ClientsScreen(Screen):
     def search_clients(self, searchValue):  # Finish this function
         if not searchValue == '':
             clients = load_clients(0)
-            clients = [client for client in clients if searchValue.lower() in client['name'].lower()]
+            clients = [client for client in clients
+                       if searchValue.lower() in client['name'].lower()
+                       or searchValue.lower() in client['phone_number'].lower()
+                       or searchValue.lower() in client['email'].lower()]
             self.populate_clients(clients)
 
     def view_client(self, client_id, instance):
@@ -196,21 +181,10 @@ class ClientsScreen(Screen):
         txt = instance.text
         if txt == 'Add':
             self.add_client_popup()
-        elif txt == 'Filter: All' or txt == 'Filter: In Progress' or txt == 'Filter: Completed' or txt == 'Filter: None':
-            if txt == 'Filter: All':
-                self.populate_clients(load_clients(1))
-                self.ids.clients_filter.text = 'Filter: In Progress'
-            elif txt == 'Filter: In Progress':
-                self.populate_clients(load_clients(2))
-                self.ids.clients_filter.text = 'Filter: Completed'
-            elif txt == 'Filter: Completed':
-                self.populate_clients(load_clients(3))
-                self.ids.clients_filter.text = 'Filter: None'
-            elif txt == 'Filter: None':
-                self.populate_clients(load_clients(0))
-                self.ids.clients_filter.text = 'Filter: All'
         elif txt == 'Back':
             self.parent.current = 'main'
+        elif txt == 'Refresh':
+            self.populate_clients(load_clients(0))
         elif txt == 'Overview':
             self.report_clients()
 

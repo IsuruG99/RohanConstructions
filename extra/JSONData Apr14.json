@@ -4,13 +4,19 @@
       "address": "MAS Holdings, Colombo 03",
       "email": "mas@hotmail.com",
       "name": "MAS",
-      "phone_number": "+0123456789"
+      "phone_number": "0123456789"
     },
     "-NuXZawsbIQA-2QLC4iF": {
       "address": "mada colombo",
       "email": "inukaB@gmail.com",
       "name": "inuka ",
       "phone_number": "0119"
+    },
+    "-NvOIL028z0uXSd4y3u0": {
+      "address": "aaaa",
+      "email": "a@aura.com",
+      "name": "Aura",
+      "phone_number": "0711223344"
     },
     "client3": {
       "address": "123 Main St, City, Country",
@@ -31,10 +37,10 @@
       "category": "Contract",
       "date": "2024-04-12",
       "description": "Building Renovation Project",
-      "project_name": "ABC",
+      "project_name": "Project ClAA",
       "related_entity": "ABC",
       "type": "Income",
-	  "user": "None"
+      "user": "a"
     },
     "-NuUT9RjgjdFjgVSOUTR": {
       "amount": "20000",
@@ -44,7 +50,7 @@
       "project_name": "School Repair Project",
       "related_entity": "School Students Council",
       "type": "Income",
-	  "user": "None"
+      "user": "None"
     },
     "-NunSjjWg6qytN7oJMq9": {
       "amount": "100000",
@@ -54,17 +60,17 @@
       "project_name": "New Office Building",
       "related_entity": "ABC Company",
       "type": "Income",
-	  "user": "None"
+      "user": "None"
     },
     "-Nv7Vz2WsqITNmQFDupW": {
       "amount": "2345",
       "category": "Contract",
-      "date": "2222-03-22",
+      "date": "2022-03-22",
       "description": "Project Completion",
       "project_name": "AAB",
       "related_entity": "ABC",
       "type": "Income",
-	  "user": "None"
+      "user": "a"
     },
     "transaction1": {
       "amount": "50011",
@@ -74,7 +80,7 @@
       "project_name": "Old Office Building",
       "related_entity": "supplier1",
       "type": "Expense",
-	  "user": "a"
+      "user": "a"
     }
   },
   "manpower": {
@@ -83,7 +89,10 @@
       "employment_status": "Permanent",
       "name": "Alicia Key",
       "phone_number": "0711234567",
-      "project_assignments": [""],
+      "project_assignments": [
+        "",
+        "New Office Building"
+      ],
       "role": "Manager",
       "salary": "12500"
     },
@@ -92,15 +101,18 @@
       "employment_status": "Permanent",
       "name": "David Beckem",
       "phone_number": "0711234567",
-      "project_assignments": [""],
+      "project_assignments": [
+        "",
+        "New Office Building"
+      ],
       "role": "Architect",
       "salary": "10000"
     },
     "employee1": {
       "email": "alice@example.com",
-      "phone_number": "+1122334455",
       "employment_status": "Permanent",
       "name": "Alice Johnson",
+      "phone_number": "+1122334455",
       "project_assignments": [
         "New Office Building"
       ],
@@ -109,9 +121,9 @@
     },
     "employee2": {
       "email": "ruwan@gmail.com",
-      "phone_number": "0711234567",
       "employment_status": "Permanent",
       "name": "Ruwan Perera",
+      "phone_number": "0711234567",
       "project_assignments": [
         "School Repair Project"
       ],
@@ -120,9 +132,9 @@
     },
     "employee3": {
       "email": "abbey@gmail.com",
-      "phone_number": "0711234567",
       "employment_status": "Temp",
       "name": "Abbey Grange",
+      "phone_number": "0711234567",
       "project_assignments": [
         "New Office Building",
         "School Repair Project"
@@ -136,18 +148,18 @@
       "budget": "10000",
       "client_name": "ABC Company",
       "description": "Project CL is a test  project",
-      "end_date": "2042-05-11",
+      "end_date": "2022-05-11",
       "name": "Project ClAA",
-      "start_date": "2024-02-11",
+      "start_date": "2010-2-11",
       "status": "In Progress"
     },
     "-Nr3ekhFFfkI5uluRaPd": {
       "budget": "2345",
       "client_name": "ABC",
       "description": "AA",
-      "end_date": "2025-03-22",
+      "end_date": "2222-3-22",
       "name": "AAB",
-      "start_date": "2024-02-22",
+      "start_date": "2222-2-22",
       "status": "Completed"
     },
     "-Nr3f4jQf6532XjvOXNm": {
@@ -182,48 +194,57 @@
     "-NuWTjrk5gQJ5P2HEftc": {
       "name": "Stone",
       "quantity": "15",
-      "status": "In Stock",
-      "supplier_name": "XYZ Suppliers",
-      "unit_cost": "15000",
-        "resource_assignments": [
-            {
-            "amount": "5",
-            "project": "New Office Building"
-            },
-            {
-            "amount": "10",
-            "project": "School Repair Project"
-            }
-        ]
-    },
-    "-NuWV76x3y7lrUrY-XX6": {
-      "name": "ABC Equipment",
-      "quantity": "15",
-      "status": "In Stock",
-      "supplier_name": "XYZ Suppliers",
-      "unit_cost": "80000",
-        "resource_assignments": [{"amount": "5","project": "New Office Building"}, {
-            "amount": "10",
-            "project": "School Repair Project"
-            }
-        ]
-    },
-    "resource2": {
-      "name": "Wood",
-      "quantity": "120",
-      "status": "In stock",
-      "supplier_name": "XYZ Suppliers",
-      "unit_cost": "3000",
       "resource_assignments": [
         {
-          "amount": "20",
+          "amount": "5",
           "project": "New Office Building"
         },
         {
           "amount": "10",
           "project": "School Repair Project"
+        },
+        {
+          "amount": "11",
+          "project": "AAB"
         }
-      ]
+      ],
+      "status": "In Stock",
+      "supplier_name": "Mr. Validasa",
+      "unit_cost": "15000"
+    },
+    "-NuWV76x3y7lrUrY-XX6": {
+      "name": "ABC Equipment",
+      "quantity": "15",
+      "resource_assignments": [
+        {
+          "amount": "10",
+          "project": "Project ClAA"
+        },
+        {
+          "amount": "5",
+          "project": "AAB"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": "80000"
+    },
+    "resource2": {
+      "name": "Wood",
+      "quantity": "128",
+      "resource_assignments": [
+        {
+          "amount": "15",
+          "project": "AB"
+        },
+        {
+          "amount": "4",
+          "project": "Project ClAA"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": "3000"
     }
   },
   "suppliers": {

@@ -154,27 +154,28 @@ class SuppliersScreen(Screen):
         if headers is None:
             headers = ['Business', 'Owner', 'Contact', 'Level']
         # Fill header list (Made to rewrite [A] [D] Sorting Header custom names in sorting)
+        size_hints = [4, 3, 2, 1]
         for header in headers:
             self.ids.Supplier_headers.add_widget(CButton(text=header,
                                                          bold=True,
-                                                         padding=(10, 10),
+                                                         padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                                                          on_release=partial(self.sort_suppliers, suppliers, header)))
 
         # Fill the grid with Supplier Data
         for supplier in suppliers:
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
             button = Button(text=supplier["business"],
                             on_release=partial(self.view_suppliers, supplier["id"]),
                             background_normal='', font_size='20sp',
                             background_color=(0.1, 0.1, 0.1, 0.0),
-                            font_name='Roboto',
+                            font_name='Roboto', size_hint_x=4,
                             color=(1, 1, 1, 1),
                             bold=True)
             grid.supplier = supplier
             grid.add_widget(button)
-            grid.add_widget(CLabel(text=supplier["supplierName"]))
-            grid.add_widget(CLabel(text=supplier["contactNo"]))
-            grid.add_widget(CLabel(text=supplier["supplierLevel"]))
+            grid.add_widget(CLabel(text=supplier["supplierName"], size_hint_x=3))
+            grid.add_widget(CLabel(text=supplier["contactNo"], size_hint_x=2))
+            grid.add_widget(CLabel(text=supplier["supplierLevel"], size_hint_x=1))
             self.ids.Supplier_list.add_widget(grid)
 
     # Main Sorting Function, take header list, supplier list, call populate function with sorted supplier list

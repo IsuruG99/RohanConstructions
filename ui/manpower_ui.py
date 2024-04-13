@@ -60,12 +60,14 @@ class ViewManpower(GridLayout):
 
         # emp["project_assignments"] is a list of projects, we display them in ScrollView named viewEmp_projects
         for project in emp["project_assignments"]:
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(CLabel(text=project, size_hint_x=0.8))
-            grid.add_widget(
-                Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
-                       font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
-            self.ids.viewEmp_projects.add_widget(grid)
+            # there is one blank project assignment, where project: "", skip it
+            if not project == "":
+                grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+                grid.add_widget(CLabel(text=project, size_hint_x=0.8))
+                grid.add_widget(
+                    Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
+                           font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
+                self.ids.viewEmp_projects.add_widget(grid)
 
     def reload(self, project_name, action, instance):
         print(project_name, action)
@@ -122,21 +124,22 @@ class ManpowerScreen(Screen):
         # headers
         if headers is None:
             headers = ['Name', 'Role', 'Email', '', '']
+        size_hints = [0.3, 0.2, 0.3, 0.1, 0.1]
         for header in headers:
-            self.ids.manpower_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+            self.ids.manpower_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                                                          on_release=partial(self.sort_manpower, employees, header)))
 
         for emp in employees:
-            grid = GridLayout(cols=5, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(CLabel(text=emp["name"]))
-            grid.add_widget(CLabel(text=emp["role"]))
-            grid.add_widget(CLabel(text=emp["email"]))
+            grid = GridLayout(cols=5, spacing=10, size_hint_y=None, height=40)
+            grid.add_widget(CLabel(text=emp["name"], size_hint_x=0.3))
+            grid.add_widget(CLabel(text=emp["role"], size_hint_x=0.2))
+            grid.add_widget(CLabel(text=emp["email"], size_hint_x=0.3))
             grid.add_widget(Button(text='View', on_release=partial(self.view_emp, emp["id"]),
-                                   background_normal='', font_size='20sp',
+                                   background_normal='', font_size='20sp', size_hint_x=0.1,
                                    background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
                                    bold=True))
             grid.add_widget(Button(text='Delete', on_release=partial(self.delete_employee, emp["id"]),
-                                   background_normal='', font_size='20sp',
+                                   background_normal='', font_size='20sp', size_hint_x=0.1,
                                    background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
                                    bold=True))
             grid.emp = emp

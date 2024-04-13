@@ -3,7 +3,7 @@ from utils import *
 
 
 # add a new client to the database
-def add_client(name, phone_number, email, address, project_name="None", project_duration="None", project_status="None"):
+def add_client(name, phone_number, email, address):
     # generate a new unique key for the client easily manipulate data
     ref = database.get_ref('clients')
 
@@ -16,10 +16,7 @@ def add_client(name, phone_number, email, address, project_name="None", project_
             'name': name,
             'phone_number': phone_number,
             'email': email,
-            'address': address,
-            'project_name': project_name,
-            'project_duration': project_duration,
-            'project_status': project_status
+            'address': address
         })
         return True
     else:
@@ -30,20 +27,13 @@ def add_client(name, phone_number, email, address, project_name="None", project_
 # get all clients from the database
 def load_clients(status=0):
     ref = database.get_ref('clients')
-    print("reached load_clients")
 
     clients = []
     for client_id, client in ref.get().items():
         client['id'] = client_id
         clients.append(client)
 
-    if status == 1:
-        clients = [client for client in clients if client['project_status'] == 'In Progress']
-    elif status == 2:
-        clients = [client for client in clients if client['project_status'] == 'Completed']
-    elif status == 3:
-        clients = [client for client in clients if client['project_status'] == 'None']
-    elif status == 0:
+    if status == 0:
         clients = clients
 
     return clients
@@ -59,7 +49,7 @@ def get_client(client_id):
 
 
 # updating existing client details to the database
-def update_client(client_id, name, phone_number, email, address, project_name, project_duration, project_status):
+def update_client(client_id, name, phone_number, email, address):
     ref = database.get_ref('clients')
 
     if ref is not None:
@@ -67,10 +57,7 @@ def update_client(client_id, name, phone_number, email, address, project_name, p
             'name': name,
             'phone_number': phone_number,
             'email': email,
-            'address': address,
-            'project_name': project_name,
-            'project_duration': project_duration,
-            'project_status': project_status
+            'address': address
         })
         print("Client updated successfully.")
         return True

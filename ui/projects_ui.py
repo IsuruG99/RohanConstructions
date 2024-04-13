@@ -139,14 +139,14 @@ class ReportsPopup(GridLayout):
         # Get relevant manpower data (manpower role, count)
         roles = load_members(project["name"])
         for role, count in roles.items():
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
             grid.add_widget(CLabel(text=role, font_size='15sp'))
             grid.add_widget(CLabel(text=str(count), font_size='15sp'))
             self.ids.assigned_manpower.add_widget(grid)
         # Get resource data (resource name, amount)
         res = load_res(project["name"])
         for resource, amount in res.items():
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
             grid.add_widget(CLabel(text=resource, font_size='15sp'))
             grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
             self.ids.assigned_resources.add_widget(grid)
@@ -169,22 +169,23 @@ class ProjectsScreen(Screen):
         # Create Headers
         if headers is None:
             headers = ['Project Name', 'Client', 'End Date', 'Status']
+        size_hints = [0.4, 0.3, 0.15, 0.15]
         for header in headers:
-            self.ids.projects_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+            self.ids.projects_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                                                          on_release=partial(self.sort_projects, header, projects)))
 
         # Fill the Grid with Project Data
         for project in projects:
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
             button = Button(text=project["name"], on_release=partial(self.view_project, project["id"]),
-                            background_normal='', font_size='20sp',
+                            background_normal='', font_size='20sp', size_hint_x=0.4,
                             background_color=(0.1, 0.1, 0.1, 0.0), font_name='Roboto', color=(1, 1, 1, 1),
                             bold=True)
             grid.project = project
             grid.add_widget(button)
-            grid.add_widget(CLabel(text=project["client_name"]))
-            grid.add_widget(CLabel(text=project["end_date"]))
-            grid.add_widget(CLabel(text=project["status"]))
+            grid.add_widget(CLabel(text=project["client_name"], size_hint_x=0.3))
+            grid.add_widget(CLabel(text=project["end_date"], size_hint_x=0.15))
+            grid.add_widget(CLabel(text=project["status"], size_hint_x=0.15))
             self.ids.projects_list.add_widget(grid)
 
     # Sort Projects, called by the header buttons, calls populate_projects with matching Projects List

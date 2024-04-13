@@ -113,10 +113,11 @@ class ReportResource(GridLayout):
         self.ids.reportRes_cost.text = str(res["unit_cost"])
 
         for assignment in res["resource_assignments"]:
-            grid = GridLayout(cols=2, size_hint_y=None, height=60)
-            grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.8))
-            grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
-            self.ids.assigned_projects.add_widget(grid)
+            if not assignment["project"] == "":
+                grid = GridLayout(cols=2, size_hint_y=None, height=40)
+                grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.8))
+                grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
+                self.ids.assigned_projects.add_widget(grid)
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -137,21 +138,22 @@ class ResourcesScreen(Screen):
         # headers
         if headers is None:
             headers = ['Name', 'Status', 'Supplier', 'Stock']
+        size_hints = [0.4, 0.2, 0.3, 0.1]
         for header in headers:
-            self.ids.resource_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+            self.ids.resource_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                                                          on_release=partial(self.sort_resources, resources, header)))
 
         # Fill Data into ScrollView
         for res in resources:
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=50)
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
             button = Button(text=res["name"], on_release=partial(self.view_res, res["id"]),
-                            background_normal='', font_size='20sp',
+                            background_normal='', font_size='20sp', size_hint_x=0.4,
                             background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1), bold=True)
             grid.res = res
             grid.add_widget(button)
-            grid.add_widget(CLabel(text=res["status"]))
-            grid.add_widget(CLabel(text=res["supplier_name"]))
-            grid.add_widget(CLabel(text=str(res["quantity"])))
+            grid.add_widget(CLabel(text=res["status"], size_hint_x=0.2))
+            grid.add_widget(CLabel(text=res["supplier_name"], size_hint_x=0.3))
+            grid.add_widget(CLabel(text=str(res["quantity"]), size_hint_x=0.1))
             self.ids.resources_list.add_widget(grid)
 
     def sort_resources(self, resources, header, instance):

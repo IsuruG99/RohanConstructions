@@ -152,8 +152,9 @@ class FinancesScreen(Screen):
         if headers is None:
             headers = ["Amount", "Category", "Date", "User"]
         # Dynamically regenerate headers, made for Sorting name changes
+        size_hints = [0.3, 0.2, 0.3, 0.2]
         for header in headers:
-            self.ids.finance_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10),
+            self.ids.finance_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                                                         on_release=partial(self.sort_logs, header, financeList)))
 
         for log in financeList:
@@ -163,15 +164,15 @@ class FinancesScreen(Screen):
             else:
                 cl = (0.5, 1, 0.5, 1)
 
-            grid = GridLayout(cols=4, size_hint_y=None, height=50)
+            grid = GridLayout(cols=4, size_hint_y=None, height=40)
             button = Button(text=convert_currency(log["amount"]), on_release=partial(self.view_log, log["id"]),
-                            background_normal='', font_size='20sp',
+                            background_normal='', font_size='20sp', size_hint_x=0.3,
                             background_color=(0.1, 0.1, 0.1, 0.0), font_name='Roboto', color=cl, bold=True)
             grid.finance = log
             grid.add_widget(button)
-            grid.add_widget(CLabel(text=log["category"]))
-            grid.add_widget(CLabel(text=convert_date(log["date"])))
-            grid.add_widget(CLabel(text=log["user"]))
+            grid.add_widget(CLabel(text=log["category"], size_hint_x=0.2))
+            grid.add_widget(CLabel(text=convert_date(log["date"]), size_hint_x=0.3))
+            grid.add_widget(CLabel(text=log["user"], size_hint_x=0.2))
             self.ids.finances_list.add_widget(grid)
 
     def sort_logs(self, header, finances, instance):

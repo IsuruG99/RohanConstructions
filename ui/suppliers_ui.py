@@ -122,6 +122,23 @@ class ViewSupPopup(GridLayout):
         instance.dismiss()
 
 
+class ReportSupPopup(GridLayout):
+    def __init__(self, suppliers_screen, **kwargs):
+        super().__init__(**kwargs)
+        self.suppliers_screen = suppliers_screen
+        self.populate_report()
+
+    def populate_report(self):
+        suppliers = load_suppliers()
+        self.ids.supTotal.text = "Total : " + str(len(suppliers))
+        self.ids.supLV1.text = "Suppliers Lv1 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '1']))
+        self.ids.supLV2.text = "Suppliers Lv2 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '2']))
+        self.ids.supLV3.text = "Suppliers Lv3 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '3']))
+
+    def dismiss_popup(self, instance):
+        self.suppliers_screen.dismiss_popup(instance)
+
+
 # Suppliers Main UI (Accessed by main.py)
 class SuppliersScreen(Screen):
     def __init__(self, **kwargs):
@@ -197,6 +214,11 @@ class SuppliersScreen(Screen):
         viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.6, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
+
+    def overview_suppliers(self):
+        overviewPop = CPopup(title='Supplier Overview', content=ReportSupPopup(self), size_hint=(0.6, 0.8))
+        overviewPop.open()
+        overviewPop.content.popup = overviewPop
 
     # Open to supplier add popup window
     def add_popup(self):

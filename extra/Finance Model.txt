@@ -21,8 +21,10 @@ User Tracking
 
 
 To-do (For Myself) :
+- Client Function Revamp, Button on Name, Project's end date by days left instead of Action Field.
+- When adding/removing resource assignment, change Quantity accordingly
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
 - Export a Report (?)
 - Create Account Functionality? (Delete too i guess)
-- Project Report Revamp (Postponed til resource and manpower function complete)
 - Access Controls V3+ (Postponed till every function complete)
+

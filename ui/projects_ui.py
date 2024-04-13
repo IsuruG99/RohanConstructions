@@ -37,7 +37,7 @@ class AddPopup(GridLayout):
         add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
         message_box('Success', 'Project added successfully.')
         self.projects_screen.populate_projects(load_projects(0))
-        self.projects_screen.ids.projects_filter.text = 'In Progress'
+        self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
         self.projects_screen.dismiss_popup(self.popup)
 
 
@@ -88,7 +88,7 @@ class ViewPopup(GridLayout):
             if update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status):
                 message_box('Success', 'Project updated successfully.')
                 self.projects_screen.populate_projects(load_projects(0))
-                self.projects_screen.ids.projects_filter.text = 'In Progress'
+                self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
                 self.projects_screen.dismiss_popup(self.popup)
             else:
                 message_box('Failed', 'Failed to update project.')
@@ -112,7 +112,7 @@ class ViewPopup(GridLayout):
             else:
                 message_box('Error', 'Failed to delete project.')
             self.projects_screen.populate_projects(load_projects(0))
-            self.projects_screen.ids.projects_filter.text = 'In Progress'
+            self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
             self.projects_screen.dismiss_popup(self.popup)
 
     def dismiss_popup(self, instance):

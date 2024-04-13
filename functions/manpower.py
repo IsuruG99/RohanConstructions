@@ -83,17 +83,25 @@ def project_assignment(emp_id, project_name, action):
                 assignments = [""]
                 ref.child(emp_id).update({'project_assignments': assignments})
             else:
-                assignments.remove(project_name)
-                ref.child(emp_id).update({'project_assignments': assignments})
+                if project_name in assignments:
+                    assignments.remove(project_name)
+                    ref.child(emp_id).update({'project_assignments': assignments})
+                else:
+                    print("Project not found in employee assignments.")
+                    return False
 
             print("Project removed from employee successfully.")
             return True
         elif action == "Add":
-            assignments.append(project_name)
-            ref.child(emp_id).update({'project_assignments': assignments})
+            if project_name not in assignments:
+                assignments.append(project_name)
+                ref.child(emp_id).update({'project_assignments': assignments})
 
-            print("Project added to employee successfully.")
-            return True
+                print("Project added to employee successfully.")
+                return True
+            else:
+                print("Project already exists in employee assignments.")
+                return False
         else:
             message_box('Error', 'Failed to perform action')
             return False

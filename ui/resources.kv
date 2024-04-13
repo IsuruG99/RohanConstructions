@@ -31,6 +31,7 @@
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.75, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton2:
                                         text: 'Search'
                                         size_hint: 0.25, 1
@@ -102,6 +103,7 @@
                                 multiline: False
                                 hint_text: 'Stone'
                                 size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Quantity'
@@ -112,6 +114,7 @@
                                 multiline: False
                                 hint_text: '10'
                                 size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Supplier'
@@ -122,6 +125,7 @@
                                 size_hint: 0.7, 0.1
                                 hint_text: 'XYZ Suppliers'
                                 completions: root.load_suppliers()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Cost'
@@ -131,6 +135,7 @@
                                 multiline: False
                                 hint_text: '15000'
                                 size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Status'
@@ -161,12 +166,15 @@
                                 AutoFillText:
                                         id: projectList
                                         text: ''
+                                        hint_text: 'Project Name'
                                         size_hint_x: 0.4
                                         completions: root.load_projects()
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CText:
                                         id: projectQty
                                         hint_text: '10'
                                         size_hint_x: 0.1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton:
                                         text: '+'
                                         size_hint_x: 0.1
@@ -226,6 +234,7 @@
                         CText:
                                 id: addRes_name
                                 hint_text: 'Person or Group'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 size_hint: 0.7, 1
 
                         CLabel:
@@ -234,6 +243,7 @@
                         CText:
                                 id: addRes_qty
                                 hint_text: 'Unit Count'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 size_hint: 0.7, 1
 
                         CLabel:
@@ -244,6 +254,7 @@
                                 hint_text: 'XYZ Suppliers'
                                 size_hint: 0.7, 1
                                 completions: root.load_suppliers()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Cost'
@@ -251,6 +262,7 @@
                         CText:
                                 id: addRes_cost
                                 hint_text: '10500.00'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Status'

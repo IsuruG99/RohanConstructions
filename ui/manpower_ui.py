@@ -187,7 +187,7 @@ class ManpowerScreen(Screen):
         if confirm_box('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?') == 'yes':
             delete_employee(emp_id)
             self.populate_manpower(load_manpower(0))
-            self.ids.manpower_filter.text = 'All'
+            self.ids.manpower_filter.text = 'Filter: All'
         else:
             message_box('Error', 'Failed to delete Employee.')
 

@@ -55,9 +55,11 @@ class AddLogPopup(GridLayout):
         add_log(fin_type, amount, date, desc, entity, project, category)
         message_box('Success', 'Log added successfully.')
         self.finances_screen.populate_logs(load_all_finances(0))
-        self.finances_screen.ids.finances_filter.text = 'All'
+        self.finances_screen.ids.finances_filter.text = 'Filter: All'
         self.finances_screen.dismiss_popup(self.popup)
 
+    def load_project_list(self):
+        return load_project_names()
 
 class ViewLogPopup(GridLayout):
     def __init__(self, finances_screen, fin_id, **kwargs):
@@ -110,10 +112,11 @@ class ViewLogPopup(GridLayout):
             return
         # Send data to finances.py
         if confirm_box('Edit', 'Are you sure you want to edit this log?') == 'yes':
-            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category, App.get_running_app().get_accessName()):
+            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
+                        App.get_running_app().get_accessName()):
                 message_box('Success', 'Log edited successfully.')
                 self.finances_screen.populate_logs(load_all_finances(0))
-                self.finances_screen.ids.finances_filter.text = 'All'
+                self.finances_screen.ids.finances_filter.text = 'Filter: All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to edit log.')
@@ -126,7 +129,7 @@ class ViewLogPopup(GridLayout):
             if delete_log(self.fin_id):
                 message_box('Success', 'Log deleted successfully.')
                 self.finances_screen.populate_logs(load_all_finances(0))
-                self.finances_screen.ids.finances_filter.text = 'All'
+                self.finances_screen.ids.finances_filter.text = 'Filter: All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to delete log.')
@@ -215,6 +218,11 @@ class FinancesScreen(Screen):
         viewPop.open()
         viewPop.content.popup = viewPop
 
+    def overview_log(self):
+        overviewPop = CPopup(title='Finance Overview', content=FinanceOverview(self), size_hint=(0.5, 0.8))
+        overviewPop.open()
+        overviewPop.content.popup = overviewPop
+
     def add_log_popup(self):
         addPop = CPopup(title='Add Finance Log', content=AddLogPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
@@ -235,6 +243,48 @@ class FinancesScreen(Screen):
             elif self.ids.finances_filter.text == 'Filter: Expense':
                 self.populate_logs(load_all_finances(0))
                 self.ids.finances_filter.text = 'Filter: All'
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+
+
+class FinanceOverview(GridLayout):
+    def __init__(self, finance_screen, **kwargs):
+        super().__init__(**kwargs)
+        self.finance_screen = finance_screen
+        year = str(datetime.datetime.now().year)
+        month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
+        self.populate_overview(year, month)
+
+    def populate_overview(self, y, m):
+        if y == '' or None:
+            message_box('Error', 'Year is required.')
+            return
+
+        finances = load_all_finances(0)
+        total_income = 0
+        total_expense = 0
+        if m == '':
+            m = '00'
+        else:
+            m = str(convert_monthToNumber(m))
+        for finance in finances:
+            # Date is stored as 'YYYY-MM-DD', it is a string and we need to extract year and month
+            # 2 conditions, year and month, year only (which means all months)
+            if finance['date'][:4] == y and finance['date'][5:7] == m:
+                if finance['type'] == 'Income':
+                    total_income += currencyStringToFloat(finance['amount'])
+                else:
+                    total_expense += currencyStringToFloat(finance['amount'])
+            elif finance['date'][:4] == y and m == '00':
+                if finance['type'] == 'Income':
+                    total_income += currencyStringToFloat(finance['amount'])
+                else:
+                    total_expense += currencyStringToFloat(finance['amount'])
+
+        self.ids.overview_income.text = convert_currency(total_income)
+        self.ids.overview_expense.text = convert_currency(total_expense)
+        self.ids.overview_balance.text = convert_currency(total_income - total_expense)
 
     def dismiss_popup(self, instance):
         instance.dismiss()

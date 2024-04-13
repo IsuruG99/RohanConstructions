@@ -112,8 +112,17 @@ def resource_assignment(res_id, amount, project_name, action):
                     ref.child(res_id).update({'resource_assignments': assignments})
                     print("Resource removed from project successfully.")
                     return True
-    if action == "Add":
-        assignments.append({"amount": amount, "project": project_name})
+    elif action == "Add":
+        project_exists = False
+        for assignment in assignments:
+            if assignment['project'] == project_name:
+                assignment['amount'] = str(int(assignment['amount']) + int(amount))
+                project_exists = True
+                break
+
+        if not project_exists:
+            assignments.append({"amount": amount, "project": project_name})
+
         ref.child(res_id).update({'resource_assignments': assignments})
         print("Resource added to project successfully.")
         return True

@@ -10,7 +10,7 @@
                         size_hint: 1, 0.05
                         CButton2:
                                 id: projects_filter
-                                text: 'In Progress'
+                                text: 'Filter: In Progress'
                                 size_hint: 0.2, 1
                                 on_release: root.btn_click(self)
                         CLabel:
@@ -31,6 +31,7 @@
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.75, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton2:
                                         text: 'Search'
                                         size_hint: 0.25, 1
@@ -102,6 +103,7 @@
                                 multiline: False
                                 hint_text: 'Project AD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Description'
@@ -111,6 +113,7 @@
                                 multiline: False
                                 hint_text: 'Project is about this.'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Start Date'
@@ -120,6 +123,7 @@
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'End Date'
@@ -129,6 +133,7 @@
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Client'
@@ -138,6 +143,7 @@
                                 multiline: False
                                 hint_text: 'ABC Company'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Budget'
@@ -147,6 +153,7 @@
                                 multiline: False
                                 hint_text: '10000'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                 GridLayout:
                         cols: 1
@@ -189,6 +196,7 @@
                                 multiline: False
                                 hint_text: 'Project AD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Description'
@@ -198,6 +206,7 @@
                                 multiline: False
                                 hint_text: 'Project is about this.'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Start Date'
@@ -207,6 +216,7 @@
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'End Date'
@@ -216,6 +226,7 @@
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Client'
@@ -225,6 +236,7 @@
                                 size_hint: 0.7, 0.1
                                 hint_text: 'ABC Company'
                                 completions: root.load_clients()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Budget'
@@ -234,6 +246,7 @@
                                 multiline: False
                                 hint_text: '10000'
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Status'

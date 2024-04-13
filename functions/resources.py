@@ -103,6 +103,7 @@ def resource_assignment(res_id, amount, project_name, action):
         if len(assignments) == 1:
             assignments = [{"amount": "", "project": ""}]
             ref.child(res_id).update({'resource_assignments': assignments})
+            change_qty(res_id, amount, "AddQty")
             print("Resource removed from project successfully.")
             return True
         else:
@@ -110,6 +111,7 @@ def resource_assignment(res_id, amount, project_name, action):
                 if assignment['project'] == project_name:
                     assignments.remove(assignment)
                     ref.child(res_id).update({'resource_assignments': assignments})
+                    change_qty(res_id, amount, "AddQty")
                     print("Resource removed from project successfully.")
                     return True
     elif action == "Add":
@@ -124,6 +126,7 @@ def resource_assignment(res_id, amount, project_name, action):
             assignments.append({"amount": amount, "project": project_name})
 
         ref.child(res_id).update({'resource_assignments': assignments})
+        change_qty(res_id, amount, "SubtractQty")
         print("Resource added to project successfully.")
         return True
     else:
@@ -131,3 +134,19 @@ def resource_assignment(res_id, amount, project_name, action):
         return False
 
     message_box('Error', 'Failed to connect to Database.')
+
+
+# Separate function to subtract amount from resource quantity
+def change_qty(res_id, amount, action):
+    if action == "AddQty":
+        ref = database.get_ref('resources')
+        res = get_res(res_id)
+        new_qty = int(res['quantity']) + int(amount)
+        ref.child(res_id).update({'quantity': str(new_qty)})
+        return True
+    elif action == "SubtractQty":
+        ref = database.get_ref('resources')
+        res = get_res(res_id)
+        new_qty = int(res['quantity']) - int(amount)
+        ref.child(res_id).update({'quantity': str(new_qty)})
+        return True

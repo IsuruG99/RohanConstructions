@@ -41,9 +41,13 @@ class ViewResource(GridLayout):
             self.ids.viewRes_projects.add_widget(grid)
 
     def reload(self, amount, project_name, action, instance):
-        resource_assignment(self.res_id, amount, project_name, action)
-        self.ids.viewRes_projects.clear_widgets()
-        self.populate_view()
+        if (int(get_res(self.res_id)["quantity"]) - int(amount)) < 0:
+            message_box('Error', 'Resource quantity cannot be negative.')
+            return
+        else:
+            resource_assignment(self.res_id, amount, project_name, action)
+            self.ids.viewRes_projects.clear_widgets()
+            self.populate_view()
 
     def editRes(self, name, qty, status, supplier, cost):
         # Stringify inputs (Including Dates)

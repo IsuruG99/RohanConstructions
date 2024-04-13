@@ -1,5 +1,6 @@
 import datetime
 import re
+from calendar import calendar
 
 from custom import *
 
@@ -65,6 +66,61 @@ def convert_currency(amount):
 # A function to reverse above function, take the string and return the float, etc Rs. 10,000.00 to 10000.00
 def currencyStringToFloat(amount):
     return float(amount.replace('Rs. ', '').replace(',', ''))
+
+# Input (January-December), Output (1-12)
+def convert_monthToNumber(month):
+    if month == 'January':
+        return '01'
+    elif month == 'February':
+        return '02'
+    elif month == 'March':
+        return '03'
+    elif month == 'April':
+        return '04'
+    elif month == 'May':
+        return '05'
+    elif month == 'June':
+        return '06'
+    elif month == 'July':
+        return '07'
+    elif month == 'August':
+        return '08'
+    elif month == 'September':
+        return '09'
+    elif month == 'October':
+        return '10'
+    elif month == 'November':
+        return '11'
+    elif month == 'December':
+        return '12'
+
+# Get month as number and return corresponding string word like January
+def convert_numberToMonth(month):
+    str(month)
+    if month == '01' or month == '1':
+        return 'January'
+    elif month == '02' or month == '2':
+        return 'February'
+    elif month == '03' or month == '3':
+        return 'March'
+    elif month == '04' or month == '4':
+        return 'April'
+    elif month == '05' or month == '5':
+        return 'May'
+    elif month == '06' or month == '6':
+        return 'June'
+    elif month == '07' or month == '7':
+        return 'July'
+    elif month == '08' or month == '8':
+        return 'August'
+    elif month == '09' or month == '9':
+        return 'September'
+    elif month == '10':
+        return 'October'
+    elif month == '11':
+        return 'November'
+    elif month == '12':
+        return 'December'
 
 
 # validate currency, may be an int as well

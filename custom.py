@@ -115,6 +115,9 @@ class CText(TextInput):
         self.background_normal = ''
         self.background_active = ''
         self.multiline = False
+        #padding only on left and right, 0 on top bot
+        self.padding_x = 15
+
 
 
 class RLabelTop(CLabel):

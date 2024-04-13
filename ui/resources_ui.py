@@ -64,7 +64,7 @@ class ViewResource(GridLayout):
             if update_res(self.res_id, name, qty, status, supplier, cost):
                 message_box('Success', 'Resource updated successfully.')
                 self.res_screen.populate_res(load_resources(0))
-                self.res_screen.ids.resource_filter.text = 'All'
+                self.res_screen.ids.resource_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
 
     def deleteRes(self):
@@ -75,7 +75,7 @@ class ViewResource(GridLayout):
             else:
                 message_box('Error', 'Failed to delete.')
             self.res_screen.populate_res(load_resources(0))
-            self.res_screen.ids.resource_filter.text = 'All'
+            self.res_screen.ids.resource_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
 
     def load_suppliers(self):
@@ -247,7 +247,7 @@ class AddResource(GridLayout):
                 message_box('Success', 'Resource added successfully.')
                 # Refresh the resources display
                 self.res_screen.populate_res(load_resources(0))
-                self.res_screen.ids.resource_filter.text = 'All'
+                self.res_screen.ids.resource_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to add resource.')

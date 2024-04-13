@@ -35,7 +35,7 @@ class AddClientPopup(GridLayout):
         if add_client(name, phone_number, email, address):
             message_box('Success', 'Client added successfully.')
             self.clients_screen.populate_clients(load_clients(0))
-            self.clients_screen.ids.clients_filter.text = 'All'
+            self.clients_screen.ids.clients_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
 
     def load_project_list(self):
@@ -94,7 +94,7 @@ class ViewClientPopup(GridLayout):
             if update_client(self.client_id, name, phone_number, email, address, proj_name, proj_duration, proj_status):
                 message_box('Success', 'Client updated successfully.')
                 self.clients_screen.populate_clients(load_clients(0))
-                self.clients_screen.ids.clients_filter.text = 'All'
+                self.clients_screen.ids.clients_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to update client.')
@@ -104,7 +104,7 @@ class ViewClientPopup(GridLayout):
             if delete_client(self.client_id):
                 message_box('Success', 'Client deleted successfully.')
                 self.clients_screen.populate_clients(load_clients(0))
-                self.clients_screen.ids.clients_filter.text = 'All'
+                self.clients_screen.ids.clients_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
                 message_box('Error', 'Failed to delete client.')
@@ -187,6 +187,11 @@ class ClientsScreen(Screen):
         view_popup.open()
         view_popup.content.popup = view_popup
 
+    def report_clients(self):
+        report_popup = CPopup(title='Clients Report', content=ClientsReport(self), size_hint=(0.5, 0.8))
+        report_popup.open()
+        report_popup.content.popup = report_popup
+
     def btn_click(self, instance):
         txt = instance.text
         if txt == 'Add':
@@ -206,3 +211,22 @@ class ClientsScreen(Screen):
                 self.ids.clients_filter.text = 'Filter: All'
         elif txt == 'Back':
             self.parent.current = 'main'
+        elif txt == 'Overview':
+            self.report_clients()
+
+class ClientsReport(GridLayout):
+    def __init__(self, client_screen, **kwargs):
+        super().__init__(**kwargs)
+        self.client_screen = client_screen
+        self.populate_report()
+
+    def populate_report(self):
+        # Assume the fields are in kv, populate it from the database
+        clients = load_clients(0)
+
+        # Show client count on reportClient_count
+        self.ids.reportClient_count.text = "Client Count: " + str(len(clients))
+
+    def dismiss_popup(self, instance):
+        instance.dismiss()
+

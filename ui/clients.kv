@@ -31,6 +31,7 @@
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.75, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton2:
                                         text: 'Search'
                                         size_hint: 0.25, 1
@@ -70,18 +71,19 @@
                                 size_hint: 1, 0.3
 
                                 CButton2:
-                                        text: 'Report'
+                                        text: 'Overview'
                                         size_hint: 0.4, 1
+                                        on_release: root.btn_click(self)
 
                                 CButton2:
                                         text: 'Add'
                                         size_hint: 0.4, 1
-                                        on_press: root.add_client_popup()
+                                        on_release: root.add_client_popup()
 
                                 CButton2:
                                         text: 'Back'
                                         size_hint: 0.2, 1
-                                        on_press:
+                                        on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 
@@ -107,6 +109,7 @@
                                 id: add_client_name
                                 multiline: False
                                 hint_text: 'Client Name'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Phone Number'
@@ -115,6 +118,7 @@
                                 id: add_client_phone_number
                                 multiline: False
                                 hint_text: 'Phone Number'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Email'
@@ -123,6 +127,7 @@
                                 id: add_client_email
                                 multiline: False
                                 hint_text: 'Email'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Address'
@@ -131,6 +136,7 @@
                                 id: add_client_address
                                 multiline: False
                                 hint_text: 'Address'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Name'
@@ -140,6 +146,7 @@
                                 multiline: False
                                 hint_text: 'None'
                                 completions: root.load_project_list()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 disabled: False
 
                         CLabel:
@@ -150,6 +157,7 @@
                                 multiline: False
                                 hint_text: 'None'
                                 disabled: True
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Status'
@@ -175,7 +183,7 @@
                         CButton2:
                                 text: 'Cancel'
                                 on_release:
-                                        root.dismiss_popups(self)
+                                        root.dismiss_popup(self)
 
 <ViewClientPopup>:
         GridLayout:
@@ -198,6 +206,7 @@
                                 id: view_client_name
                                 multiline: False
                                 hint_text: 'Client Name'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Phone Number'
@@ -206,6 +215,7 @@
                                 id: view_client_phone_number
                                 multiline: False
                                 hint_text: 'Phone Number'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Email'
@@ -214,6 +224,7 @@
                                 id: view_client_email
                                 multiline: False
                                 hint_text: 'Email'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Address'
@@ -222,6 +233,7 @@
                                 id: view_client_address
                                 multiline: False
                                 hint_text: 'Address'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Name'
@@ -229,6 +241,7 @@
                         AutoFillText:
                                 id: view_client_project_name
                                 completions: root.load_project_list()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Duration'
@@ -237,6 +250,7 @@
                                 id: view_client_project_duration
                                 multiline: False
                                 hint_text: 'None'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Status'
@@ -266,4 +280,36 @@
                                 text: 'Delete'
                                 on_release:
                                         root.delete_client()
+
+
+<ClientsReport>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+                GridLayout:
+                        cols: 1
+                        rows: 2
+                        size_hint: 0.9, 0.9
+                        GridLayout:
+                                cols: 1
+                                rows: 2
+                                padding: 10
+                                spacing: 10
+                                size_hint: 1, 0.9
+
+                                CLabel:
+                                        text: 'Clients Report'
+                                        size_hint: 1, 0.4
+                                        font_size: '30sp'
+                                CLabel:
+                                        id: reportClient_count
+                                        size_hint: 1, 0.7
+
+                        CButton2:
+                                text: 'Back'
+                                size_hint: 1, 0.1
+                                on_release: root.dismiss_popup(root.popup)
+
 

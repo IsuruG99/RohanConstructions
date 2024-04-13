@@ -31,6 +31,7 @@
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.75, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton2:
                                         text: 'Search'
                                         size_hint: 0.25, 1
@@ -64,14 +65,19 @@
 
                         GridLayout:
                                 rows: 1
-                                cols: 2
+                                cols: 3
                                 spacing: 20
                                 padding: 20
                                 size_hint: 1, 0.3
 
                                 CButton2:
+                                        text: 'Overview'
+                                        size_hint: 0.3, 1
+                                        on_release: root.overview_log()
+
+                                CButton2:
                                         text: 'Add'
-                                        size_hint: 0.6, 1
+                                        size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:
@@ -113,6 +119,7 @@
                         CText:
                                 id: viewLog_amount
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Date'
@@ -120,6 +127,7 @@
                         CText:
                                 id: viewLog_date
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Description'
@@ -127,6 +135,7 @@
                         CText:
                                 id: viewLog_desc
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Related Entity'
@@ -134,6 +143,7 @@
                         CText:
                                 id: viewLog_entity
                                 size_hint: 0.7, 0.1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Name'
@@ -142,6 +152,7 @@
                                 id: viewLog_project
                                 size_hint: 0.7, 0.1
                                 completions: root.load_project_list()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Category'
@@ -205,6 +216,7 @@
                                 id: addLog_amount
                                 size_hint: 0.7, 0.1
                                 hint_text: '10000'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Date'
@@ -213,6 +225,7 @@
                                 id: addLog_date
                                 size_hint: 0.7, 0.1
                                 hint_text: 'YYYY-MM-DD'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Description'
@@ -221,6 +234,7 @@
                                 id: addLog_desc
                                 size_hint: 0.7, 0.1
                                 hint_text: 'Description'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Related Entity'
@@ -229,16 +243,16 @@
                                 id: addLog_entity
                                 size_hint: 0.7, 0.1
                                 hint_text: 'Employee, Supplier, etc.'
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        CSpinner:
+                        AutoFillText:
                                 id: addLog_project
-                                text: 'Project Name'
-                                values: ['']
-                                font_size: '20sp'
                                 size_hint: 0.7, 0.1
+                                completions: root.load_project_list()
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Category'
@@ -266,3 +280,92 @@
                                         addLog_desc.text = ''
                                         addLog_entity.text = ''
                                         addLog_project.text = ''
+
+<FinanceOverview>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+                padding: 20
+                spacing: 10
+                GridLayout:
+                        cols: 1
+                        rows: 2
+                        size_hint: 0.9, 0.9
+                        spacing: 20
+                        padding: 20
+                        GridLayout:
+                                cols: 1
+                                rows: 3
+                                spacing: 10
+                                size_hint: 1, 0.4
+                                CLabel:
+                                        text: 'Year and Month'
+                                        size_hint: 1, 0.4
+                                        font_size: '30sp'
+
+                                GridLayout:
+                                        cols: 2
+                                        rows: 1
+                                        size_hint: 1, 0.6
+                                        spacing: 10
+                                        AutoFillText:
+                                                id: overview_year
+                                                text: '2024'
+                                                hint_text: 'Year'
+                                                size_hint: 0.3, 0.4
+                                                font_size: '25sp'
+                                                halign: 'center'
+                                                multiline: False
+                                                completions: [str(i) for i in range(1900, 2101)]
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        AutoFillText:
+                                                id: overview_month
+                                                size_hint: 0.3, 0.4
+                                                # how do i say that the text should be a month, but can be blank as well?
+                                                hint_text: 'Month (optional)'
+                                                font_size: '25sp'
+                                                halign: 'center'
+                                                multiline: False
+                                                completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CButton2:
+                                        text: 'Check'
+                                        size_hint: 0.3, 0.4
+                                        on_release: root.populate_overview(overview_year.text, overview_month.text)
+
+                        GridLayout:
+                                cols: 2
+                                rows: 3
+                                size_hint: 1, 0.6
+                                spacing: 10
+
+                                CLabel:
+                                        text: 'Total Income'
+                                        size_hint: 0.5, 0.3
+                                CLabel:
+                                        id: overview_income
+                                        size_hint: 0.5, 0.3
+                                        multiline: False
+
+                                CLabel:
+                                        text: 'Total Expense'
+                                        size_hint: 0.5, 0.3
+                                CLabel:
+                                        id: overview_expense
+                                        size_hint: 0.5, 0.3
+                                        multiline: False
+
+                                CLabel:
+                                        text: 'Balance'
+                                        size_hint: 0.5, 0.3
+                                CLabel:
+                                        id: overview_balance
+                                        size_hint: 0.5, 0.3
+                                        multiline: False
+
+                CButton2:
+                        text: 'Back'
+                        size_hint: 1, 0.1
+                        on_release: root.dismiss_popup(root.popup)

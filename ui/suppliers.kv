@@ -31,6 +31,7 @@
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.75, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 CButton2:
                                         text: 'Search'
                                         size_hint: 0.25, 1
@@ -64,14 +65,19 @@
 
                         GridLayout:
                                 rows: 1
-                                cols: 2
+                                cols: 3
                                 spacing: 20
                                 padding: 20
                                 size_hint: 1, 0.3
 
                                 CButton2:
+                                        text: 'Overview'
+                                        size_hint: 0.3, 1
+                                        on_release: root.overview_suppliers()
+
+                                CButton2:
                                         text: 'Add New Supplier'
-                                        size_hint: 0.6, 1
+                                        size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
 
                                 CButton2:
@@ -105,7 +111,7 @@
                                 id: supplierName
                                 multiline: False
                                 hint_text: 'Mr.Mahinda Mahattaya'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel: # 2
                                 text: 'Business'
@@ -114,7 +120,7 @@
                                 id: business
                                 multiline: False
                                 hint_text: 'ABC Hardware'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel: # 3
                                 text: 'Contact No'
@@ -123,7 +129,7 @@
                                 id: contactNo
                                 multiline: False
                                 hint_text: '07xxxxxxxx'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
 			            CLabel: # 4
                                 text: 'Email'
@@ -132,7 +138,7 @@
                                 id: email
                                 multiline: False
                                 hint_text: 'Email Address'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
 			            CLabel: # 5
                                 text: 'Address'
@@ -141,7 +147,7 @@
                                 id: address
                                 multiline: False
                                 hint_text: 'No01, Merchan Tower, Kollupitiya.'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel: # 6
                                 text: 'Start Dealing'
@@ -150,7 +156,7 @@
                                 id: startDealing
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel: # 7
                                 text: 'Level'
@@ -205,7 +211,7 @@
                         CText:
                                 id: supplierName
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Business'
@@ -213,7 +219,7 @@
                         CText:
                                 id: business
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Contact No'
@@ -221,7 +227,7 @@
                         CText:
                                 id: contactNo
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
 			            CLabel:
                                 text: 'Email'
@@ -229,7 +235,7 @@
                         CText:
                                 id: email
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
 			            CLabel:
                                 text: 'Address'
@@ -237,7 +243,7 @@
                         CText:
                                 id: address
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Start Dealing'
@@ -245,7 +251,7 @@
                         CText:
                                 id: startDealing
                                 multiline: False
-                                padding: 15
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Level'
@@ -276,4 +282,41 @@
 
                         CButton2:
                                 text: 'Cancel'
+                                on_release: root.dismiss_popup(root.popup)
+
+<ReportSupPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+                GridLayout:
+                        cols: 1
+                        rows: 2
+                        size_hint: 0.9, 0.9
+
+                        GridLayout:
+                                cols: 1
+                                rows: 4
+                                padding: 10
+                                spacing: 10
+                                size_hint: 1, 0.8
+
+                                # Suppliers at Level 1-3 and Total
+                                CLabel:
+                                        id: supLV1
+                                        size_hint: 1, 0.25
+                                CLabel:
+                                        id: supLV2
+                                        size_hint: 1, 0.25
+                                CLabel:
+                                        id: supLV3
+                                        size_hint: 1, 0.25
+                                CLabel:
+                                        id: supTotal
+                                        size_hint: 1, 0.25
+
+                        CButton2:
+                                text: 'Back'
+                                size_hint: 1, 0.1
                                 on_release: root.dismiss_popup(root.popup)

@@ -54,6 +54,7 @@ def convert_date(date):
     date = datetime.datetime.strptime(date, '%Y-%m-%d')
     return date.strftime('%B %d')
 
+
 # Reversion of above function
 def reverse_date(date):
     return datetime.datetime.strptime(date, '%B %d').strftime('%Y-%m-%d')
@@ -63,9 +64,11 @@ def reverse_date(date):
 def convert_currency(amount):
     return 'Rs. {:,.2f}'.format(float(amount))
 
+
 # A function to reverse above function, take the string and return the float, etc Rs. 10,000.00 to 10000.00
 def currencyStringToFloat(amount):
     return float(amount.replace('Rs. ', '').replace(',', ''))
+
 
 # Input (January-December), Output (1-12)
 def convert_monthToNumber(month):
@@ -93,6 +96,7 @@ def convert_monthToNumber(month):
         return '11'
     elif month == 'December':
         return '12'
+
 
 # Get month as number and return corresponding string word like January
 def convert_numberToMonth(month):
@@ -137,3 +141,24 @@ def cutEmail(email):
         return email
     else:
         return email.split('@')[0]
+
+
+# Receive something like this "last_login": "2024-04-12T08:00:00.000Z" and Return "April 12, 08:00 AM"
+def SimplifyTime(timestamp):
+    date = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return date.strftime('%Y %B %d, %I:%M %p')
+
+
+# Recieve something like this "last_login": "2024-04-12T08:00:00.000Z" and Return "D H Ago"
+def TimeDiff(timestamp):
+    date = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
+    diff = datetime.datetime.now() - date
+    days = diff.days
+    hours = diff.seconds // 3600
+    minutes = (diff.seconds // 60) % 60
+    if days > 0:
+        return str(days) + 'D ' + str(hours) + 'H Ago'
+    elif hours > 0:
+        return str(hours) + 'H ' + str(minutes) + 'M Ago'
+    else:
+        return str(minutes) + 'M Ago'

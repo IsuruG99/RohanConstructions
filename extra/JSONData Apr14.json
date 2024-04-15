@@ -316,17 +316,20 @@
     "admin": {
       "access": 0,
       "email": "a",
-      "password": "a"
+      "password": "a",
+      "last_login": "2024-04-12T08:00:00.000Z"
     },
     "manager": {
       "access": 1,
       "email": "b",
-      "password": "b"
+      "password": "b",
+        "last_login": "2024-04-12T08:00:00.000Z"
     },
     "staff1": {
       "access": 2,
       "email": "c",
-      "password": "c"
+      "password": "c",
+        "last_login": "2024-04-12T08:00:00.000Z"
     }
   }
 }

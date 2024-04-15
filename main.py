@@ -50,6 +50,13 @@ class MainScreen(Screen):
                 self.parent.current = 'finances'
             elif instance.text == 'Personnel':
                 self.parent.current = 'manpower'
+            elif instance.text == 'Admin':
+                self.openAdminControls()
+
+    def openAdminControls(self):
+        adminPop = CPopup(title='Admin Controls', content=AdminControls(self), size_hint=(0.5, 0.9))
+        adminPop.open()
+        adminPop.content.popup = adminPop
 
     def openLogPopup(self, request):
         if request == 'LogIn':
@@ -90,6 +97,7 @@ class MainScreen(Screen):
                 self.ids.financesBtn.disabled = False
                 self.ids.personnelBtn.disabled = False
                 self.ids.resourcesBtn.disabled = False
+                self.ids.logBtn.text = 'Admin'
         else:
             self.ids.logBtn.text = 'LogIn'
             self.ids.logStatus.text = 'Not Logged In.'

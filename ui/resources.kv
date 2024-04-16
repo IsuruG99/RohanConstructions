@@ -90,8 +90,8 @@
                 GridLayout:
                         cols: 4
                         rows: 3
-                        padding: 10
-                        spacing: 10
+                        padding: 20
+                        spacing: 20
                         size_hint: 1, 0.35
 
                         CLabel:
@@ -148,9 +148,16 @@
 
                 GridLayout:
                         cols: 1
-                        rows: 3
+                        rows: 4
                         size_hint: 1, 0.6
                         padding: 10
+                        spacing: 10
+
+                        CLabel:
+                                size_hint: 1, 0.1
+                                text: 'Assignments'
+                                size_hint: 1, 0.1
+                                bold: True
 
                         GridLayout:
                                 rows: 1
@@ -158,11 +165,6 @@
                                 size_hint: 1, 0.2
                                 padding: 10
                                 spacing: 10
-
-                                CLabel:
-                                        text: 'Assign to Project'
-                                        size_hint_x: 0.2
-                                        bold: True
                                 AutoFillText:
                                         id: projectList
                                         text: ''
@@ -179,6 +181,10 @@
                                         text: '+'
                                         size_hint_x: 0.1
                                         on_release: root.reload(projectQty.text, projectList.text, "Add", self)
+                                CButton:
+                                        text: '-'
+                                        size_hint_x: 0.1
+                                        on_release: root.reload(projectQty.text, projectList.text, "Subtract", self)
 
                         ScrollView:
                                 size_hint: 1, 0.6
@@ -197,7 +203,7 @@
                                                         pos: self.pos
                         GridLayout:
                                 cols: 3
-                                size_hint: 1, 0.2
+                                size_hint: 1, 0.1
                                 padding: 10
                                 spacing: 10
 

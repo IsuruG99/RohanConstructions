@@ -55,7 +55,10 @@ class AdminControls(GridLayout):
         self.main_screen = main_screen
         self.populate_users(load_users(0))
 
+
     def populate_users(self, users=load_users(0), headers=None):
+        self.ids.current_user.text = ''
+        self.ids.current_user.text = 'Current User: ' + App.get_running_app().get_accessName()
         self.ids.account_list.clear_widgets()
         self.ids.account_headers.clear_widgets()
         if headers is None:
@@ -164,14 +167,27 @@ class AdminControls(GridLayout):
             self.ids.edit_access.text = str(user['access'])
             # if last login is None, it is none, otherwise Simplify the time
             if user['last_login'] == "None":
-                self.ids.edit_status.text = "Never Logged In"
+                self.ids.edit_last_login.text = "Never Logged In"
             else:
-                self.ids.edit_status.text = SimplifyTime(user['last_login'])
+                self.ids.edit_last_login.text = SimplifyTime(user['last_login'])
+
+    def delete_user(self, email):
+        if email is not None:
+            if App.get_running_app().get_accessLV() <= getAccessLV(email):
+                if confirm_box('Delete User', 'Are you sure you want to delete this user?') == 'yes':
+                    delete_user(email)
+                    message_box('Success', 'User deleted successfully.')
+                    self.populate_users(load_users(0))
+            else:
+                message_box('Error', 'You cannot delete a user with higher access level than yours.')
+        else:
+            message_box('Error', 'Please select a user first.')
 
     def btn_click(self, instance):
         txt = instance.text
-        if txt == 'LogOut':
-            self.main_screen.openLogPopup(txt)
+        if txt == 'Log Out':
+            self.main_screen.openLogPopup('LogOut')
+            self.dismiss_popup(self.popup)
 
     def dismiss_popup(self, instance):
         instance.dismiss()

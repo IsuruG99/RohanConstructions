@@ -129,6 +129,18 @@ def resource_assignment(res_id, amount, project_name, action):
         change_qty(res_id, amount, "SubtractQty")
         print("Resource added to project successfully.")
         return True
+    elif action == "Subtract":
+        for assignment in assignments:
+            if assignment['project'] == project_name:
+                if int(assignment['amount']) >= int(amount):
+                    assignment['amount'] = str(int(assignment['amount']) - int(amount))
+                    ref.child(res_id).update({'resource_assignments': assignments})
+                    change_qty(res_id, amount, "AddQty")
+                    print("Resource subtracted from project successfully.")
+                    return True
+                else:
+                    message_box('Error', 'Not enough resources assigned to project.')
+                    return False
     else:
         message_box('Error', 'Failed to perform action')
         return False

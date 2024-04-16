@@ -92,6 +92,18 @@ def add_user(email, password, access):
     return
 
 
+def delete_user(email):
+    ref = database.get_ref('users')
+    users = ref.get()
+    for user in users:
+        if users[user]['email'] == email:
+            ref.child(user).delete()
+            return True
+    else:
+        message_box('Error', 'User not found')
+        return False
+
+
 def check_unique_email(email, action):
     if action == "New":
         ref = database.get_ref('users')

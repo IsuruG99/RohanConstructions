@@ -18,8 +18,13 @@ Purely to keep track, will manually notify suppliers if resources are out of sto
 
 User Tracking
 - Every Finance Log will have a Related_User field, to track who made the changes
+- User Logins are Tracked
+- Admin Controls are accessible to Both Access Lv1 & 0
+- 0 Being the person we train to use the system's admin functions
+- Lv0 users can edit all users, while Lv1 Cannot see admin users (Access 0).
 
-Users
+BrainStorming :
+- Users
 - Who are users? (Trained Admin (0), Owner & Manager (1), Assistant (2), Receptionist (3))
 - Privileges (based on above, what do you think)
     0: Full Access (Super Admin)
@@ -32,16 +37,19 @@ Users
     2: Assistant Manager's Computer
     3: The computer near the reception, customer support phone, that's why i named it receptionist
 
-- User Logins are Tracked
-- Admin Controls are accessible to Both Access Lv1 & 0
-- 0 Being the person we train to use the system's admin functions
-- Lv0 users can edit all users, while Lv1 Cannot see admin users (Access 0).
+- Understand the Project Completion complexity first
+    (Concept: Project Completion -> Budget - Allocated Res & Manpower)
+    - Give them a editable budget popup at project completion?
+    - Autofill with calculated current assigned data, and allow manual changes
+    - Once submitted, it will be added to the finances
+        - Generated Finance Log Models (Different ways to do it, a log will only have name, desc and price, can't complicate it)
+            1. Budget Allocation Log, Resource Allocation Log, Manpower Allocation Log
+            2. One Log as Completion, include final calculated price
+            3. ... ?
 
-To-do (For Myself) :
-- MAKE THE FREAKING LOG OUT FOR ADMINS
-- Delete Account for Admin Controls
-- Resources: Subtract function on assignment
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
+
+To-Do List:
 - Supplier & Client Overview structure (Popup made, format and structure unknown)
 - Access Controls V3+ (Postponed till every function complete)
 - Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
@@ -50,5 +58,6 @@ FINAL TASK: (After ALL Above)
 - Project Completion connectivity to Finance function and Budget calculation.
 
 Optional
+- Customize Confirm Message Box, Separate Functions.
 - Export a Report (?)
 

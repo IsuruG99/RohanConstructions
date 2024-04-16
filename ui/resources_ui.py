@@ -193,7 +193,7 @@ class ResourcesScreen(Screen):
 
     # Triggers the ViewResource PopUp Window
     def view_res(self, res_id, instance):
-        viewPop = CPopup(title='View Resource', content=ViewResource(self, res_id), size_hint=(0.5, 0.8))
+        viewPop = CPopup(title='View Resource', content=ViewResource(self, res_id), size_hint=(0.55, 0.9))
         viewPop.open()
         viewPop.content.popup = viewPop
 

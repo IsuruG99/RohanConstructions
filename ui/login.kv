@@ -53,15 +53,30 @@
 <AdminControls>:
         GridLayout:
                 cols: 1
-                rows: 3
+                rows: 4
                 size: root.size
                 pos: root.pos
+
+                GridLayout:
+                        cols: 2
+                        padding: 20
+                        size_hint: 1.0, 0.15
+
+                        CLabel:
+                                id: current_user
+                                size_hint: 0.8, 1
+                                bold: True
+
+                        CButton2:
+                                text: 'Log Out'
+                                size_hint: 0.2, 1
+                                on_release: root.btn_click(self)
 
                 GridLayout:
                         cols: 1
                         rows: 2
                         padding: 20
-                        size_hint: 1, 0.6
+                        size_hint: 1, 0.5
 
                         GridLayout:
                                 size_hint: 0.95, 0.1
@@ -139,17 +154,22 @@
                                         size_hint: 0.7, 1
 
                 GridLayout:
-                        cols: 2
+                        cols: 3
                         rows: 1
-                        size_hint: 1, 0.2
+                        size_hint: 1, 0.15
                         padding: 20
                         spacing: 20
                         CButton2:
-                                size_hint: 0.5, 1
+                                size_hint: 0.3, 1
                                 text: 'Add'
                                 on_release: root.add_user(edit_email.text, edit_password.text, edit_access.text)
 
                         CButton2:
-                                size_hint: 0.5, 1
+                                size_hint: 0.3, 1
                                 text: 'Edit'
                                 on_release: root.edit_user(edit_email.text, edit_password.text, edit_access.text)
+
+                        CButton2:
+                                size_hint: 0.3, 1
+                                text: 'Delete'
+                                on_release: root.delete_user(edit_email.text)

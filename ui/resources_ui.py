@@ -10,6 +10,7 @@ from functions.suppliers import load_supplier_names
 from functools import partial
 
 from utils import *
+from validation import *
 
 
 class ViewResource(GridLayout):
@@ -42,7 +43,7 @@ class ViewResource(GridLayout):
 
     def reload(self, amount, project_name, action, instance):
         if (int(get_res(self.res_id)["quantity"]) - int(amount)) < 0:
-            message_box('Error', 'Resource quantity cannot be negative.')
+            self.res_screen.CMessageBox('Error', 'Out of Stock', 'Message')
             return
         else:
             resource_assignment(self.res_id, amount, project_name, action)
@@ -58,15 +59,15 @@ class ViewResource(GridLayout):
 
         # Validate inputs
         if not validate_string(name, supplier):
-            message_box('Error', 'All fields are required.')
+            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_currency(qty):
-            message_box('Error', 'Invalid Amount.')
+            self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
             return
         # Send data to edit_res function in resources.py
         if confirm_box('Edit Resource', 'Are you sure you want to edit this resource?') == 'yes':
             if update_res(self.res_id, name, qty, status, supplier, cost):
-                message_box('Success', 'Resource updated successfully.')
+                self.res_screen.CMessageBox('Success', 'Resource edited successfully.', 'Message')
                 self.res_screen.populate_res(load_resources(0))
                 self.res_screen.ids.resource_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
@@ -75,9 +76,9 @@ class ViewResource(GridLayout):
         # Send res_id to resources.py and it will delete the entity
         if confirm_box('Delete Resource', 'Are you sure you want to delete this resource?') == 'yes':
             if delete_res(self.res_id):
-                message_box('Success', 'Resource deleted successfully.')
+                self.res_screen.CMessageBox('Success', 'Resource deleted successfully.', 'Message')
             else:
-                message_box('Error', 'Failed to delete.')
+                self.res_screen.CMessageBox('Error', 'Failed to delete resource.', 'Message')
             self.res_screen.populate_res(load_resources(0))
             self.res_screen.ids.resource_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
@@ -155,6 +156,16 @@ class ResourcesScreen(Screen):
             grid.add_widget(CLabel(text=res["supplier_name"], size_hint_x=0.3))
             grid.add_widget(CLabel(text=str(res["quantity"]), size_hint_x=0.1))
             self.ids.resources_list.add_widget(grid)
+
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
 
     def sort_resources(self, resources, header, instance):
         if header == 'Name' or header == 'Name [D]':
@@ -238,25 +249,25 @@ class AddResource(GridLayout):
 
         # Validate inputs
         if not validate_string(name, supplier, qty, status):
-            message_box('Error', 'All fields are required.')
+            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_currency(qty):
-            message_box('Error', 'Invalid Amount.')
+            self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
             return
         if not validate_currency(cost):
-            message_box('Error', 'Invalid Cost.')
+            self.res_screen.CMessageBox('Error', 'Invalid Cost.', 'Message')
             return
 
         # Add data to DB
         if confirm_box('Add Resource', 'Are you sure you want to add this resource?') == 'yes':
             if add_res(name, qty, status, supplier, cost):
-                message_box('Success', 'Resource added successfully.')
+                self.res_screen.CMessageBox('Success', 'Resource added successfully.', 'Message')
                 # Refresh the resources display
                 self.res_screen.populate_res(load_resources(0))
                 self.res_screen.ids.resource_filter.text = 'Filter: All'
                 self.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Failed to add resource.')
+                self.res_screen.CMessageBox('Error', 'Failed to add resource.', 'Message')
 
     def load_suppliers(self):
         return load_supplier_names()

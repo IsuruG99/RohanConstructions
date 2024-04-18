@@ -6,6 +6,7 @@ from functions.projects import load_project_names
 import datetime
 from utils import *
 from custom import *
+from validation import *
 
 
 class AddManpower(GridLayout):
@@ -24,21 +25,21 @@ class AddManpower(GridLayout):
 
         # Check if all fields are full, except assignments
         if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
-            message_box('Error', 'All fields are required.')
+            self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_email(email):
-            message_box('Error', 'Invalid email.')
+            self.manpower_screen.CMessageBox('Error', 'Invalid email.', 'Message')
             return
         if not validate_mobileNo(phone_number):
-            message_box('Error', 'Invalid phone number.')
+            self.manpower_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
             return
         if confirm_box('Add Employee', 'Are you sure you want to add employee ' + name + '?') == 'yes':
             if add_employee(name, role, email, phone_number, status, [""], salary):
-                message_box('Success', 'Employee added successfully.')
+                self.manpower_screen.CMessageBox('Success', 'Employee added successfully.', 'Message')
                 self.manpower_screen.populate_manpower(load_manpower(0))
                 self.popup.dismiss()
             else:
-                message_box('Error', 'Failed to add Employee.')
+                self.manpower_screen.CMessageBox('Error', 'Failed to add Employee.', 'Message')
 
 
 class ViewManpower(GridLayout):
@@ -76,6 +77,16 @@ class ViewManpower(GridLayout):
         self.ids.viewEmp_projects.clear_widgets()
         self.populateEmp()
 
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
+
     def edit_employee(self, name, email, phone_number, role, employment_status, salary):
         # Project assignments is a list of projects
         # Stringify inputs
@@ -88,21 +99,21 @@ class ViewManpower(GridLayout):
 
         # Check if all fields are full, except assignments
         if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
-            message_box('Error', 'All fields are required.')
+            self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_email(email):
-            message_box('Error', 'Invalid email.')
+            self.manpower_screen.CMessageBox('Error', 'Invalid email.', 'Message')
             return
         if not validate_mobileNo(phone_number):
-            message_box('Error', 'Invalid phone number.')
+            self.manpower_screen.CMessageBox('Error', 'Invalid Mobile No.', 'Message')
             return
         if confirm_box('Edit Employee', 'Are you sure you want to edit employee ' + name + '?') == 'yes':
             if update_employee(self.emp_id, name, role, email, phone_number, status, salary):
-                message_box('Success', 'Employee edited successfully.')
+                self.manpower_screen.CMessageBox('Success', 'Employee edited successfully.', 'Message')
                 self.manpower_screen.populate_manpower(load_manpower(0))
                 self.popup.dismiss()
             else:
-                message_box('Error', 'Failed to edit Employee.')
+                self.manpower_screen.CMessageBox('Error', 'Failed to edit Employee.', 'Message')
 
     def load_projects(self):
         return load_project_names()
@@ -191,8 +202,6 @@ class ManpowerScreen(Screen):
             delete_employee(emp_id)
             self.populate_manpower(load_manpower(0))
             self.ids.manpower_filter.text = 'Filter: All'
-        else:
-            message_box('Error', 'Failed to delete Employee.')
 
     def btn_click(self, instance):
         text = instance.text

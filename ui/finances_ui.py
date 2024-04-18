@@ -8,8 +8,11 @@ from functools import partial
 
 from functions.finances import *
 from functions.projects import load_projects, load_project_names
+
 from utils import *
 from custom import *
+from validation import *
+
 import datetime
 
 
@@ -37,23 +40,23 @@ class AddLogPopup(GridLayout):
         category = str(category)
         # Validate inputs
         if not validate_string(fin_type, amount, date, desc, entity, project, category):
-            message_box('Error', 'All fields are required.')
+            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_date(date):
-            message_box('Error', 'Invalid date format.')
+            self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
             return
         if fin_type != "Income" and fin_type != "Expense":
-            message_box('Error', 'Invalid type.')
+            self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
             return
         if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
-            message_box('Error', 'Invalid category.')
+            self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
             return
         if validate_currency(amount) is False:
-            message_box('Error', 'Invalid amount.')
+            self.finances_screen.CMessageBox('Error', 'Invalid amount.', 'Message')
             return
         # Send data to finances.py
         add_log(fin_type, amount, date, desc, entity, project, category)
-        message_box('Success', 'Log added successfully.')
+        self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
         self.finances_screen.populate_logs(load_all_finances(0))
         self.finances_screen.ids.finances_filter.text = 'Filter: All'
         self.finances_screen.dismiss_popup(self.popup)
@@ -99,27 +102,27 @@ class ViewLogPopup(GridLayout):
         category = str(category)
         # Validate inputs
         if not validate_string(fin_type, amount, date, desc, entity, project, category):
-            message_box('Error', 'All fields are required.')
+            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_date(date):
-            message_box('Error', 'Invalid date format.')
+            self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
             return
         if fin_type != "Income" and fin_type != "Expense":
-            message_box('Error', 'Invalid type.')
+            self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
             return
         if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
-            message_box('Error', 'Invalid category.')
+            self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
             return
         # Send data to finances.py
         if confirm_box('Edit', 'Are you sure you want to edit this log?') == 'yes':
             if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
                         App.get_running_app().get_accessName()):
-                message_box('Success', 'Log edited successfully.')
+                self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'Filter: All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Failed to edit log.')
+                self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
 
     def load_project_list(self):
         return load_project_names()
@@ -229,6 +232,16 @@ class FinancesScreen(Screen):
         addPop.open()
         addPop.content.popup = addPop
 
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
+
     def btn_click(self, instance):
         if instance.text == 'Back':
             self.parent.current = 'main'
@@ -259,7 +272,7 @@ class FinanceOverview(GridLayout):
 
     def populate_overview(self, y, m):
         if y == '' or None:
-            message_box('Error', 'Year is required.')
+            self.finance_screen.CMessageBox('Error', 'Year is required.', 'Message')
             return
 
         finances = load_all_finances(0)

@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
+from kivy.uix.scrollview import ScrollView
 
 from ui.manpower_ui import ManpowerScreen
 from ui.projects_ui import ProjectsScreen
@@ -13,6 +14,7 @@ from ui.finances_ui import FinancesScreen
 
 from utils import *
 from custom import *
+from validation import *
 
 # Load the KV file for the main screen
 Builder.load_file('main.kv')
@@ -23,6 +25,7 @@ Builder.load_file('ui/clients.kv')
 Builder.load_file('ui/resources.kv')
 Builder.load_file('ui/manpower.kv')
 Builder.load_file('ui/finances.kv')
+Builder.load_file('validation.kv')
 
 
 class MainScreen(Screen):
@@ -35,7 +38,7 @@ class MainScreen(Screen):
         if instance.text == 'LogOut' or instance.text == 'LogIn':
             self.openLogPopup(instance.text)
         elif perms is None:
-            message_box('Error', 'Please login to continue.')
+            self.CMessageBox('Error', 'Please login to continue.', 'Message')
             return
         else:
             if instance.text == 'Projects':
@@ -53,6 +56,22 @@ class MainScreen(Screen):
             elif instance.text == 'Admin':
                 self.openAdminControls()
 
+    def testbtnClick(self, instance):
+        print("Test Button Clicked")
+
+    def testbtn2(self, instance):
+        print("I Win")
+
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
+
     def openAdminControls(self):
         adminPop = CPopup(title='Admin Controls', content=AdminControls(self), size_hint=(0.5, 0.9))
         adminPop.open()
@@ -64,7 +83,7 @@ class MainScreen(Screen):
             logPop.open()
             logPop.content.popup = logPop
         elif request == 'LogOut':
-            message_box('LogOut', 'You have been logged out.')
+            self.CMessageBox('LogOut', 'You have been logged out.', 'Message')
             App.get_running_app().set_accessLV(None)
             App.get_running_app().set_accessName(None)
             self.ids.logBtn.text = 'LogIn'
@@ -76,7 +95,7 @@ class MainScreen(Screen):
             self.ids.personnelBtn.disabled = True
             self.ids.resourcesBtn.disabled = True
         else:
-            message_box('Error', 'Invalid Request')
+            self.CMessageBox('Error', 'Invalid Request', 'Message')
 
     def loggedIn(self, email=None):
         perms = App.get_running_app().get_accessLV()

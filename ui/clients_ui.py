@@ -8,7 +8,10 @@ from functools import partial
 from kivy.uix.screenmanager import Screen
 
 from functions.projects import load_projects
+
+from custom import *
 from utils import *
+from validation import *
 
 
 # add a popup window to insert client data to the database
@@ -24,16 +27,16 @@ class AddClientPopup(GridLayout):
         address = str(address)
 
         if not validate_string(name, phone_number, email, address):
-            message_box('Error', 'All fields are required.')
+            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_mobileNo(phone_number):
-            message_box('Error', 'Invalid phone number.')
+            self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
             return
         if not validate_email(email):
-            message_box('Error', 'Invalid email address.')
+            self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
             return
         if add_client(name, phone_number, email, address):
-            message_box('Success', 'Client added successfully.')
+            self.clients_screen.CMessageBox('Success', 'Client added successfully.', 'Message')
             self.clients_screen.populate_clients(load_clients(0))
             self.dismiss_popup(self.popup)
 
@@ -68,31 +71,31 @@ class ViewClientPopup(GridLayout):
         address = str(address)
 
         if not validate_string(name, phone_number, email, address):
-            message_box('Error', 'All fields are required.')
+            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if not validate_mobileNo(phone_number):
-            message_box('Error', 'Invalid phone number.')
+            self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
             return
         if not validate_email(email):
-            message_box('Error', 'Invalid email address.')
+            self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
             return
 
         if confirm_box('Update Client', 'Are you sure you want to update this client?') == 'yes':
             if update_client(self.client_id, name, phone_number, email, address):
-                message_box('Success', 'Client updated successfully.')
+                self.clients.CMessageBox('Success', 'Client updated successfully.', 'Message')
                 self.clients_screen.populate_clients(load_clients(0))
                 self.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Failed to update client.')
+                self.clients.CMessageBox('Error', 'Failed to update client.', 'Message')
 
     def delete_client(self):
         if confirm_box('Delete Client', 'Are you sure you want to delete this client?') == 'yes':
             if delete_client(self.client_id):
-                message_box('Success', 'Client deleted successfully.')
+                self.clients_screen.CMessageBox('Success', 'Client deleted successfully.', 'Message')
                 self.clients_screen.populate_clients(load_clients(0))
                 self.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Failed to delete client.')
+                self.clients_screen.CMessageBox('Error', 'Failed to delete client.', 'Message')
                 self.dismiss_popup(self.popup)
 
     def dismiss_popup(self,instance):
@@ -113,6 +116,19 @@ class ClientsScreen(Screen):
 
     def dismiss_popup(self, instance):
         instance.dismiss()
+
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel',
+                    btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
 
     def populate_clients(self, clients=load_clients(0), headers=None):
         # Clear the existing clients

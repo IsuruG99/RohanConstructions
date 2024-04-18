@@ -119,7 +119,6 @@ class CText(TextInput):
         self.padding_x = 15
 
 
-
 class RLabelTop(CLabel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

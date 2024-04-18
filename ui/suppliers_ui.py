@@ -8,6 +8,7 @@ from functools import partial
 
 from utils import *
 from custom import *
+from validation import *
 
 
 class AddSupPopup(GridLayout):
@@ -26,20 +27,20 @@ class AddSupPopup(GridLayout):
 
         # Validate inputs
         if not validate_string(supplierName, contactNo, email, address):
-            message_box('Error', 'You missed some information !')
+            self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
 
         if not validate_mobileNo(contactNo):
-            message_box('Error', 'Check the contact number')
+            self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
             return
 
         if not validate_date(startDealing):
-            message_box('Error', 'Invalid date format.')
+            self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
             return
 
         # Send data to supplier.py
         add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
-        message_box('Success', 'New supplier added successfully.')
+        self.suppliers_screen.CMessageBox('Success', 'Supplier added successfully.', 'Message')
         self.suppliers_screen.populate_suppliers(load_suppliers())
 
     def dismiss_popup(self, instance):
@@ -81,24 +82,24 @@ class ViewSupPopup(GridLayout):
 
                 # Validate inputs
                 if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
-                    message_box('Error', 'You missed some information !')
+                    self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                     return
 
                 if not validate_mobileNo(contactNo):
-                    message_box('Error', 'Check the contact number')
+                    self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
                     return
 
                 if not validate_date(startDealing):
-                    message_box('Error', 'Invalid date format.')
+                    self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                     return
 
                 # Send data to suppliers.py
                 edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
                               supplierLevel)
 
-                message_box('Success', 'Supplier modified successfully.')
+                self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
             else:
-                message_box('Error', 'Not saved !')
+                self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
             self.suppliers_screen.populate_suppliers(load_suppliers())
             self.suppliers_screen.dismiss_popup(self.popup)
 
@@ -110,13 +111,11 @@ class ViewSupPopup(GridLayout):
     def deleteSupplier(self):
         if confirm_box('Delete Supplier', 'Do you want to delete supplier ?') == 'yes':
             if delete_supplier(self.suppliers_id):
-                message_box('Success', 'Supplier deleted successfully.')
+                self.suppliers_screen.CMessageBox('Success', 'Supplier deleted successfully.', 'Message')
                 self.suppliers_screen.populate_suppliers(load_suppliers())
                 self.suppliers_screen.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Delete failed !')
-        else:
-            message_box('Error', 'Delete Canceled.')
+                self.suppliers_screen.CMessageBox('Error', 'Delete failed !')
 
     def dismiss_popup(self, instance):
         instance.dismiss()
@@ -226,6 +225,16 @@ class SuppliersScreen(Screen):
         addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.6, 0.8))
         addPop.open()
         addPop.content.popup = addPop
+
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+        if context == 'Message':
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp.open()
+            msgPopUp.content.popup = msgPopUp
+        if context == 'Confirm':
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp.open()
+            cfmPopUp.content.popup = cfmPopUp
 
     # Button Click Event Handler
     def btn_click(self, instance):

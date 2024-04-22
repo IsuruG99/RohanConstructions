@@ -15,33 +15,40 @@ class AddSupPopup(GridLayout):
     def __init__(self, suppliers_screen, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
+        self.validCheck = 0
 
-    def add_Supplier(self, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
-        supplierName = str(supplierName)
-        business = str(business)
-        contactNo = str(contactNo)
-        email = str(email)
-        address = str(address)
-        startDealing = str(startDealing)
-        supplierLevel = str(supplierLevel)
+    def add_Supplier(self, requestType="Submit"):
+        supplierName = str(self.ids.supplierName.text)
+        business = str(self.ids.business.text)
+        contactNo = str(self.ids.contactNo.text)
+        email = str(self.ids.email.text)
+        address = str(self.ids.address.text)
+        startDealing = str(self.ids.startDealing.text)
+        supplierLevel = str(self.ids.supplierLevel.text)
 
-        # Validate inputs
-        if not validate_string(supplierName, contactNo, email, address):
-            self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(supplierName, contactNo, email, address):
+                self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
 
-        if not validate_mobileNo(contactNo):
-            self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
-            return
+            if not validate_mobileNo(contactNo):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
+                return
 
-        if not validate_date(startDealing):
-            self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
-            return
-
-        # Send data to supplier.py
-        add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
-        self.suppliers_screen.CMessageBox('Success', 'Supplier added successfully.', 'Message')
-        self.suppliers_screen.populate_suppliers(load_suppliers())
+            if not validate_date(startDealing):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            # Ask confirm
+            self.suppliers_screen.CMessageBox('Add Supplier', 'Do you want to add supplier ?', 'Confirm', 'Yes', 'No', self.add_Supplier)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                # Send data to supplier.py
+                add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel)
+                self.suppliers_screen.CMessageBox('Success', 'Supplier added successfully.', 'Message')
+                self.validCheck = 0
+                self.suppliers_screen.populate_suppliers(load_suppliers())
 
     def dismiss_popup(self, instance):
         self.suppliers_screen.dismiss_popup(self.popup)
@@ -53,6 +60,7 @@ class ViewSupPopup(GridLayout):
         self.suppliers_id = suppliers_id
         self.populate_view()
         self.suppliers_screen = suppliers_screen
+        self.validCheck = 0
 
     # Populate PopUp Window
     def populate_view(self):
@@ -68,18 +76,19 @@ class ViewSupPopup(GridLayout):
         self.ids.supplierLevel.text = supplier["supplierLevel"]
 
     # Edit Supplier
-    def editSupplier(self, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
-        if confirm_box('Edit Supplier', 'Do you want to save changes ?') == 'yes':
-            if delete_supplier(self.suppliers_id):
-                # Stringify inputs (Including Dates)
-                supplierName = str(supplierName)
-                business = str(business)
-                email = str(email)
-                contactNo = str(contactNo)
-                startDealing = str(startDealing)
-                supplierLevel = str(supplierLevel)
-                address = str(address)
+    def editSupplier(self, requestType="Submit"):
+        # supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text
+        if delete_supplier(self.suppliers_id):
+            # Stringify inputs (Including Dates)
+            supplierName = str(self.ids.supplierName.text)
+            business = str(self.ids.business.text)
+            email = str(self.ids.email.text)
+            contactNo = str(self.ids.contactNo.text)
+            startDealing = str(self.ids.startDealing.text)
+            supplierLevel = str(self.ids.supplierLevel.text)
+            address = str(self.ids.address.text)
 
+            if requestType == "Validate":
                 # Validate inputs
                 if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
                     self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
@@ -92,30 +101,37 @@ class ViewSupPopup(GridLayout):
                 if not validate_date(startDealing):
                     self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                     return
-
-                # Send data to suppliers.py
-                edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
-                              supplierLevel)
-
-                self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
-            else:
-                self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
-            self.suppliers_screen.populate_suppliers(load_suppliers())
-            self.suppliers_screen.dismiss_popup(self.popup)
+                self.suppliers_screen.CMessageBox('Edit Supplier', 'Do you want to save changes ?', 'Confirm', 'Yes', 'No', self.editSupplier)
+                self.validCheck = 1
+            elif requestType == "Submit":
+                if self.validCheck == 1:
+                    # Send data to suppliers.py
+                    if edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
+                                      supplierLevel):
+                        self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
+                    else:
+                        self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
+                    self.validCheck = 0
+                    self.suppliers_screen.populate_suppliers(load_suppliers())
+                    self.suppliers_screen.dismiss_popup(self.popup)
 
     # Open Reports Popup Window
     def reports_popup(self):
         pass
 
     # Delete Supplier
-    def deleteSupplier(self):
-        if confirm_box('Delete Supplier', 'Do you want to delete supplier ?') == 'yes':
+    def deleteSupplier(self, requestType="Submit"):
+        if requestType == "Validate":
+            self.suppliers_screen.CMessageBox('Confirm', 'Do you want to delete supplier ?', 'Confirm', 'Yes', 'No', self.deleteSupplier)
+        elif requestType == "Submit":
             if delete_supplier(self.suppliers_id):
                 self.suppliers_screen.CMessageBox('Success', 'Supplier deleted successfully.', 'Message')
                 self.suppliers_screen.populate_suppliers(load_suppliers())
+                self.validCheck = 0
                 self.suppliers_screen.dismiss_popup(self.popup)
             else:
                 self.suppliers_screen.CMessageBox('Error', 'Delete failed !')
+            self.validCheck = 0
 
     def dismiss_popup(self, instance):
         instance.dismiss()

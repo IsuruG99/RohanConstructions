@@ -19,6 +19,7 @@ class ViewResource(GridLayout):
         self.res_id = res_id
         self.populate_view()
         self.res_screen = res_screen
+        self.validCheck = 0
 
     def populate_view(self):
         # Get the resource data from the DB
@@ -38,7 +39,7 @@ class ViewResource(GridLayout):
             grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.4))
             grid.add_widget(
                 CButton(text='X', size_hint_x=0.05, on_release=partial(self.reload, assignment["amount"],
-                                                                           assignment["project"], "Remove")))
+                                                                       assignment["project"], "Remove")))
             self.ids.viewRes_projects.add_widget(grid)
 
     def reload(self, amount, project_name, action, instance):
@@ -56,35 +57,47 @@ class ViewResource(GridLayout):
                 self.ids.viewRes_projects.clear_widgets()
                 self.populate_view()
 
-    def editRes(self, name, qty, status, supplier, cost):
+    def editRes(self, requestType="Submit"):
         # Stringify inputs (Including Dates)
-        name = str(name)
-        qty = str(qty)
-        supplier = str(supplier)
-        cost = str(cost)
+        name = str(self.ids.viewPop_name.text)
+        qty = str(self.ids.viewPop_qty.text)
+        status = self.ids.viewPop_status.text
+        supplier = str(self.ids.viewPop_supplier.text)
+        cost = str(self.ids.viewPop_cost.text)
 
-        # Validate inputs
-        if not validate_string(name, supplier):
-            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_currency(qty):
-            self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
-            return
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(name, supplier):
+                self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_currency(qty):
+                self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
+                return
+            self.res_screen.CMessageBox('Edit Resource', 'Are you sure you want to edit this resource?', 'Confirm',
+                                        'Yes', 'No', self.editRes)
+            self.validCheck = 1
         # Send data to edit_res function in resources.py
-        if confirm_box('Edit Resource', 'Are you sure you want to edit this resource?') == 'yes':
-            if update_res(self.res_id, name, qty, status, supplier, cost):
-                self.res_screen.CMessageBox('Success', 'Resource edited successfully.', 'Message')
-                self.res_screen.populate_res(load_resources(0))
-                self.res_screen.ids.resource_filter.text = 'Filter: All'
-                self.dismiss_popup(self.popup)
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if update_res(self.res_id, name, qty, status, supplier, cost):
+                    self.res_screen.CMessageBox('Success', 'Resource edited successfully.', 'Message')
+                    self.res_screen.populate_res(load_resources(0))
+                    self.validCheck = 0
+                    self.res_screen.ids.resource_filter.text = 'Filter: All'
+                    self.dismiss_popup(self.popup)
 
-    def deleteRes(self):
+    def deleteRes(self, requestType="Submit"):
         # Send res_id to resources.py and it will delete the entity
-        if confirm_box('Delete Resource', 'Are you sure you want to delete this resource?') == 'yes':
+        if requestType == "Validate":
+            self.res_screen.CMessageBox('Delete Resource', 'Are you sure you want to delete this resource?', 'Confirm',
+                                        'Yes', 'No', self.deleteRes)
+            self.validCheck = 1
+        elif requestType == "Submit":
             if delete_res(self.res_id):
                 self.res_screen.CMessageBox('Success', 'Resource deleted successfully.', 'Message')
             else:
                 self.res_screen.CMessageBox('Error', 'Failed to delete resource.', 'Message')
+            self.validCheck = 0
             self.res_screen.populate_res(load_resources(0))
             self.res_screen.ids.resource_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
@@ -147,8 +160,9 @@ class ResourcesScreen(Screen):
             headers = ['Name', 'Status', 'Supplier', 'Stock']
         size_hints = [0.4, 0.2, 0.3, 0.1]
         for header in headers:
-            self.ids.resource_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
-                                                         on_release=partial(self.sort_resources, resources, header)))
+            self.ids.resource_headers.add_widget(
+                CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
+                        on_release=partial(self.sort_resources, resources, header)))
 
         # Fill Data into ScrollView
         for res in resources:
@@ -163,13 +177,16 @@ class ResourcesScreen(Screen):
             grid.add_widget(CLabel(text=str(res["quantity"]), size_hint_x=0.1))
             self.ids.resources_list.add_widget(grid)
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel',
+                    btn1click=None, btn2click=None):
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
             msgPopUp.open()
             msgPopUp.content.popup = msgPopUp
         if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
@@ -245,35 +262,40 @@ class AddResource(GridLayout):
     def __init__(self, res_screen, **kwargs):
         super().__init__(**kwargs)
         self.res_screen = res_screen
+        self.validCheck = 0
 
-    def add_resource(self, name, qty, status, supplier, cost):
+    def add_resource(self, requestType="Submit"):
         # Stringify inputs (Including Dates)
-        name = str(name)
-        qty = str(qty)
-        supplier = str(supplier)
-        cost = str(cost)
+        name = str(self.ids.addRes_name.text)
+        qty = str(self.ids.addRes_qty.text)
+        status = self.ids.addRes_status.text
+        supplier = str(self.ids.addRes_supplier.text)
+        cost = str(self.ids.addRes_cost.text)
 
-        # Validate inputs
-        if not validate_string(name, supplier, qty, status):
-            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_currency(qty):
-            self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
-            return
-        if not validate_currency(cost):
-            self.res_screen.CMessageBox('Error', 'Invalid Cost.', 'Message')
-            return
-
-        # Add data to DB
-        if confirm_box('Add Resource', 'Are you sure you want to add this resource?') == 'yes':
-            if add_res(name, qty, status, supplier, cost):
-                self.res_screen.CMessageBox('Success', 'Resource added successfully.', 'Message')
-                # Refresh the resources display
-                self.res_screen.populate_res(load_resources(0))
-                self.res_screen.ids.resource_filter.text = 'Filter: All'
-                self.dismiss_popup(self.popup)
-            else:
-                self.res_screen.CMessageBox('Error', 'Failed to add resource.', 'Message')
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(name, supplier, qty, status):
+                self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_currency(qty):
+                self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
+                return
+            if not validate_currency(cost):
+                self.res_screen.CMessageBox('Error', 'Invalid Cost.', 'Message')
+                return
+            self.res_screen.CMessageBox('Add Resource', 'Are you sure you want to add this resource?', 'Confirm',
+                                             'Yes', 'No', self.add_resource)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if add_res(name, qty, status, supplier, cost):
+                    self.res_screen.CMessageBox('Success', 'Resource added successfully.', 'Message')
+                    self.res_screen.populate_res(load_resources(0))
+                    self.res_screen.ids.resource_filter.text = 'Filter: All'
+                    self.validCheck = 0
+                    self.dismiss_popup(self.popup)
+                else:
+                    self.res_screen.CMessageBox('Error', 'Failed to add resource.', 'Message')
 
     def load_suppliers(self):
         return load_supplier_names()

@@ -16,30 +16,41 @@ class AddPopup(GridLayout):
     def __init__(self, projects_screen, **kwargs):
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
+        self.validCheck = 0
 
-    def addProj(self, name, description, start_date, end_date, client_name, budget):
-        name = str(name)
-        description = str(description)
-        start_date = str(start_date)
-        end_date = str(end_date)
-        client_name = str(client_name)
-        budget = str(budget)
+    def addProj(self, requestType="Submit"):
+        # Stringify Inputs
+        name = str(self.ids.project_name.text)
+        description = str(self.ids.project_desc.text)
+        start_date = str(self.ids.project_start.text)
+        end_date = str(self.ids.project_end.text)
+        client_name = str(self.ids.project_client.text)
+        budget = str(self.ids.project_budget.text)
         # Validate inputs
-        if not validate_string(name, description, client_name, budget):
-            message_box('Error', 'All fields are required.')
-            return
-        if not validate_date(start_date, end_date):
-            message_box('Error', 'Invalid date format.')
-            return
-        if name_unique_check('add', name) is False:
-            message_box('Error', 'Project name must be unique.')
-            return
-        # Send data to projects.py
-        add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
-        self.projects_screen.CMessageBox('Success', 'Project added successfully.', 'Message')
-        self.projects_screen.populate_projects(load_projects(0))
-        self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
-        self.projects_screen.dismiss_popup(self.popup)
+        if requestType == "Validate":
+            if not validate_string(name, description, client_name, budget):
+                message_box('Error', 'All fields are required.')
+                return
+            if not validate_date(start_date, end_date):
+                message_box('Error', 'Invalid date format.')
+                return
+            if name_unique_check('add', name) is False:
+                message_box('Error', 'Project name must be unique.')
+                return
+            # Send data to projects.py
+            self.projects_screen.CMessageBox(title='Add Project', content='Are you sure you want to add this project?',
+                                             context='Confirm', btn1='Yes', btn2='No', btn1click=self.addProj)
+            self.validCheck = 1
+        if requestType == "Submit":
+            if self.validCheck == 1:
+                add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
+                self.projects_screen.CMessageBox('Success', 'Project added successfully.', 'Message')
+                self.projects_screen.populate_projects(load_projects(0))
+                self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
+                self.projects_screen.dismiss_popup(self.popup)
+
+    def load_clients(self):
+        return load_client_names()
 
 
 # View Project Popup Window
@@ -49,6 +60,7 @@ class ViewPopup(GridLayout):
         self.project_id = project_id
         self.populate_view()
         self.projects_screen = projects_screen
+        self.validCheck = 0
 
     # Populate PopUp Window
     def populate_view(self):
@@ -64,35 +76,43 @@ class ViewPopup(GridLayout):
         self.ids.viewPop_status.text = project["status"]
 
     # Edit Project
-    def editProj(self, name, description, start_date, end_date, client_name, budget, status):
+    def editProj(self, requestType="Submit"):
         # Stringify inputs (Including Dates)
-        name = str(name)
-        description = str(description)
-        start_date = str(start_date)
-        end_date = str(end_date)
-        client_name = str(client_name)
-        budget = str(budget)
-        status = str(status)
+        name = str(self.ids.viewPop_name.text)
+        description = str(self.ids.viewPop_desc.text)
+        start_date = str(self.ids.viewPop_startDate.text)
+        end_date = str(self.ids.viewPop_endDate.text)
+        client_name = str(self.ids.viewPop_client.text)
+        budget = str(self.ids.viewPop_budget.text)
+        status = str(self.ids.viewPop_status.text)
 
-        # Validate inputs
-        if not validate_string(name, description, client_name, budget, status):
-            self.projects_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_date(start_date, end_date):
-            self.projects_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
-            return
-        if name_unique_check('update', name, self.project_id) is False:
-            self.projects_screen.CMessageBox('Error', 'Project name must be unique.', 'Message')
-            return
-        # Send data to projects.py
-        if confirm_box('Update Project', 'Are you sure you want to update this project?') == 'yes':
-            if update_project(self.project_id, name, description, start_date, end_date, client_name, budget, status):
-                self.projects_screen.CMessageBox('Success', 'Project updated successfully.', 'Message')
-                self.projects_screen.populate_projects(load_projects(0))
-                self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
-                self.projects_screen.dismiss_popup(self.popup)
-            else:
-                self.projects_screen.CMessageBox('Error', 'Failed to update project.', 'Message')
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(name, description, client_name, budget, status):
+                self.projects_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_date(start_date, end_date):
+                self.projects_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if name_unique_check('update', name, self.project_id) is False:
+                self.projects_screen.CMessageBox('Error', 'Project name must be unique.', 'Message')
+                return
+            # Send data to projects.py
+            self.projects_screen.CMessageBox(title='Update Project', content='Are you sure you want to update this project?',
+                                             context='Confirm', btn1='Yes', btn2='No', btn1click=self.editProj)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if update_project(self.project_id, name, description, start_date, end_date, client_name, budget,
+                                  status):
+                    self.projects_screen.CMessageBox('Success', 'Project updated successfully.', 'Message')
+                    self.validCheck = 0
+                    self.projects_screen.populate_projects(load_projects(0))
+                    self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
+                    self.projects_screen.dismiss_popup(self.popup)
+                else:
+                    self.validCheck = 0
+                    self.projects_screen.CMessageBox('Error', 'Failed to update project.', 'Message')
 
     # Open Reports Popup Window
     def reports_popup(self, project_name):
@@ -105,16 +125,22 @@ class ViewPopup(GridLayout):
         return load_client_names()
 
     # Delete Project
-    def deleteProj(self):
-        # Send project_id to projects.py
-        if confirm_box('Delete Project', 'Are you sure you want to delete this project?') == 'yes':
-            if delete_project(self.project_id):
-                self.projects_screen.CMessageBox('Success', 'Project deleted successfully.', 'Message')
-            else:
-                self.projects_screen.CMessageBox('Error', 'Failed to delete project.', 'Message')
-            self.projects_screen.populate_projects(load_projects(0))
-            self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
-            self.projects_screen.dismiss_popup(self.popup)
+    def deleteProj(self, requestType="Submit"):
+        if requestType == "Validate":
+            # Send project_id to projects.py
+            self.projects_screen.CMessageBox(title='Delete Project', content='Are you sure you want to delete this project?',
+                                             context='Confirm', btn1='Yes', btn2='No', btn1click=self.deleteProj)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if delete_project(self.project_id):
+                    self.projects_screen.CMessageBox('Success', 'Project deleted successfully.', 'Message')
+                else:
+                    self.projects_screen.CMessageBox('Error', 'Failed to delete project.', 'Message')
+                self.validCheck = 0
+                self.projects_screen.populate_projects(load_projects(0))
+                self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
+                self.projects_screen.dismiss_popup(self.popup)
 
     def dismiss_popup(self, instance):
         self.projects_screen.dismiss_popup(self.popup)
@@ -155,6 +181,7 @@ class ReportsPopup(GridLayout):
     def dismiss_popup(self, instance):
         instance.dismiss()
 
+
 # Projects Main UI (Accessed by main.py)
 class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
@@ -172,8 +199,9 @@ class ProjectsScreen(Screen):
             headers = ['Project Name', 'Client', 'End Date', 'Status']
         size_hints = [0.4, 0.3, 0.15, 0.15]
         for header in headers:
-            self.ids.projects_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
-                                                         on_release=partial(self.sort_projects, header, projects)))
+            self.ids.projects_headers.add_widget(
+                CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
+                        on_release=partial(self.sort_projects, header, projects)))
 
         # Fill the Grid with Project Data
         for project in projects:
@@ -227,13 +255,16 @@ class ProjectsScreen(Screen):
                         project['end_date'].lower()]
             self.populate_projects(projects)
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel',
+                    btn1click=None, btn2click=None):
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
             msgPopUp.open()
             msgPopUp.content.popup = msgPopUp
         if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 

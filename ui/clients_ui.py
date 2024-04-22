@@ -19,26 +19,34 @@ class AddClientPopup(GridLayout):
     def __init__(self, clients_screen, **kwargs):
         super().__init__(**kwargs)
         self.clients_screen = clients_screen
+        self.validCheck = 0
 
-    def add_client(self, name, phone_number, email, address):
-        name = str(name)
-        phone_number = str(phone_number)
-        email = str(email)
-        address = str(address)
+    def add_client(self, requestType="Submit"):
+        # add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text
+        name = str(self.ids.add_client_name.text)
+        phone_number = str(self.ids.add_client_phone_number.text)
+        email = str(self.ids.add_client_email.text)
+        address = str(self.ids.add_client_address.text)
 
-        if not validate_string(name, phone_number, email, address):
-            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_mobileNo(phone_number):
-            self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
-            return
-        if not validate_email(email):
-            self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
-            return
-        if add_client(name, phone_number, email, address):
-            self.clients_screen.CMessageBox('Success', 'Client added successfully.', 'Message')
-            self.clients_screen.populate_clients(load_clients(0))
-            self.dismiss_popup(self.popup)
+        if requestType == "Validate":
+            if not validate_string(name, phone_number, email, address):
+                self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_mobileNo(phone_number):
+                self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
+                return
+            if not validate_email(email):
+                self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
+                return
+            self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to add this client?', 'Confirm', 'Yes', 'No', self.add_client)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if add_client(name, phone_number, email, address):
+                    self.clients_screen.CMessageBox('Success', 'Client added successfully.', 'Message')
+                    self.clients_screen.populate_clients(load_clients(0))
+                    self.validCheck = 0
+                    self.dismiss_popup(self.popup)
 
     def load_project_list(self):
         return load_project_names()
@@ -54,6 +62,7 @@ class ViewClientPopup(GridLayout):
         self.client_id = client_id
         self.clients_screen = clients_screen
         self.populate_view()
+        self.validCheck = 0
 
     def populate_view(self):
         # Get the client data from the database
@@ -64,39 +73,45 @@ class ViewClientPopup(GridLayout):
         self.ids.view_client_email.text = client['email']
         self.ids.view_client_address.text = client['address']
 
-    def edit_client(self, name, phone_number, email, address):
-        name = str(name)
-        phone_number = str(phone_number)
-        email = str(email)
-        address = str(address)
+    def edit_client(self, requestType="Submit"):
+        # view_client_name.text, view_client_phone_number.text, view_client_email.text, view_client_address.text
+        name = str(self.ids.view_client_name.text)
+        phone_number = str(self.ids.view_client_phone_number.text)
+        email = str(self.ids.view_client_email.text)
+        address = str(self.ids.view_client_address.text)
+        if requestType == "Validate":
+            if not validate_string(name, phone_number, email, address):
+                self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_mobileNo(phone_number):
+                self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
+                return
+            if not validate_email(email):
+                self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
+                return
+            self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to update this client?', 'Confirm', 'Yes', 'No', self.edit_client)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if update_client(self.client_id, name, phone_number, email, address):
+                    self.clients_screen.CMessageBox('Success', 'Client updated successfully.', 'Message')
+                    self.clients_screen.populate_clients(load_clients(0))
+                    self.validCheck = 0
+                    self.dismiss_popup(self.popup)
+                else:
+                    self.clients.CMessageBox('Error', 'Failed to update client.', 'Message')
+                    self.validCheck = 0
 
-        if not validate_string(name, phone_number, email, address):
-            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_mobileNo(phone_number):
-            self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
-            return
-        if not validate_email(email):
-            self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
-            return
-
-        if confirm_box('Update Client', 'Are you sure you want to update this client?') == 'yes':
-            if update_client(self.client_id, name, phone_number, email, address):
-                self.clients.CMessageBox('Success', 'Client updated successfully.', 'Message')
-                self.clients_screen.populate_clients(load_clients(0))
-                self.dismiss_popup(self.popup)
-            else:
-                self.clients.CMessageBox('Error', 'Failed to update client.', 'Message')
-
-    def delete_client(self):
-        if confirm_box('Delete Client', 'Are you sure you want to delete this client?') == 'yes':
+    def delete_client(self, requestType="Submit"):
+        if requestType == "Validate":
+            self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to delete this client?', 'Confirm', 'Yes', 'No', self.delete_client)
+        elif requestType == "Submit":
             if delete_client(self.client_id):
                 self.clients_screen.CMessageBox('Success', 'Client deleted successfully.', 'Message')
                 self.clients_screen.populate_clients(load_clients(0))
                 self.dismiss_popup(self.popup)
             else:
                 self.clients_screen.CMessageBox('Error', 'Failed to delete client.', 'Message')
-                self.dismiss_popup(self.popup)
 
     def dismiss_popup(self,instance):
         instance.dismiss()

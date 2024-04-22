@@ -138,11 +138,12 @@
                         CLabel:
                                 text: 'Client'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        AutoFillText:
                                 id: project_client
                                 multiline: False
                                 hint_text: 'ABC Company'
                                 size_hint: 0.7, 0.1
+                                completions: root.load_clients()
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
@@ -165,13 +166,7 @@
                         CButton2:
                                 text: 'Insert'
                                 on_release:
-                                        root.addProj(project_name.text, project_desc.text, project_start.text, project_end.text, project_client.text, project_budget.text)
-                                        project_name.text = ''
-                                        project_desc.text = ''
-                                        project_start.text = ''
-                                        project_end.text = ''
-                                        project_client.text = ''
-                                        project_budget.text = ''
+                                        root.addProj(requestType = "Validate")
 
 <ViewPopup>:
         size: 400, 600
@@ -267,12 +262,12 @@
                         CButton2:
                                 text: 'Edit'
                                 on_release:
-                                        root.editProj(viewPop_name.text, viewPop_desc.text, viewPop_startDate.text, viewPop_endDate.text, viewPop_client.text, viewPop_budget.text, viewPop_status.text)
+                                        root.editProj(requestType="Validate")
 
                         CButton2:
                                 text: 'Delete'
                                 on_release:
-                                        root.deleteProj()
+                                        root.deleteProj(requestType="Validate")
 
                         CButton2:
                                 text: 'Report'

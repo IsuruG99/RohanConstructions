@@ -176,14 +176,7 @@
                         CButton2:
                                 text: 'Submit'
                                 on_release:
-                                        root.add_Supplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
-                                        supplierName.text = ''
-                                        business.text = ''
-                                        contactNo.text = ''
-                                        email.text = ''
-                                        address.text = ''
-                                        startDealing.text = ''
-					                    supplierLevel.text = ''
+                                        root.add_Supplier(requestType="Validate")
 
                         CButton2:
                                 text: 'Cancel'
@@ -274,11 +267,11 @@
                         CButton2:
                                 text: 'Save'
                                 on_release:
-                                        root.editSupplier(supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text)
+                                        root.editSupplier(requestType="Validate")
 
                         CButton2:
                                 text: 'Delete'
-                                on_release: root.deleteSupplier()
+                                on_release: root.deleteSupplier(requestType="Validate")
 
                         CButton2:
                                 text: 'Cancel'

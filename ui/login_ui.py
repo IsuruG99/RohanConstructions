@@ -23,8 +23,8 @@ class LogInPopUp(GridLayout):
         super().__init__(**kwargs)
         self.mainScreen = mainScreen
 
-    def testfunctest(self):
-        print("Test Button Clicked")
+    def testfunctest(self,stat=0):
+        print("button test")
 
     def login(self, email, password):
         email = str(email)
@@ -33,7 +33,7 @@ class LogInPopUp(GridLayout):
         if not validate_string(email, password):
             # CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
             # CMessageBox test, we call the Confirm this time, and call the test function if btn1 is clicked.
-            self.mainScreen.CMessageBox(title='Confirm', content='Are you sure you want to delete this user?', context='Confirm', btn1='Yes', btn2='No', btn1click=self.testfunctest)
+            self.mainScreen.CMessageBox(title='Confirm', content='Are you sure you want say yes?', context='Confirm', btn1='Yes', btn2='No', btn1click=self.testfunctest)
             return
 
         # if not validate_email(email):

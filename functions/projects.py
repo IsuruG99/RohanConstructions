@@ -25,6 +25,8 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
             'budget': budget,
             'status': status
         })
+        print("name: ", name, "description: ", description, "start_date: ", start_date, "end_date: ", end_date,
+              "client_name: ", client_name, "budget: ", budget, "status: ", status)
 
     else:
         message_box('Error', 'Failed to add project: "projects" reference not found.')

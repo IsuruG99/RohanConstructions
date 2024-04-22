@@ -210,10 +210,10 @@
                                 CButton2:
                                         text: 'Edit'
                                         on_release:
-                                                root.editRes(viewPop_name.text, viewPop_qty.text, viewPop_status.text, viewPop_supplier.text,viewPop_cost.text)
+                                                root.editRes(requestType="Validate")
                                 CButton2:
                                         text: 'Delete'
-                                        on_release: root.deleteRes()
+                                        on_release: root.deleteRes(requestType="Validate")
 
                                 CButton2:
                                         text: 'Report'
@@ -288,7 +288,7 @@
                         CButton2:
                                 text: 'Add'
                                 size_hint: 1, 0.1
-                                on_release: root.add_resource(addRes_name.text, addRes_qty.text, addRes_status.text, addRes_supplier.text, addRes_cost.text)
+                                on_release: root.add_resource(requestType="Validate")
 
 <ReportResource>:
         GridLayout:

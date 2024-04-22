@@ -174,12 +174,12 @@
                         CButton2:
                                 text: 'Edit'
                                 on_release:
-                                        root.edit_log(viewLog_type.text, viewLog_amount.text, viewLog_date.text, viewLog_desc.text, viewLog_entity.text, viewLog_project.text, viewLog_category.text)
+                                        root.edit_log(requestType="Validate")
 
                         CButton2:
                                 text: 'Delete'
                                 on_release:
-                                        root.delete_log()
+                                        root.delete_log(requestType="Validate")
 
                         CButton2:
                                 text: 'Report'
@@ -274,12 +274,7 @@
                         CButton2:
                                 text: 'Insert'
                                 on_release:
-                                        root.addLog(addLog_type.text, addLog_amount.text, addLog_date.text, addLog_desc.text, addLog_entity.text, addLog_project.text, addLog_category.text)
-                                        addLog_amount.text = ''
-                                        addLog_date.text = ''
-                                        addLog_desc.text = ''
-                                        addLog_entity.text = ''
-                                        addLog_project.text = ''
+                                        root.addLog(requestType="Validate")
 
 <FinanceOverview>:
         GridLayout:

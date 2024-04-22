@@ -149,7 +149,7 @@
                         CButton2:
                                 text: 'Insert'
                                 on_release:
-                                        root.add_client(add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text)
+                                        root.add_client(requestType="Validate")
 
                         CButton2:
                                 text: 'Cancel'
@@ -217,13 +217,12 @@
                         CButton2:
                                 text: 'Edit'
                                 on_release:
-                                        root.edit_client(view_client_name.text, view_client_phone_number.text,
-                                        view_client_email.text, view_client_address.text)
+                                        root.edit_client(requestType="Validate")
 
                         CButton2:
                                 text: 'Delete'
                                 on_release:
-                                        root.delete_client()
+                                        root.delete_client(requestType="Validate")
 
 
 <ClientsReport>:

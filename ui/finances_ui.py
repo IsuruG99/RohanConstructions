@@ -21,6 +21,7 @@ class AddLogPopup(GridLayout):
         super().__init__(**kwargs)
         self.finances_screen = finances_screen
         self.populate_projectNames()
+        self.validCheck = 0
 
     def populate_projectNames(self):
         self.ids.addLog_project.values = []
@@ -30,36 +31,44 @@ class AddLogPopup(GridLayout):
             project_names.append(project["name"])
         self.ids.addLog_project.values = project_names
 
-    def addLog(self, fin_type, amount, date, desc, entity, project, category):
-        fin_type = str(fin_type)
-        amount = str(amount)
-        date = str(date)
-        desc = str(desc)
-        entity = str(entity)
-        project = str(project)
-        category = str(category)
-        # Validate inputs
-        if not validate_string(fin_type, amount, date, desc, entity, project, category):
-            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_date(date):
-            self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
-            return
-        if fin_type != "Income" and fin_type != "Expense":
-            self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
-            return
-        if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
-            self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
-            return
-        if validate_currency(amount) is False:
-            self.finances_screen.CMessageBox('Error', 'Invalid amount.', 'Message')
-            return
-        # Send data to finances.py
-        add_log(fin_type, amount, date, desc, entity, project, category)
-        self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
-        self.finances_screen.populate_logs(load_all_finances(0))
-        self.finances_screen.ids.finances_filter.text = 'Filter: All'
-        self.finances_screen.dismiss_popup(self.popup)
+    def addLog(self, requestType="Submit"):
+        fin_type = str(self.ids.addLog_type.text)
+        amount = str(self.ids.addLog_amount.text)
+        date = str(self.ids.addLog_date.text)
+        desc = str(self.ids.addLog_desc.text)
+        entity = str(self.ids.addLog_entity.text)
+        project = str(self.ids.addLog_project.text)
+        category = str(self.ids.addLog_category.text)
+
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(fin_type, amount, date, desc, entity, project, category):
+                self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_date(date):
+                self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if fin_type != "Income" and fin_type != "Expense":
+                self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
+                return
+            if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
+                self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
+                return
+            if validate_currency(amount) is False:
+                self.finances_screen.CMessageBox('Error', 'Invalid amount.', 'Message')
+                return
+            # Send data to finances.py
+            self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to add this log?', 'Confirm',
+                                             'Submit', 'Cancel', self.addLog)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                add_log(fin_type, amount, date, desc, entity, project, category)
+                self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
+                self.finances_screen.populate_logs(load_all_finances(0))
+                self.validCheck = 0
+                self.finances_screen.ids.finances_filter.text = 'Filter: All'
+                self.finances_screen.dismiss_popup(self.popup)
 
     def load_project_list(self):
         return load_project_names()
@@ -70,6 +79,7 @@ class ViewLogPopup(GridLayout):
         self.fin_id = fin_id
         self.populate_view()
         self.finances_screen = finances_screen
+        self.validCheck = 0
 
     # Populate PopUp Window
     def populate_view(self):
@@ -92,51 +102,61 @@ class ViewLogPopup(GridLayout):
         self.ids.viewLog_project.text = log["project_name"]
         self.ids.viewLog_category.text = log["category"]
 
-    def edit_log(self, fin_type, amount, date, desc, entity, project, category):
-        fin_type = str(fin_type)
-        amount = str(amount)
-        date = str(date)
-        desc = str(desc)
-        entity = str(entity)
-        project = str(project)
-        category = str(category)
+    def edit_log(self, requestType="Submit"):
+        fin_type = str(self.ids.viewLog_type.text)
+        amount = str(self.ids.viewLog_amount.text)
+        date = str(self.ids.viewLog_date.text)
+        desc = str(self.ids.viewLog_desc.text)
+        entity = str(self.ids.viewLog_entity.text)
+        project = str(self.ids.viewLog_project.text)
+        category = str(self.ids.viewLog_category.text)
+
+        if requestType == "Validate":
         # Validate inputs
-        if not validate_string(fin_type, amount, date, desc, entity, project, category):
-            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not validate_date(date):
-            self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
-            return
-        if fin_type != "Income" and fin_type != "Expense":
-            self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
-            return
-        if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
-            self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
-            return
-        # Send data to finances.py
-        if confirm_box('Edit', 'Are you sure you want to edit this log?') == 'yes':
-            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
-                        App.get_running_app().get_accessName()):
-                self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
-                self.finances_screen.populate_logs(load_all_finances(0))
-                self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                self.finances_screen.dismiss_popup(self.popup)
-            else:
-                self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
+            if not validate_string(fin_type, amount, date, desc, entity, project, category):
+                self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not validate_date(date):
+                self.finances_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if fin_type != "Income" and fin_type != "Expense":
+                self.finances_screen.CMessageBox('Error', 'Invalid type.', 'Message')
+                return
+            if category != "Materials" and category != "PayRoll" and category != "Contract" and category != "Misc":
+                self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
+                return
+            # Send data to finances.py
+            self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to edit this log?', 'Confirm',
+                                             'Submit', 'Cancel', self.edit_log)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
+                            App.get_running_app().get_accessName()):
+                    self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
+                    self.finances_screen.populate_logs(load_all_finances(0))
+                    self.validCheck = 0
+                    self.finances_screen.ids.finances_filter.text = 'Filter: All'
+                    self.finances_screen.dismiss_popup(self.popup)
+                else:
+                    self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
+                    self.validCheck = 0
 
     def load_project_list(self):
         return load_project_names()
 
-    def delete_log(self):
-        if confirm_box('Delete', 'Are you sure you want to delete this log?') == 'yes':
+    def delete_log(self, requestType="Submit"):
+        if requestType == "Validate":
+            self.finances_screen.CMessageBox('Delete Finance Log', 'Are you sure you want to delete this log?', 'Confirm',
+                                             'Submit', 'Cancel', self.delete_log)
+        elif requestType == "Submit":
             if delete_log(self.fin_id):
-                message_box('Success', 'Log deleted successfully.')
+                self.finances_screen.CMessageBox('Success', 'Log deleted successfully.', 'Message')
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'Filter: All'
                 self.finances_screen.dismiss_popup(self.popup)
             else:
-                message_box('Error', 'Failed to delete log.')
-                self.finances_screen.dismiss_popup(self.popup)
+                self.finances_screen.CMessageBox('Error', 'Failed to delete log.', 'Message')
 
 
 # Financial Section Main UI (Opens this from main.py)

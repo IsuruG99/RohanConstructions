@@ -12,12 +12,12 @@ from validation import *
 
 
 class AddSupPopup(GridLayout):
-    def __init__(self, suppliers_screen, **kwargs):
+    def __init__(self, suppliers_screen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
         self.validCheck = 0
 
-    def add_Supplier(self, requestType="Submit"):
+    def add_Supplier(self, requestType: str = "Submit") -> None:
         supplierName = str(self.ids.supplierName.text)
         business = str(self.ids.business.text)
         contactNo = str(self.ids.contactNo.text)
@@ -40,7 +40,8 @@ class AddSupPopup(GridLayout):
                 self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                 return
             # Ask confirm
-            self.suppliers_screen.CMessageBox('Add Supplier', 'Do you want to add supplier ?', 'Confirm', 'Yes', 'No', self.add_Supplier)
+            self.suppliers_screen.CMessageBox('Add Supplier', 'Do you want to add supplier ?', 'Confirm', 'Yes', 'No',
+                                              self.add_Supplier)
             self.validCheck = 1
         elif requestType == "Submit":
             if self.validCheck == 1:
@@ -50,12 +51,12 @@ class AddSupPopup(GridLayout):
                 self.validCheck = 0
                 self.suppliers_screen.populate_suppliers(load_suppliers())
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         self.suppliers_screen.dismiss_popup(self.popup)
 
 
 class ViewSupPopup(GridLayout):
-    def __init__(self, suppliers_screen, suppliers_id, **kwargs):
+    def __init__(self, suppliers_screen: Screen, suppliers_id: str, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_id = suppliers_id
         self.populate_view()
@@ -63,7 +64,7 @@ class ViewSupPopup(GridLayout):
         self.validCheck = 0
 
     # Populate PopUp Window
-    def populate_view(self):
+    def populate_view(self) -> None:
         # Get the suppliers data from the DB
         supplier = get_supplier(self.suppliers_id)
         # Assign
@@ -76,53 +77,53 @@ class ViewSupPopup(GridLayout):
         self.ids.supplierLevel.text = supplier["supplierLevel"]
 
     # Edit Supplier
-    def editSupplier(self, requestType="Submit"):
-        # supplierName.text, business.text, contactNo.text, email.text, address.text, startDealing.text, supplierLevel.text
-        if delete_supplier(self.suppliers_id):
-            # Stringify inputs (Including Dates)
-            supplierName = str(self.ids.supplierName.text)
-            business = str(self.ids.business.text)
-            email = str(self.ids.email.text)
-            contactNo = str(self.ids.contactNo.text)
-            startDealing = str(self.ids.startDealing.text)
-            supplierLevel = str(self.ids.supplierLevel.text)
-            address = str(self.ids.address.text)
+    def editSupplier(self, requestType: str = "Submit") -> None:
+        # Stringify inputs (Including Dates)
+        supplierName = str(self.ids.supplierName.text)
+        business = str(self.ids.business.text)
+        email = str(self.ids.email.text)
+        contactNo = str(self.ids.contactNo.text)
+        startDealing = str(self.ids.startDealing.text)
+        supplierLevel = str(self.ids.supplierLevel.text)
+        address = str(self.ids.address.text)
 
-            if requestType == "Validate":
-                # Validate inputs
-                if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
-                    self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-                    return
+        if requestType == "Validate":
+            # Validate inputs
+            if not validate_string(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+                self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
 
-                if not validate_mobileNo(contactNo):
-                    self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
-                    return
+            if not validate_mobileNo(contactNo):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid contact number.', 'Message')
+                return
 
-                if not validate_date(startDealing):
-                    self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
-                    return
-                self.suppliers_screen.CMessageBox('Edit Supplier', 'Do you want to save changes ?', 'Confirm', 'Yes', 'No', self.editSupplier)
-                self.validCheck = 1
-            elif requestType == "Submit":
-                if self.validCheck == 1:
-                    # Send data to suppliers.py
-                    if edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
-                                      supplierLevel):
-                        self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
-                    else:
-                        self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
-                    self.validCheck = 0
-                    self.suppliers_screen.populate_suppliers(load_suppliers())
-                    self.suppliers_screen.dismiss_popup(self.popup)
+            if not validate_date(startDealing):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            self.suppliers_screen.CMessageBox('Edit Supplier', 'Do you want to save changes ?', 'Confirm', 'Yes',
+                                              'No', self.editSupplier)
+            self.validCheck = 1
+        elif requestType == "Submit":
+            if self.validCheck == 1:
+                # Send data to suppliers.py
+                if edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
+                                 supplierLevel):
+                    self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
+                else:
+                    self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
+                self.validCheck = 0
+                self.suppliers_screen.populate_suppliers(load_suppliers())
+                self.suppliers_screen.dismiss_popup(self.popup)
 
     # Open Reports Popup Window
-    def reports_popup(self):
+    def reports_popup(self) -> None:
         pass
 
     # Delete Supplier
-    def deleteSupplier(self, requestType="Submit"):
+    def deleteSupplier(self, requestType: str = "Submit") -> None:
         if requestType == "Validate":
-            self.suppliers_screen.CMessageBox('Confirm', 'Do you want to delete supplier ?', 'Confirm', 'Yes', 'No', self.deleteSupplier)
+            self.suppliers_screen.CMessageBox('Confirm', 'Do you want to delete supplier ?', 'Confirm', 'Yes', 'No',
+                                              self.deleteSupplier)
         elif requestType == "Submit":
             if delete_supplier(self.suppliers_id):
                 self.suppliers_screen.CMessageBox('Success', 'Supplier deleted successfully.', 'Message')
@@ -133,24 +134,27 @@ class ViewSupPopup(GridLayout):
                 self.suppliers_screen.CMessageBox('Error', 'Delete failed !')
             self.validCheck = 0
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
 class ReportSupPopup(GridLayout):
-    def __init__(self, suppliers_screen, **kwargs):
+    def __init__(self, suppliers_screen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
         self.populate_report()
 
-    def populate_report(self):
+    def populate_report(self) -> None:
         suppliers = load_suppliers()
         self.ids.supTotal.text = "Total : " + str(len(suppliers))
-        self.ids.supLV1.text = "Suppliers Lv1 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '1']))
-        self.ids.supLV2.text = "Suppliers Lv2 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '2']))
-        self.ids.supLV3.text = "Suppliers Lv3 : " + str(len([supplier for supplier in suppliers if supplier['supplierLevel'] == '3']))
+        self.ids.supLV1.text = "Suppliers Lv1 : " + str(
+            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '1']))
+        self.ids.supLV2.text = "Suppliers Lv2 : " + str(
+            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '2']))
+        self.ids.supLV3.text = "Suppliers Lv3 : " + str(
+            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '3']))
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         self.suppliers_screen.dismiss_popup(instance)
 
 
@@ -160,7 +164,7 @@ class SuppliersScreen(Screen):
         super().__init__(**kwargs)
         self.populate_suppliers(load_suppliers())
 
-    def populate_suppliers(self, suppliers=load_suppliers(), headers=None):
+    def populate_suppliers(self, suppliers: list = load_suppliers(), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView & Headers
         self.ids.Supplier_list.clear_widgets()
         self.ids.Supplier_headers.clear_widgets()
@@ -173,7 +177,8 @@ class SuppliersScreen(Screen):
         for header in headers:
             self.ids.Supplier_headers.add_widget(CButton(text=header,
                                                          bold=True,
-                                                         padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
+                                                         padding=(10, 10),
+                                                         size_hint_x=size_hints[headers.index(header)],
                                                          on_release=partial(self.sort_suppliers, suppliers, header)))
 
         # Fill the grid with Supplier Data
@@ -194,7 +199,7 @@ class SuppliersScreen(Screen):
             self.ids.Supplier_list.add_widget(grid)
 
     # Main Sorting Function, take header list, supplier list, call populate function with sorted supplier list
-    def sort_suppliers(self, suppliers, header, instance):
+    def sort_suppliers(self, suppliers: list, header: str, instance) -> None:
         if header == 'Business' or header == 'Business [D]':
             suppliers = sorted(suppliers, key=lambda x: x['business'])
             self.populate_suppliers(suppliers, headers=['Business [A]', 'Owner', 'Contact', 'Level'])
@@ -215,7 +220,7 @@ class SuppliersScreen(Screen):
             self.populate_suppliers(suppliers, headers=['Business', 'Owner', 'Contact', 'Level [D]'])
 
     # Search Function, take search text, call populate function with filtered supplier list
-    def searchSuppliers(self, search_text):
+    def searchSuppliers(self, search_text: str) -> None:
         search_text = search_text.lower()
         suppliers = load_suppliers()
         suppliers = [supplier for supplier in suppliers if
@@ -226,7 +231,7 @@ class SuppliersScreen(Screen):
                      search_text in supplier['startDealing'].lower()]
         self.populate_suppliers(suppliers)
 
-    def view_suppliers(self, suppliers_id, instance):
+    def view_suppliers(self, suppliers_id: str, instance) -> None:
         viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.6, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
@@ -237,41 +242,45 @@ class SuppliersScreen(Screen):
         overviewPop.content.popup = overviewPop
 
     # Open to supplier add popup window
-    def add_popup(self):
+    def add_popup(self) -> None:
         addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.6, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
+                    btn1: str = 'Ok', btn2: str = 'Cancel', btn1click=None, btn2click=None) -> None:
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
             msgPopUp.open()
             msgPopUp.content.popup = msgPopUp
         if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
     # Button Click Event Handler
-    def btn_click(self, instance):
-        if instance.text == 'Back':
+    def btn_click(self, instance) -> None:
+        txt = instance.text
+        if txt == 'Back':
             self.parent.current = 'main'
-        elif instance.text == 'Add New Supplier':
+        elif txt == 'Add New Supplier':
             self.add_popup()
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
-        elif instance.text == 'Filter: All' or instance.text == 'Filter: Level 1' or instance.text == 'Filter: Level 2' or instance.text == 'Filter: Level 3':
-            if instance.text == 'Filter: All':
+        elif txt == 'Filter: All' or txt == 'Filter: Level 1' or txt == 'Filter: Level 2' or txt == 'Filter: Level 3':
+            if txt == 'Filter: All':
                 self.populate_suppliers(load_suppliers(1))
                 self.ids.supplierFilter.text = 'Filter: Level 1'
-            elif instance.text == 'Filter: Level 1':
+            elif txt == 'Filter: Level 1':
                 self.populate_suppliers(load_suppliers(2))
                 self.ids.supplierFilter.text = 'Filter: Level 2'
-            elif instance.text == 'Filter: Level 2':
+            elif txt == 'Filter: Level 2':
                 self.populate_suppliers(load_suppliers(3))
                 self.ids.supplierFilter.text = 'Filter: Level 3'
-            elif instance.text == 'Filter: Level 3':
+            elif txt == 'Filter: Level 3':
                 self.populate_suppliers(load_suppliers(0))
                 self.ids.supplierFilter.text = 'Filter: All'
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()

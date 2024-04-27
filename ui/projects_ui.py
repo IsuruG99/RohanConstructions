@@ -13,12 +13,12 @@ from validation import *
 
 # Add Project Popup Window
 class AddPopup(GridLayout):
-    def __init__(self, projects_screen, **kwargs):
+    def __init__(self, projects_screen: Screen, **kwargs) -> None:
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
         self.validCheck = 0
 
-    def addProj(self, requestType="Submit"):
+    def addProj(self, requestType: str = "Submit") -> None:
         # Stringify Inputs
         name = str(self.ids.project_name.text)
         description = str(self.ids.project_desc.text)
@@ -49,13 +49,13 @@ class AddPopup(GridLayout):
                 self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
                 self.projects_screen.dismiss_popup(self.popup)
 
-    def load_clients(self):
+    def load_clients(self) -> list:
         return load_client_names()
 
 
 # View Project Popup Window
 class ViewPopup(GridLayout):
-    def __init__(self, projects_screen, project_id, **kwargs):
+    def __init__(self, projects_screen: Screen, project_id: str, **kwargs):
         super().__init__(**kwargs)
         self.project_id = project_id
         self.populate_view()
@@ -63,7 +63,7 @@ class ViewPopup(GridLayout):
         self.validCheck = 0
 
     # Populate PopUp Window
-    def populate_view(self):
+    def populate_view(self) -> None:
         # Get the project data from the DB
         project = get_project(self.project_id)
         # Assign
@@ -76,7 +76,7 @@ class ViewPopup(GridLayout):
         self.ids.viewPop_status.text = project["status"]
 
     # Edit Project
-    def editProj(self, requestType="Submit"):
+    def editProj(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
         name = str(self.ids.viewPop_name.text)
         description = str(self.ids.viewPop_desc.text)
@@ -98,7 +98,8 @@ class ViewPopup(GridLayout):
                 self.projects_screen.CMessageBox('Error', 'Project name must be unique.', 'Message')
                 return
             # Send data to projects.py
-            self.projects_screen.CMessageBox(title='Update Project', content='Are you sure you want to update this project?',
+            self.projects_screen.CMessageBox(title='Update Project',
+                                             content='Are you sure you want to update this project?',
                                              context='Confirm', btn1='Yes', btn2='No', btn1click=self.editProj)
             self.validCheck = 1
         elif requestType == "Submit":
@@ -115,20 +116,21 @@ class ViewPopup(GridLayout):
                     self.projects_screen.CMessageBox('Error', 'Failed to update project.', 'Message')
 
     # Open Reports Popup Window
-    def reports_popup(self, project_name):
+    def reports_popup(self, project_name: str) -> None:
         self.projects_screen.dismiss_popup(self.popup)
         reportsPop = CPopup(title=project_name, content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
         reportsPop.open()
         reportsPop.content.popup = reportsPop
 
-    def load_clients(self):
+    def load_clients(self) -> list:
         return load_client_names()
 
     # Delete Project
-    def deleteProj(self, requestType="Submit"):
+    def deleteProj(self, requestType: str = "Submit") -> None:
         if requestType == "Validate":
             # Send project_id to projects.py
-            self.projects_screen.CMessageBox(title='Delete Project', content='Are you sure you want to delete this project?',
+            self.projects_screen.CMessageBox(title='Delete Project',
+                                             content='Are you sure you want to delete this project?',
                                              context='Confirm', btn1='Yes', btn2='No', btn1click=self.deleteProj)
             self.validCheck = 1
         elif requestType == "Submit":
@@ -142,18 +144,18 @@ class ViewPopup(GridLayout):
                 self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
                 self.projects_screen.dismiss_popup(self.popup)
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         self.projects_screen.dismiss_popup(self.popup)
 
 
 class ReportsPopup(GridLayout):
-    def __init__(self, projects_screen, proj_id, **kwargs):
+    def __init__(self, projects_screen: Screen, proj_id: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
         self.populate_reports(proj_id)
 
     # We have the Proj_ID, populate the fields
-    def populate_reports(self, pid):
+    def populate_reports(self, pid: str) -> None:
         # Get the project data from the DB
         project = get_project(pid)
 
@@ -178,7 +180,7 @@ class ReportsPopup(GridLayout):
             grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
             self.ids.assigned_resources.add_widget(grid)
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
@@ -189,7 +191,7 @@ class ProjectsScreen(Screen):
         self.populate_projects(load_projects(0))
 
     # Populate the ScrollView with the projects
-    def populate_projects(self, projects=load_projects(0), headers=None):
+    def populate_projects(self, projects: list = load_projects(0), headers: list = None) -> None:
         # Clear the ScrollView
         self.ids.projects_list.clear_widgets()
         self.ids.projects_headers.clear_widgets()
@@ -218,7 +220,7 @@ class ProjectsScreen(Screen):
             self.ids.projects_list.add_widget(grid)
 
     # Sort Projects, called by the header buttons, calls populate_projects with matching Projects List
-    def sort_projects(self, header, projects, instance):
+    def sort_projects(self, header: str, projects: list, instance) -> None:
         # Sort by header
         if header == 'Project Name' or header == 'Project Name [D]':
             projects = sorted(projects, key=lambda x: x['name'])
@@ -247,7 +249,7 @@ class ProjectsScreen(Screen):
             self.populate_projects(projects, headers=['Project Name', 'Client', 'End Date', 'Status [D]'])
 
     # Search Projects by given String, calls populate_projects with matching Projects List
-    def searchProj(self, searchValue):
+    def searchProj(self, searchValue: str) -> None:
         if not searchValue == '':
             projects = load_projects(0)
             projects = [project for project in projects if searchValue.lower() in project['name'].lower() or
@@ -255,8 +257,9 @@ class ProjectsScreen(Screen):
                         project['end_date'].lower()]
             self.populate_projects(projects)
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel',
-                    btn1click=None, btn2click=None):
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
+                    btn1: str = 'Ok', btn2: str = 'Cancel',
+                    btn1click=None, btn2click=None) -> None:
         if context == 'Message':
             msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
                               size_hint=(0.35, 0.3))
@@ -269,20 +272,20 @@ class ProjectsScreen(Screen):
             cfmPopUp.content.popup = cfmPopUp
 
     # Open View Popup Window
-    def view_project(self, project_id, instance):
+    def view_project(self, project_id: str, instance) -> None:
         # The project_id is passed to the ViewPopup Window
         viewPop = CPopup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
         viewPop.open()
         viewPop.content.popup = viewPop
 
     # Open Add Popup Window
-    def add_popup(self):
+    def add_popup(self) -> None:
         addPop = CPopup(title='Add Project', content=AddPopup(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 
     # Button Click Event Handler
-    def btn_click(self, instance):
+    def btn_click(self, instance) -> None:
         txt = instance.text
         if txt == 'Add':
             self.add_popup()
@@ -312,5 +315,5 @@ class ProjectsScreen(Screen):
     #                     child.texture_update()
     #                     child.size = child.texture_size
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()

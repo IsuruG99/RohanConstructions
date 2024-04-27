@@ -43,6 +43,7 @@ BrainStorming :
     - Autofill with calculated current assigned data, and allow manual changes
     - Once submitted, it will be added to the finances
         - Generated Finance Log Models (Different ways to do it, a log will only have name, desc and price, can't complicate it)
+            Pick One
             1. Budget Allocation Log, Resource Allocation Log, Manpower Allocation Log
             2. One Log as Completion, include final calculated price
             3. ... ?

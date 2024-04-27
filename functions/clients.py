@@ -30,6 +30,8 @@ def load_clients(status=0):
 
     clients = []
     for client_id, client in ref.get().items():
+        if client_id == 'clientZero':
+            continue
         client['id'] = client_id
         clients.append(client)
 

@@ -133,7 +133,7 @@ class MainApp(App):
     accessName = None
 
     def set_accessLV(self, level):
-        self.accessLV = level
+        self.accessLV = int(level)
 
     def get_accessLV(self):
         return self.accessLV

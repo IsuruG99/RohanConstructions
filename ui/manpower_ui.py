@@ -130,6 +130,7 @@ class ManpowerScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_manpower(load_manpower(0))
+        self.dempID = None
 
     def populate_manpower(self, employees=load_manpower(0), headers=None):
         # Clear the existing widgets in the ScrollView
@@ -153,7 +154,7 @@ class ManpowerScreen(Screen):
                                    background_normal='', font_size='20sp', size_hint_x=0.1,
                                    background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
                                    bold=True))
-            grid.add_widget(Button(text='Delete', on_release=partial(self.delete_employee, emp["id"], requestType="Validate"),
+            grid.add_widget(Button(text='Delete', on_release=partial(self.delete_employee, emp["id"]),
                                    background_normal='', font_size='20sp', size_hint_x=0.1,
                                    background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
                                    bold=True))
@@ -201,14 +202,24 @@ class ManpowerScreen(Screen):
         addEmp.open()
         addEmp.content.popup = addEmp
 
-    def delete_employee(self, emp_id, requestType, instance):
-        if requestType == "Validate":
-            self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm', 'Yes', 'No',
-                             partial(self.delete_employee, emp_id, "Delete"))
+    def delete_employee(self, emp_id, instance):
+        self.dempID = emp_id
+        self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm', 'Yes', 'No',
+                         self.confirmedDelete)
+
+    def confirmedDelete(self,requestType="Validated"):
+        if requestType == "Validated":
+            if delete_employee(self.dempID):
+                self.CMessageBox('Success', 'Employee deleted successfully.', 'Message')
+                self.dempID = None
+                self.populate_manpower(load_manpower(0))
+                self.ids.manpower_filter.text = 'Filter: All'
+            else:
+                self.CMessageBox('Error', 'Failed to delete Employee.', 'Message')
+                self.dempID = None
         else:
-            delete_employee(emp_id)
-            self.populate_manpower(load_manpower(0))
-            self.ids.manpower_filter.text = 'Filter: All'
+            print("illegal action")
+            self.dempID = None
 
     def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
         if context == 'Message':

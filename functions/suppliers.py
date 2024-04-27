@@ -9,6 +9,8 @@ def load_suppliers(status=0):
     # Retrieve all suppliers as a list of dictionaries
     suppliers = []
     for supplier_id, supplier in ref.get().items():
+        if supplier_id == 'supplierZero':
+            continue
         supplier['id'] = supplier_id
         suppliers.append(supplier)
 

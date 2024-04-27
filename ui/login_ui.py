@@ -102,52 +102,53 @@ class AdminControls(GridLayout):
                 grid.add_widget(CLabel(text=time, size_hint_x=2))
                 self.ids.account_list.add_widget(grid)
 
-    def add_user(self, email, password, access):
-        #Stringify
-        email = str(email)
-        password = str(password)
-        access = int(access)
+    def add_user(self, requestType="Submit"):
+        email = str(self.ids.edit_email.text)
+        password = str(self.ids.edit_password.text)
+        access = int(self.ids.edit_access.text)
 
-        if not validate_string(email, password, str(access)):
-            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        if not check_unique_email(email, "New"):
-            self.main_screen.CMessageBox('Error', 'Email already exists.', 'Message')
-            return
-        if access < 0 or access > 3:
-            self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
-            return
-        if access < App.get_running_app().get_accessLV():
-            self.main_screen.CMessageBox('Error', 'You cannot add a user with higher access level than yours.', 'Message')
-            return
-        if confirm_box('Add User', 'Are you sure you want to add this user?') == 'yes':
+        if requestType == "Validate":
+            if not validate_string(email, password, str(access)):
+                self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            if not check_unique_email(email, "New"):
+                self.main_screen.CMessageBox('Error', 'Email already exists.', 'Message')
+                return
+            if access < 0 or access > 3:
+                self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
+                return
+            if access < App.get_running_app().get_accessLV():
+                self.main_screen.CMessageBox('Error', 'You cannot add a user with higher access level than yours.', 'Message')
+                return
+            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to add this user?', 'Confirm', 'Yes', 'No', self.add_user)
+        if requestType == "Submit":
             add_user(email, password, access)
             self.main_screen.CMessageBox('Success', 'User added successfully.', 'Message')
             self.populate_users(load_users(0))
 
-    def edit_user(self, email, password, access):
-        #Stringify
-        email = str(email)
-        password = str(password)
-        access = str(access)
+    def edit_user(self, requestType="Submit"):
+        email = str(self.ids.edit_email.text)
+        password = str(self.ids.edit_password.text)
+        access = int(self.ids.edit_access.text)
         print(email, password, access)
-
-        if not validate_string(email, password, access):
-            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-            return
-        # if access is 0 or 1
-        if int(access) < 0 or int(access) > 3:
-            self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
-            return
-        if int(access) < App.get_running_app().get_accessLV():
-            self.main_screen.CMessageBox('Error', 'You cannot edit a user with higher access level than yours.', 'Message')
-            return
-        if confirm_box('Edit User', 'Are you sure you want to edit this user?') == 'yes':
+        if requestType == "Validate":
+            if not validate_string(email, password, access):
+                self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+                return
+            # if access is 0 or 1
+            if int(access) < 0 or int(access) > 3:
+                self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
+                return
+            if int(access) < App.get_running_app().get_accessLV():
+                self.main_screen.CMessageBox('Error', 'You cannot edit a user with higher access level than yours.', 'Message')
+                return
+            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to edit this user?', 'Confirm', 'Yes', 'No', self.edit_user)
+        if requestType == "Submit":
             if edit_user(email, password, access):
                 self.main_screen.CMessageBox('Success', 'User edited successfully.', 'Message')
-                self.populate_users(load_users(0))
                 if email == App.get_running_app().get_accessName():
                     App.get_running_app().set_accessLV(access)
+                self.populate_users(load_users(0))
 
     def sort_users(self, users, header, instance):
         if header == 'Email' or header == 'Email [D]':
@@ -175,10 +176,14 @@ class AdminControls(GridLayout):
             else:
                 self.ids.edit_last_login.text = SimplifyTime(user['last_login'])
 
-    def delete_user(self, email):
+    def delete_user(self, requestType="Submit"):
+        email = str(self.ids.edit_email.text)
         if email is not None:
             if App.get_running_app().get_accessLV() <= getAccessLV(email):
-                if confirm_box('Delete User', 'Are you sure you want to delete this user?') == 'yes':
+                if requestType == "Validate":
+                    self.main_screen.CMessageBox('Confirm', 'Are you sure you want to delete this user?', 'Confirm',
+                                              'Yes', 'No', self.delete_user)
+                if requestType == "Submit":
                     delete_user(email)
                     self.main_screen.CMessageBox('Success', 'User deleted successfully.', 'Message')
                     self.populate_users(load_users(0))

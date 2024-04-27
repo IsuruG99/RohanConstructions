@@ -118,6 +118,7 @@
                                         hint_text: 'Email'
                                         size_hint: 0.8, 1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        disabled: True
 
                                 CLabel:
                                         text: 'Status'
@@ -162,14 +163,14 @@
                         CButton2:
                                 size_hint: 0.3, 1
                                 text: 'Add'
-                                on_release: root.add_user(edit_email.text, edit_password.text, edit_access.text)
+                                on_release: root.add_user(requestType="Validate")
 
                         CButton2:
                                 size_hint: 0.3, 1
                                 text: 'Edit'
-                                on_release: root.edit_user(edit_email.text, edit_password.text, edit_access.text)
+                                on_release: root.edit_user(requestType="Validate")
 
                         CButton2:
                                 size_hint: 0.3, 1
                                 text: 'Delete'
-                                on_release: root.delete_user(edit_email.text)
+                                on_release: root.delete_user(requestType="Validate")

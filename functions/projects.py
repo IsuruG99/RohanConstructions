@@ -40,6 +40,8 @@ def load_projects(status=2):
     # Retrieve all projects as a list of dictionaries
     projects = []
     for project_id, project in ref.get().items():
+        if project_id == 'pjZero':
+            continue
         project['id'] = project_id
         projects.append(project)
 
@@ -134,6 +136,8 @@ def load_manpower():
     # Retrieve all manpower as a list of dictionaries
     manpower_list = []
     for manpower_id, manpower in ref.get().items():
+        if manpower_id == 'empZero':
+            continue
         manpower['id'] = manpower_id
         manpower_list.append(manpower)
 

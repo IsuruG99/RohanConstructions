@@ -50,6 +50,7 @@ BrainStorming :
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
 
 To-Do List:
+- Get Refs will crash without internet, implement blank return
 - Supplier & Client Overview structure (Popup made, format and structure unknown)
 - Access Controls V3+ (Postponed till every function complete)
 - Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
@@ -65,6 +66,7 @@ Best moments in project(Coding) so far:
 - Learning Kivy's dynamics
 - Creating the dropdown Textbox custom widget
 - Creating the custom confirm message box. (Pretty much the hardest obstacle in the project, did it recursively instead).
+- Patient Zero for every node in firebase
 - Access Control Structure & Admin Panel
 - Figuring out the resource assignments (i did not expect it to require + -)
 - The way the project completion will work, and how it will connect to the finance function

@@ -11,6 +11,8 @@ def load_resources(status=0):
     # Retrieve all resources as a list of dictionaries
     res = []
     for res_id, resource in ref.get().items():
+        if res_id == 'resourceZero':
+            continue
         resource['id'] = res_id
         res.append(resource)
 

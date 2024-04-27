@@ -6,20 +6,26 @@ from utils import *
 def load_manpower(status=0):
     # Get reference from database
     ref = get_ref('manpower')
+    # Count ref.get(), make sure its above 1 item
+    if ref is not None:
+        # Retrieve all manpower as a list of dictionaries
+        manpower = []
+        for emp_id, employee in ref.get().items():
+            if emp_id == 'empZero':
+                continue
+            employee['id'] = emp_id
+            manpower.append(employee)
 
-    # Retrieve all manpower as a list of dictionaries
-    manpower = []
-    for emp_id, employee in ref.get().items():
-        employee['id'] = emp_id
-        manpower.append(employee)
+        if status == 0:
+            manpower = manpower
+        elif status == 1:
+            manpower = [employee for employee in manpower if employee['employment_status'] == 'Permanent']
+        elif status == 2:
+            manpower = [employee for employee in manpower if employee['employment_status'] == 'Temp']
 
-    if status == 0:
-        manpower = manpower
-    elif status == 1:
-        manpower = [employee for employee in manpower if employee['employment_status'] == 'Permanent']
-    elif status == 2:
-        manpower = [employee for employee in manpower if employee['employment_status'] == 'Temp']
-
+    else:
+        manpower = [{'email': 'None', 'employment_status': 'None', 'name': 'None', 'phone_number': 'None',
+                     'project_assignments': [], 'role': 'None', 'salary': 'None'}]
     return manpower
 
 

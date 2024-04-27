@@ -1,5 +1,11 @@
 {
   "clients": {
+    "clientZero": {
+        "address": "None",
+        "email": "None",
+        "name": "None",
+        "phone_number": "None"
+    },
     "-NuXKpBexRFYlH3d3oUh": {
       "address": "MAS Holdings, Colombo 03",
       "email": "mas@hotmail.com",
@@ -32,6 +38,16 @@
     }
   },
   "finance": {
+    "logZero":{
+      "amount": "None",
+        "category": "None",
+        "date": "None",
+        "description": "None",
+        "project_name": "None",
+        "related_entity": "None",
+        "type": "None",
+        "user": "None"
+    },
     "-NuIZAu01atM8IVxK3ih": {
       "amount": "200000",
       "category": "Contract",
@@ -84,6 +100,15 @@
     }
   },
   "manpower": {
+  "empZero": {
+      "email": "None",
+      "employment_status": "None",
+      "name": "None",
+      "phone_number": "None",
+      "project_assignments": [],
+      "role": "None",
+      "salary": "None"
+    },
     "-NuVw6msFd_YvRuYty78": {
       "email": "alicia333@yahoo.mail",
       "employment_status": "Permanent",
@@ -144,6 +169,15 @@
     }
   },
   "projects": {
+    "pjZero": {
+      "budget": "None",
+      "client_name": "None",
+      "description": "None",
+      "end_date": "None",
+      "name": "None",
+      "start_date": "None",
+      "status": "None"
+    },
     "-Nr3dnCefKCWCiHhBo02": {
       "budget": "10000",
       "client_name": "ABC Company",
@@ -191,6 +225,14 @@
     }
   },
   "resources": {
+    "resourceZero": {
+      "name": "None",
+      "quantity": "None",
+      "resource_assignments": [],
+      "status": "None",
+      "supplier_name": "None",
+      "unit_cost": "None"
+    },
     "-NuWTjrk5gQJ5P2HEftc": {
       "name": "Stone",
       "quantity": "15",
@@ -248,6 +290,15 @@
     }
   },
   "suppliers": {
+    "supplierZero": {
+      "address": "None",
+      "business": "None",
+      "contactNo": "None",
+      "email": "None",
+      "startDealing": "None",
+      "supplierLevel": "None",
+      "supplierName": "None"
+    },
     "-NuUNGXzN71FHLunmSt1": {
       "address": "No1,MerchantRoad,Kelaniya",
       "business": "ABC Hardware",

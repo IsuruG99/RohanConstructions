@@ -9,6 +9,8 @@ def load_all_finances(status=0):
     # Retrieve all finance logs as a list of dictionaries
     finances = []
     for fin_id, finance in ref.get().items():
+        if fin_id == 'logZero':
+            continue
         finance['id'] = fin_id
         finances.append(finance)
 

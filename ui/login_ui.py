@@ -19,25 +19,19 @@ from utils import *
 
 
 class LogInPopUp(GridLayout):
-    def __init__(self, mainScreen, **kwargs):
+    def __init__(self, mainScreen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.mainScreen = mainScreen
 
-    def testfunctest(self,stat=0):
-        print("button test")
-
-    def login(self, email, password):
+    def login(self, email: str, password: str) -> None:
         email = str(email)
         password = str(password)
         # Validate inputs
         if not validate_string(email, password):
-            # CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
-            # CMessageBox test, we call the Confirm this time, and call the test function if btn1 is clicked.
-            self.mainScreen.CMessageBox(title='Confirm', content='Are you sure you want say yes?', context='Confirm', btn1='Yes', btn2='No', btn1click=self.testfunctest)
-            return
+            self.mainScreen.CMessageBox(title='Error', message='All fields are required.', type='Message')
 
-        # if not validate_email(email):
-        #  message_box('Error', 'Invalid email address.')
+        if not validate_email(email):
+            self.mainScreen.CMessageBox(title='Error', message='Invalid email.', type='Message')
 
         if checkCredentials(email, password):
             app = App.get_running_app()
@@ -50,17 +44,17 @@ class LogInPopUp(GridLayout):
         else:
             self.mainScreen.CMessageBox('Error', 'Invalid email or password.', 'Message')
 
-    def dismiss_popup(self):
+    def dismiss_popup(self) -> None:
         self.popup.dismiss()
 
 
 class AdminControls(GridLayout):
-    def __init__(self, main_screen, **kwargs):
+    def __init__(self, main_screen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.main_screen = main_screen
         self.populate_users(load_users(0))
 
-    def populate_users(self, users=load_users(0), headers=None):
+    def populate_users(self, users: list = load_users(0), headers: list = None) -> None:
         self.ids.current_user.text = ''
         self.ids.current_user.text = 'Current User: ' + App.get_running_app().get_accessName()
         self.ids.account_list.clear_widgets()
@@ -76,7 +70,7 @@ class AdminControls(GridLayout):
                                                         on_release=partial(self.sort_users, users,
                                                                            header)))
         for user in users:
-            #If user access is 1, do not show access 0 users
+            # If user access is 1, do not show access 0 users
             if user["access"] == 0 and App.get_running_app().get_accessLV() == 1:
                 continue
             else:
@@ -102,7 +96,7 @@ class AdminControls(GridLayout):
                 grid.add_widget(CLabel(text=time, size_hint_x=2))
                 self.ids.account_list.add_widget(grid)
 
-    def add_user(self, requestType="Submit"):
+    def add_user(self, requestType: str = "Submit") -> None:
         email = str(self.ids.edit_email.text)
         password = str(self.ids.edit_password.text)
         access = int(self.ids.edit_access.text)
@@ -118,15 +112,17 @@ class AdminControls(GridLayout):
                 self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
                 return
             if access < App.get_running_app().get_accessLV():
-                self.main_screen.CMessageBox('Error', 'You cannot add a user with higher access level than yours.', 'Message')
+                self.main_screen.CMessageBox('Error', 'You cannot add a user with higher access level than yours.',
+                                             'Message')
                 return
-            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to add this user?', 'Confirm', 'Yes', 'No', self.add_user)
+            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to add this user?', 'Confirm', 'Yes', 'No',
+                                         self.add_user)
         if requestType == "Submit":
             add_user(email, password, access)
             self.main_screen.CMessageBox('Success', 'User added successfully.', 'Message')
             self.populate_users(load_users(0))
 
-    def edit_user(self, requestType="Submit"):
+    def edit_user(self, requestType: str = "Submit") -> None:
         email = str(self.ids.edit_email.text)
         password = str(self.ids.edit_password.text)
         access = int(self.ids.edit_access.text)
@@ -140,9 +136,11 @@ class AdminControls(GridLayout):
                 self.main_screen.CMessageBox('Error', 'Invalid access level.', 'Message')
                 return
             if int(access) < App.get_running_app().get_accessLV():
-                self.main_screen.CMessageBox('Error', 'You cannot edit a user with higher access level than yours.', 'Message')
+                self.main_screen.CMessageBox('Error', 'You cannot edit a user with higher access level than yours.',
+                                             'Message')
                 return
-            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to edit this user?', 'Confirm', 'Yes', 'No', self.edit_user)
+            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to edit this user?', 'Confirm', 'Yes', 'No',
+                                         self.edit_user)
         if requestType == "Submit":
             if edit_user(email, password, access):
                 self.main_screen.CMessageBox('Success', 'User edited successfully.', 'Message')
@@ -150,7 +148,7 @@ class AdminControls(GridLayout):
                     App.get_running_app().set_accessLV(access)
                 self.populate_users(load_users(0))
 
-    def sort_users(self, users, header, instance):
+    def sort_users(self, users: list, header: str, instance) -> None:
         if header == 'Email' or header == 'Email [D]':
             users = sorted(users, key=lambda x: x['email'])
             self.populate_users(users, ['Email [A]', 'Password', 'Access', 'Status'])
@@ -164,7 +162,7 @@ class AdminControls(GridLayout):
             users = sorted(users, key=lambda x: x['access'], reverse=True)
             self.populate_users(users, ['Email', 'Password', 'Access [D]', 'Status'])
 
-    def view_user(self, user_id, instance):
+    def view_user(self, user_id: str, instance) -> None:
         if user_id is not None:
             user = get_user(user_id)
             self.ids.edit_email.text = user['email']
@@ -176,27 +174,28 @@ class AdminControls(GridLayout):
             else:
                 self.ids.edit_last_login.text = SimplifyTime(user['last_login'])
 
-    def delete_user(self, requestType="Submit"):
+    def delete_user(self, requestType: str = "Submit") -> None:
         email = str(self.ids.edit_email.text)
         if email is not None:
             if App.get_running_app().get_accessLV() <= getAccessLV(email):
                 if requestType == "Validate":
                     self.main_screen.CMessageBox('Confirm', 'Are you sure you want to delete this user?', 'Confirm',
-                                              'Yes', 'No', self.delete_user)
+                                                 'Yes', 'No', self.delete_user)
                 if requestType == "Submit":
                     delete_user(email)
                     self.main_screen.CMessageBox('Success', 'User deleted successfully.', 'Message')
                     self.populate_users(load_users(0))
             else:
-                self.main_screen.CMessageBox('Error', 'You cannot delete a user with higher access level than yours.', 'Message')
+                self.main_screen.CMessageBox('Error', 'You cannot delete a user with higher access level than yours.',
+                                             'Message')
         else:
             self.main_screen.CMessageBox('Error', 'Invalid user.', 'Message')
 
-    def btn_click(self, instance):
+    def btn_click(self, instance) -> None:
         txt = instance.text
         if txt == 'Log Out':
             self.main_screen.openLogPopup('LogOut')
             self.dismiss_popup(self.popup)
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()

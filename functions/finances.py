@@ -2,7 +2,7 @@ import database
 from utils import message_box
 
 
-def load_all_finances(status=0):
+def load_all_finances(status: int = 0) -> list:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -25,7 +25,7 @@ def load_all_finances(status=0):
     return finances
 
 
-def get_log(fin_id):
+def get_log(fin_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -35,7 +35,8 @@ def get_log(fin_id):
     return finance
 
 
-def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category, user="None"):
+def edit_log(fin_id: str, fin_type: str, amount: str, date: str, desc: str, entity: str, project: str, category: str,
+             user: str = "None") -> bool:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -51,14 +52,14 @@ def edit_log(fin_id, fin_type, amount, date, desc, entity, project, category, us
             'category': category,
             'user': user
         })
+        return True
     else:
         message_box('Error', 'Failed to update log: "finances" reference not found.')
-
-    print("Log updated successfully.")
-    return True
+        return False
 
 
-def add_log(fin_type, amount, date, desc, entity, project, category, user="None"):
+def add_log(fin_type: str, amount: str, date: str, desc: str, entity: str, project: str, category: str,
+            user: str = "None") -> bool:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
@@ -75,23 +76,20 @@ def add_log(fin_type, amount, date, desc, entity, project, category, user="None"
             'category': category,
             'user': user
         })
-
+        return True
     else:
         message_box('Error', 'Failed to add log: "finances" reference not found.')
-
-    print("Log added successfully.")
-    return True
+        return False
 
 
-def delete_log(fin_id):
+def delete_log(fin_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
     # Delete the log
     if ref is not None:
         ref.child(fin_id).delete()
+        return True
     else:
         message_box('Error', 'Failed to delete log: "finances" reference not found.')
-
-    print("Log deleted successfully.")
-    return True
+        return False

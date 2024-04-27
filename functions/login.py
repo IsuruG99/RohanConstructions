@@ -6,7 +6,7 @@ from utils import message_box
 
 # check if the user is valid
 
-def checkCredentials(email, password):
+def checkCredentials(email: str, password: str) -> bool:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -16,7 +16,7 @@ def checkCredentials(email, password):
     return False
 
 
-def getAccessLV(email):
+def getAccessLV(email: str) -> int:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -26,7 +26,7 @@ def getAccessLV(email):
     return False
 
 
-def getAccessName(email):
+def getAccessName(email: str) -> str:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -36,7 +36,7 @@ def getAccessName(email):
     return False
 
 
-def load_users(status=0):
+def load_users(status: int = 0) -> list:
     # Make a dictionary of users
     ref = database.get_ref('users')
     users = []
@@ -54,7 +54,7 @@ def load_users(status=0):
         return [user for user in users if user['access'] == 3]
 
 
-def get_user(user_id):
+def get_user(user_id: str) -> dict:
     ref = database.get_ref('users')
     user = ref.child(user_id).get()
     return user
@@ -63,7 +63,7 @@ def get_user(user_id):
 # Used when a user logs in, to store "last_login": "2024-04-12T08:00:00.000Z" format
 # to the user's data in the database
 # Get the time from current time and date on Sri Lanka.
-def update_last_login(email):
+def update_last_login(email: str) -> None:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -72,7 +72,7 @@ def update_last_login(email):
             return
 
 
-def edit_user(email, password, access):
+def edit_user(email: str, password: str, access: int) -> bool:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -86,13 +86,13 @@ def edit_user(email, password, access):
         return False
 
 
-def add_user(email, password, access):
+def add_user(email: str, password: str, access: int) -> None:
     ref = database.get_ref('users')
     ref.push({"email": email, "password": password, "access": access, "last_login": "None"})
     return
 
 
-def delete_user(email):
+def delete_user(email: str) -> bool:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
@@ -104,7 +104,7 @@ def delete_user(email):
         return False
 
 
-def check_unique_email(email, action):
+def check_unique_email(email: str, action: str) -> bool:
     if action == "New":
         ref = database.get_ref('users')
         users = ref.get()

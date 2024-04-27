@@ -10,12 +10,12 @@ from validation import *
 
 
 class AddManpower(GridLayout):
-    def __init__(self, manpower_screen, **kwargs):
+    def __init__(self, manpower_screen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.manpower_screen = manpower_screen
         self.validCheck = 0
 
-    def add_employee(self, requestType="Submit"):
+    def add_employee(self, requestType: str = "Submit") -> None:
         # Stringify
         name = str(self.ids.addEmp_name.text)
         email = str(self.ids.addEmp_email.text)
@@ -35,7 +35,8 @@ class AddManpower(GridLayout):
             if not validate_mobileNo(phone_number):
                 self.manpower_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
                 return
-            self.manpower_screen.CMessageBox('Add Employee', str('Are you sure you want to add employee ' + name + '?'), 'Confirm', 'Yes', 'No', self.add_employee)
+            self.manpower_screen.CMessageBox('Add Employee', str('Are you sure you want to add employee ' + name + '?'),
+                                             'Confirm', 'Yes', 'No', self.add_employee)
             self.validCheck = 1
         if requestType == "Submit" and self.validCheck == 1:
             if add_employee(name, role, email, phone_number, status, [""], salary):
@@ -49,14 +50,14 @@ class AddManpower(GridLayout):
 
 
 class ViewManpower(GridLayout):
-    def __init__(self, manpower_screen, emp_id, **kwargs):
+    def __init__(self, manpower_screen: Screen, emp_id: str, **kwargs):
         super().__init__(**kwargs)
         self.emp_id = emp_id
         self.manpower_screen = manpower_screen
         self.populateEmp()
         self.validCheck = 0
 
-    def populateEmp(self):
+    def populateEmp(self) -> None:
         emp = get_employee(self.emp_id)
 
         self.ids.viewEmp_name.text = emp["name"]
@@ -73,20 +74,20 @@ class ViewManpower(GridLayout):
                 grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
                 grid.add_widget(CLabel(text=project, size_hint_x=0.8))
                 grid.add_widget(
-                    Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True,
+                    Button(text='X', background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp',
+                           bold=True,
                            font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
                 self.ids.viewEmp_projects.add_widget(grid)
 
-    def reload(self, project_name, action, instance):
+    def reload(self, project_name: Screen, action: str, instance) -> None:
         print(project_name, action)
         project_assignment(self.emp_id, project_name, action)
         # Clear all widgets from viewEmp_projects
         self.ids.viewEmp_projects.clear_widgets()
         self.populateEmp()
 
-    def edit_employee(self, requestType="Submit"):
-        # Project assignments is a list of projects
-        # viewEmp_name.text, viewEmp_email.text, viewEmp_phone.text, viewEmp_role.text, viewEmp_status.text, viewEmp_salary.text
+    def edit_employee(self, requestType: str = "Submit") -> None:
+        # Project assignments is a list of projects, not validating it
         # Stringify inputs
         name = str(self.ids.viewEmp_name.text)
         email = str(self.ids.viewEmp_email.text)
@@ -106,7 +107,8 @@ class ViewManpower(GridLayout):
             if not validate_mobileNo(phone_number):
                 self.manpower_screen.CMessageBox('Error', 'Invalid Mobile No.', 'Message')
                 return
-            self.manpower_screen.CMessageBox('Edit Employee', 'Are you sure you want to edit employee ' + name + '?', 'Confirm', 'Yes', 'No', self.edit_employee)
+            self.manpower_screen.CMessageBox('Edit Employee', 'Are you sure you want to edit employee ' + name + '?',
+                                             'Confirm', 'Yes', 'No', self.edit_employee)
             self.validCheck = 1
         if requestType == "Submit":
             if self.validCheck == 1:
@@ -119,10 +121,10 @@ class ViewManpower(GridLayout):
                     self.manpower_screen.CMessageBox('Error', 'Failed to edit Employee.', 'Message')
                     self.validCheck = 0
 
-    def load_projects(self):
+    def load_projects(self) -> list:
         return load_project_names()
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss
 
 
@@ -132,7 +134,7 @@ class ManpowerScreen(Screen):
         self.populate_manpower(load_manpower(0))
         self.dempID = None
 
-    def populate_manpower(self, employees=load_manpower(0), headers=None):
+    def populate_manpower(self, employees: list = load_manpower(0), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView
         self.ids.manpower_list.clear_widgets()
         self.ids.manpower_headers.clear_widgets()
@@ -142,8 +144,9 @@ class ManpowerScreen(Screen):
             headers = ['Name', 'Role', 'Email', '', '']
         size_hints = [0.3, 0.2, 0.3, 0.1, 0.1]
         for header in headers:
-            self.ids.manpower_headers.add_widget(CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
-                                                         on_release=partial(self.sort_manpower, employees, header)))
+            self.ids.manpower_headers.add_widget(
+                CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
+                        on_release=partial(self.sort_manpower, employees, header)))
 
         for emp in employees:
             grid = GridLayout(cols=5, spacing=10, size_hint_y=None, height=40)
@@ -161,7 +164,7 @@ class ManpowerScreen(Screen):
             grid.emp = emp
             self.ids.manpower_list.add_widget(grid)
 
-    def sort_manpower(self, manpower, header, instance):
+    def sort_manpower(self, manpower: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             manpower = sorted(manpower, key=lambda x: x['name'])
             self.populate_manpower(manpower, ['Name [A]', 'Role', 'Email', '', ''])
@@ -181,7 +184,7 @@ class ManpowerScreen(Screen):
             manpower = sorted(manpower, key=lambda x: x['email'], reverse=True)
             self.populate_manpower(manpower, ['Name', 'Role', 'Email [D]', '', ''])
 
-    def search_manpower(self, search_text):
+    def search_manpower(self, search_text: str) -> None:
         if not search_text == '':
             manpower = load_manpower(0)
             results = []
@@ -192,22 +195,23 @@ class ManpowerScreen(Screen):
                     results.append(emp)
             self.populate_manpower(results)
 
-    def view_emp(self, emp_id, instance):
+    def view_emp(self, emp_id: str, instance) -> None:
         viewEmp = CPopup(title='View Employee', content=ViewManpower(self, emp_id), size_hint=(0.6, 0.8))
         viewEmp.open()
         viewEmp.content.popup = viewEmp
 
-    def add_emp(self):
+    def add_emp(self) -> None:
         addEmp = CPopup(title='Add Employee', content=AddManpower(self), size_hint=(0.5, 0.8))
         addEmp.open()
         addEmp.content.popup = addEmp
 
-    def delete_employee(self, emp_id, instance):
+    def delete_employee(self, emp_id: str, instance) -> None:
         self.dempID = emp_id
-        self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm', 'Yes', 'No',
+        self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm',
+                         'Yes', 'No',
                          self.confirmedDelete)
 
-    def confirmedDelete(self,requestType="Validated"):
+    def confirmedDelete(self, requestType: str = "Validated") -> None:
         if requestType == "Validated":
             if delete_employee(self.dempID):
                 self.CMessageBox('Success', 'Employee deleted successfully.', 'Message')
@@ -221,17 +225,20 @@ class ManpowerScreen(Screen):
             print("illegal action")
             self.dempID = None
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
+                    btn1: str = 'Ok', btn2: str = 'Cancel', btn1click = None, btn2click = None):
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
             msgPopUp.open()
             msgPopUp.content.popup = msgPopUp
         if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
-    def btn_click(self, instance):
+    def btn_click(self, instance) -> None:
         text = instance.text
         if text == 'Back':
             self.parent.current = 'main'
@@ -248,5 +255,5 @@ class ManpowerScreen(Screen):
                 self.populate_manpower(load_manpower(0))
                 self.ids.manpower_filter.text = 'Filter: All'
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss

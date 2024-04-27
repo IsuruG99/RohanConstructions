@@ -14,14 +14,14 @@ from validation import *
 
 
 class ViewResource(GridLayout):
-    def __init__(self, res_screen, res_id, **kwargs):
+    def __init__(self, res_screen: Screen, res_id: str, **kwargs):
         super().__init__(**kwargs)
         self.res_id = res_id
         self.populate_view()
         self.res_screen = res_screen
         self.validCheck = 0
 
-    def populate_view(self):
+    def populate_view(self) -> None:
         # Get the resource data from the DB
         res = get_res(self.res_id)
         # Assign
@@ -31,8 +31,7 @@ class ViewResource(GridLayout):
         self.ids.viewPop_supplier.text = res["supplier_name"]
         self.ids.viewPop_cost.text = str(res["unit_cost"])
 
-        # we have this in JSON for firebase, 'resource_assignments': [{"amount": "", "project": ""}]
-        # we need to parse this and display it in the ScrollView named viewRes_projects
+        # res assignment format in DB, ('resource_assignments': [{"amount": "", "project": ""}])
         for assignment in res["resource_assignments"]:
             grid = GridLayout(cols=3, spacing=10, size_hint_y=None, height=50)
             grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.4))
@@ -42,7 +41,7 @@ class ViewResource(GridLayout):
                                                                        assignment["project"], "Remove")))
             self.ids.viewRes_projects.add_widget(grid)
 
-    def reload(self, amount, project_name, action, instance):
+    def reload(self, amount: str, project_name: str, action: str, instance) -> None:
         if project_name == "":
             self.res_screen.CMessageBox('Error', 'Project Name is required.', 'Message')
             return
@@ -57,7 +56,7 @@ class ViewResource(GridLayout):
                 self.ids.viewRes_projects.clear_widgets()
                 self.populate_view()
 
-    def editRes(self, requestType="Submit"):
+    def editRes(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
         name = str(self.ids.viewPop_name.text)
         qty = str(self.ids.viewPop_qty.text)
@@ -86,7 +85,7 @@ class ViewResource(GridLayout):
                     self.res_screen.ids.resource_filter.text = 'Filter: All'
                     self.dismiss_popup(self.popup)
 
-    def deleteRes(self, requestType="Submit"):
+    def deleteRes(self, requestType: str = "Submit") -> None:
         # Send res_id to resources.py and it will delete the entity
         if requestType == "Validate":
             self.res_screen.CMessageBox('Delete Resource', 'Are you sure you want to delete this resource?', 'Confirm',
@@ -102,18 +101,18 @@ class ViewResource(GridLayout):
             self.res_screen.ids.resource_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
 
-    def load_suppliers(self):
+    def load_suppliers(self) -> list:
         return load_supplier_names()
 
-    def load_projects(self):
+    def load_projects(self) -> list:
         return load_project_names()
 
-    def reportRes(self):
+    def reportRes(self) -> None:
         reportPop = CPopup(title='Report Resource', content=ReportResource(self.res_id), size_hint=(0.5, 0.8))
         reportPop.open()
         reportPop.content.popup = reportPop
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
@@ -124,7 +123,7 @@ class ReportResource(GridLayout):
         self.res_id = res_id
         self.populate_report()
 
-    def populate_report(self):
+    def populate_report(self) -> None:
         res = get_res(self.res_id)
         self.ids.reportRes_name.text = res["name"]
         self.ids.reportRes_qty.text = str(res["quantity"])
@@ -139,7 +138,7 @@ class ReportResource(GridLayout):
                 grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
                 self.ids.assigned_projects.add_widget(grid)
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
@@ -150,7 +149,7 @@ class ResourcesScreen(Screen):
         self.populate_res(load_resources(0))
 
     # Populate the ScrollView with the resources
-    def populate_res(self, resources=load_resources(0), headers=None):
+    def populate_res(self, resources: list = load_resources(0), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView
         self.ids.resources_list.clear_widgets()
         self.ids.resource_headers.clear_widgets()
@@ -177,8 +176,9 @@ class ResourcesScreen(Screen):
             grid.add_widget(CLabel(text=str(res["quantity"]), size_hint_x=0.1))
             self.ids.resources_list.add_widget(grid)
 
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel',
-                    btn1click=None, btn2click=None):
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
+                    btn1: str = 'Ok', btn2: str = 'Cancel',
+                    btn1click=None, btn2click=None) -> None:
         if context == 'Message':
             msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
                               size_hint=(0.35, 0.3))
@@ -190,7 +190,7 @@ class ResourcesScreen(Screen):
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
-    def sort_resources(self, resources, header, instance):
+    def sort_resources(self, resources: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             resources = sorted(resources, key=lambda x: x['name'])
             self.populate_res(resources, ['Name [A]', 'Status', 'Supplier', 'Stock'])
@@ -216,7 +216,7 @@ class ResourcesScreen(Screen):
             resources = sorted(resources, key=lambda x: x['quantity'], reverse=True)
             self.populate_res(resources, ['Name', 'Status', 'Supplier', 'Stock [D]'])
 
-    def search_res(self, search_text):
+    def search_res(self, search_text: str) -> None:
         if not search_text == '':
             resources = load_resources(0)
             results = []
@@ -226,45 +226,46 @@ class ResourcesScreen(Screen):
             self.populate_res(results)
 
     # Triggers the ViewResource PopUp Window
-    def view_res(self, res_id, instance):
+    def view_res(self, res_id: str, instance) -> None:
         viewPop = CPopup(title='View Resource', content=ViewResource(self, res_id), size_hint=(0.55, 0.9))
         viewPop.open()
         viewPop.content.popup = viewPop
 
     # Triggers the AddResourcePopup Window
-    def add_resource_popup(self):
+    def add_resource_popup(self) -> None:
         addPop = CPopup(title='Add Resource', content=AddResource(self), size_hint=(0.5, 0.8))
         addPop.open()
         addPop.content.popup = addPop
 
     # Button Click goes back to Main UI
-    def btn_click(self, instance):
-        if instance.text == 'Back':
+    def btn_click(self, instance) -> None:
+        txt = instance.text
+        if txt == 'Back':
             self.parent.current = 'main'
-        elif instance.text == 'Add':
+        elif txt == 'Add':
             self.add_resource_popup()
-        elif instance.text == 'Filter: All' or instance.text == 'Filter: In Stock' or instance.text == 'Filter: Out of Stock':
-            if instance.text == 'Filter: All':
+        elif txt == 'Filter: All' or txt == 'Filter: In Stock' or txt == 'Filter: Out of Stock':
+            if txt == 'Filter: All':
                 self.ids.resource_filter.text = 'Filter: In Stock'
                 self.populate_res(load_resources(1))
-            elif instance.text == 'Filter: In Stock':
+            elif txt == 'Filter: In Stock':
                 self.ids.resource_filter.text = 'Filter: Out of Stock'
                 self.populate_res(load_resources(2))
-            elif instance.text == 'Filter: Out of Stock':
+            elif txt == 'Filter: Out of Stock':
                 self.ids.resource_filter.text = 'Filter: All'
                 self.populate_res(load_resources(3))
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
 class AddResource(GridLayout):
-    def __init__(self, res_screen, **kwargs):
+    def __init__(self, res_screen: Screen, **kwargs):
         super().__init__(**kwargs)
         self.res_screen = res_screen
         self.validCheck = 0
 
-    def add_resource(self, requestType="Submit"):
+    def add_resource(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
         name = str(self.ids.addRes_name.text)
         qty = str(self.ids.addRes_qty.text)
@@ -284,7 +285,7 @@ class AddResource(GridLayout):
                 self.res_screen.CMessageBox('Error', 'Invalid Cost.', 'Message')
                 return
             self.res_screen.CMessageBox('Add Resource', 'Are you sure you want to add this resource?', 'Confirm',
-                                             'Yes', 'No', self.add_resource)
+                                        'Yes', 'No', self.add_resource)
             self.validCheck = 1
         elif requestType == "Submit":
             if self.validCheck == 1:
@@ -297,8 +298,8 @@ class AddResource(GridLayout):
                 else:
                     self.res_screen.CMessageBox('Error', 'Failed to add resource.', 'Message')
 
-    def load_suppliers(self):
+    def load_suppliers(self) -> list:
         return load_supplier_names()
 
-    def dismiss_popup(self, instance):
+    def dismiss_popup(self, instance) -> None:
         instance.dismiss()

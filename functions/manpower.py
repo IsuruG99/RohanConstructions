@@ -3,7 +3,7 @@ from utils import *
 
 
 # Load manpower function
-def load_manpower(status=0):
+def load_manpower(status: int = 0) -> list:
     # Get reference from database
     ref = get_ref('manpower')
     # Count ref.get(), make sure its above 1 item
@@ -30,7 +30,7 @@ def load_manpower(status=0):
 
 
 # Get a single employee function
-def get_employee(emp_id):
+def get_employee(emp_id: str) -> dict:
     # Get a reference to DB
     ref = get_ref('manpower')
 
@@ -41,7 +41,8 @@ def get_employee(emp_id):
 
 
 # Update employee function
-def update_employee(emp_id, name, role, email, phone_number, employment_status, salary):
+def update_employee(emp_id: str, name: str, role: str, email: str, phone_number: str, employment_status: str,
+                    salary: str) -> bool:
     # Get a reference to DB
     ref = get_ref('manpower')
 
@@ -64,7 +65,7 @@ def update_employee(emp_id, name, role, email, phone_number, employment_status, 
 
 
 # Delete employee function
-def delete_employee(emp_id):
+def delete_employee(emp_id: str) -> bool:
     # Get a reference to DB
     ref = get_ref('manpower')
 
@@ -78,7 +79,7 @@ def delete_employee(emp_id):
         return False
 
 
-def project_assignment(emp_id, project_name, action):
+def project_assignment(emp_id: str, project_name: str, action: str) -> bool:
     ref = get_ref('manpower')
     assignments = ref.child(emp_id).child('project_assignments').get()
     print(assignments)
@@ -117,7 +118,8 @@ def project_assignment(emp_id, project_name, action):
 
 
 # Add employee function
-def add_employee(name, role, email, phone_number, employment_status, project_assignments, salary):
+def add_employee(name: str, role: str, email: str, phone_number: str, employment_status: str, project_assignments: list,
+                 salary: str) -> bool:
     # Get a reference to the 'manpower' collection in the database
     ref = get_ref('manpower')
 

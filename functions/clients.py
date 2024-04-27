@@ -1,9 +1,8 @@
-import database
 from utils import *
 
 
 # add a new client to the database
-def add_client(name, phone_number, email, address):
+def add_client(name: str, phone_number: str, email: str, address: str) -> bool:
     # generate a new unique key for the client easily manipulate data
     ref = database.get_ref('clients')
 
@@ -25,7 +24,7 @@ def add_client(name, phone_number, email, address):
 
 
 # get all clients from the database
-def load_clients(status=0):
+def load_clients(status: int = 0) -> list:
     ref = database.get_ref('clients')
 
     clients = []
@@ -42,7 +41,7 @@ def load_clients(status=0):
 
 
 # get client by client.id
-def get_client(client_id):
+def get_client(client_id: str) -> dict:
     ref = database.get_ref('clients')
 
     client = ref.child(client_id).get()
@@ -51,7 +50,7 @@ def get_client(client_id):
 
 
 # updating existing client details to the database
-def update_client(client_id, name, phone_number, email, address):
+def update_client(client_id: str, name: str, phone_number: str, email: str, address: str) -> bool:
     ref = database.get_ref('clients')
 
     if ref is not None:
@@ -69,7 +68,7 @@ def update_client(client_id, name, phone_number, email, address):
 
 
 # delete a client by client_id
-def delete_client(client_id):
+def delete_client(client_id: str) -> bool:
     ref = database.get_ref('clients')
 
     if ref is not None:
@@ -82,7 +81,7 @@ def delete_client(client_id):
 
 
 # For other functions, a list of client names
-def load_client_names():
+def load_client_names() -> list:
     ref = database.get_ref('clients')
 
     clients = []

@@ -33,7 +33,7 @@ class MainScreen(Screen):
         super(MainScreen, self).__init__(**kwargs)
         self.loggedIn()
 
-    def btn_click(self, instance):
+    def btn_click(self, instance) -> None:
         perms = App.get_running_app().get_accessLV()
         if instance.text == 'LogOut' or instance.text == 'LogIn':
             self.openLogPopup(instance.text)
@@ -56,28 +56,25 @@ class MainScreen(Screen):
             elif instance.text == 'Admin':
                 self.openAdminControls()
 
-    def testbtnClick(self, instance):
-        print("Test Button Clicked")
-
-    def testbtn2(self, instance):
-        print("I Win")
-
-    def CMessageBox(self, title='Message', content='Message Content', context='None', btn1='Ok', btn2='Cancel', btn1click=None, btn2click=None):
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'Message',
+                    btn1: str = 'OK', btn2: str = 'Cancel', btn1click=None, btn2click=None) -> None:
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click), size_hint=(0.35, 0.3))
+            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
+                              size_hint=(0.35, 0.3))
             msgPopUp.open()
             msgPopUp.content.popup = msgPopUp
         if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click), size_hint=(0.35, 0.3))
+            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
+                              size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
-    def openAdminControls(self):
+    def openAdminControls(self) -> None:
         adminPop = CPopup(title='Admin Controls', content=AdminControls(self), size_hint=(0.5, 0.9))
         adminPop.open()
         adminPop.content.popup = adminPop
 
-    def openLogPopup(self, request):
+    def openLogPopup(self, request: str) -> None:
         if request == 'LogIn':
             logPop = CPopup(title='LogIn', content=LogInPopUp(self), size_hint=(0.5, 0.4))
             logPop.open()
@@ -97,7 +94,7 @@ class MainScreen(Screen):
         else:
             self.CMessageBox('Error', 'Invalid Request', 'Message')
 
-    def loggedIn(self, email=None):
+    def loggedIn(self, email: str = None) -> None:
         perms = App.get_running_app().get_accessLV()
         if perms is not None:
             self.ids.logBtn.text = 'LogOut'
@@ -129,22 +126,22 @@ class MainScreen(Screen):
 
 
 class MainApp(App):
-    accessLV = None
-    accessName = None
+    accessLV: int = None
+    accessName: str = None
 
-    def set_accessLV(self, level):
+    def set_accessLV(self, level) -> None:
         self.accessLV = int(level)
 
-    def get_accessLV(self):
+    def get_accessLV(self) -> int:
         return self.accessLV
 
-    def set_accessName(self, name):
+    def set_accessName(self, name: str) -> None:
         self.accessName = name
 
-    def get_accessName(self):
+    def get_accessName(self) -> str:
         return self.accessName
 
-    def build(self):
+    def build(self) -> ScreenManager:
         Window.size = (1200, 720)
         Window.clearcolor = rgba('#411f2d')
         Window.set_icon('visuals/icon.png')
@@ -163,7 +160,7 @@ class MainApp(App):
 
         return sm
 
-    def on_start(self):
+    def on_start(self) -> None:
         Window.set_title('Rohan Constructions')
 
 

@@ -1,8 +1,7 @@
-import database
 from utils import *
 
 
-def load_suppliers(status=0):
+def load_suppliers(status: int = 0) -> list:
     # Get a reference to Database
     ref = database.get_ref('suppliers')
 
@@ -27,7 +26,8 @@ def load_suppliers(status=0):
 
 
 # Adding new supplier
-def add_supplier(supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+def add_supplier(supplierName: str, business: str, contactNo: str, email: str, address: str, startDealing: str,
+                 supplierLevel: str) -> bool:
     # Get a reference to Database
     ref = database.get_ref('suppliers')
 
@@ -46,13 +46,14 @@ def add_supplier(supplierName, business, contactNo, email, address, startDealing
                 'startDealing': startDealing,
                 'supplierLevel': supplierLevel
             })
-
+        return True
     else:
         message_box('Error', 'New supplier adding fail !: "suppliers" reference not found.')
+        return False
 
 
 # Get a single supplier by ID
-def get_supplier(suppliers_id):
+def get_supplier(suppliers_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('suppliers')
 
@@ -62,7 +63,8 @@ def get_supplier(suppliers_id):
     return supplier
 
 
-def edit_supplier(suppliers_id, supplierName, business, contactNo, email, address, startDealing, supplierLevel):
+def edit_supplier(suppliers_id: str, supplierName: str, business: str, contactNo: str, email: str, address: str,
+                  startDealing: str, supplierLevel: str) -> bool:
     # Get a reference to Database
     ref = database.get_ref('suppliers')
 
@@ -83,7 +85,7 @@ def edit_supplier(suppliers_id, supplierName, business, contactNo, email, addres
         return False
 
 
-def delete_supplier(suppliers_id):
+def delete_supplier(suppliers_id: str) -> bool:
     ref = database.get_ref('suppliers')
 
     if ref is not None:
@@ -93,8 +95,9 @@ def delete_supplier(suppliers_id):
         message_box('Error', 'Failed to connect to database.')
         return False
 
+
 # For other functions, export a list of supplier names
-def load_supplier_names():
+def load_supplier_names() -> list:
     load_suppliers(0)
     supplier_names = []
     for supplier in load_suppliers(0):

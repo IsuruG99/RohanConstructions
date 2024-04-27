@@ -1,10 +1,9 @@
-import database
 from utils import *
 
 
 # Here you will write all in depth functions
 
-def load_resources(status=0):
+def load_resources(status: int = 0) -> list:
     # Get reference from database
     ref = database.get_ref('resources')
 
@@ -27,7 +26,7 @@ def load_resources(status=0):
 
 
 # Get a single Resource
-def get_res(res_id):
+def get_res(res_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('resources')
 
@@ -37,7 +36,7 @@ def get_res(res_id):
     return res
 
 
-def update_res(res_id, name, quantity, status, supplier_name, cost):
+def update_res(res_id: str, name: str, quantity: str, status: str, supplier_name: str, cost: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('resources')
 
@@ -56,7 +55,7 @@ def update_res(res_id, name, quantity, status, supplier_name, cost):
         return False
 
 
-def delete_res(res_id):
+def delete_res(res_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('resources')
 
@@ -71,7 +70,7 @@ def delete_res(res_id):
 
 
 # Add resource function
-def add_res(name, quantity, status, supplier_name, cost):
+def add_res(name: str, quantity: str, status: str, supplier_name: str, cost: str) -> bool:
     # Get a reference to the 'resources' collection in the database
     ref = database.get_ref('resources')
 
@@ -96,7 +95,7 @@ def add_res(name, quantity, status, supplier_name, cost):
         return False
 
 
-def resource_assignment(res_id, amount, project_name, action):
+def resource_assignment(res_id: str, amount: str, project_name: str, action: str) -> bool:
     ref = database.get_ref('resources')
     # json structure 'resource_assignments': [{"amount": "11", "project": "ABC"}]
     assignments = ref.child(res_id).child('resource_assignments').get()
@@ -151,7 +150,7 @@ def resource_assignment(res_id, amount, project_name, action):
 
 
 # Separate function to subtract amount from resource quantity
-def change_qty(res_id, amount, action):
+def change_qty(res_id: str, amount: str, action: str) -> bool:
     if action == "AddQty":
         ref = database.get_ref('resources')
         res = get_res(res_id)

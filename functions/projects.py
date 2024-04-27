@@ -1,13 +1,13 @@
 from kivy.app import App
 
-import database
 from utils import *
 from functions.finances import add_log
 from functions.resources import load_resources
 
 
 # Add a new project
-def add_project(name, description, start_date, end_date, client_name, budget, status):
+def add_project(name: str, description: str, start_date: str, end_date: str, client_name: str, budget: str,
+                status: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -25,15 +25,15 @@ def add_project(name, description, start_date, end_date, client_name, budget, st
             'budget': budget,
             'status': status
         })
-        print("name: ", name, "description: ", description, "start_date: ", start_date, "end_date: ", end_date,
-              "client_name: ", client_name, "budget: ", budget, "status: ", status)
+        return True
 
     else:
         message_box('Error', 'Failed to add project: "projects" reference not found.')
+        return False
 
 
 # Get all projects
-def load_projects(status=2):
+def load_projects(status: int = 2) -> list:
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -57,7 +57,7 @@ def load_projects(status=2):
 
 
 # Get a single project by ID
-def get_project(proj_id):
+def get_project(proj_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -68,7 +68,8 @@ def get_project(proj_id):
 
 
 # Take a dictionary with relevant unique key and update the project
-def update_project(project_id, name, description, start_date, end_date, client_name, budget, status):
+def update_project(project_id: str, name: str, description: str, start_date: str, end_date: str, client_name: str,
+                   budget: str, status: str):
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -98,7 +99,7 @@ def update_project(project_id, name, description, start_date, end_date, client_n
 
 
 # Delete a project by ID
-def delete_project(project_id):
+def delete_project(project_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('projects')
 
@@ -113,7 +114,7 @@ def delete_project(project_id):
 
 
 # Check if the project name is unique with an exception to the current project id
-def name_unique_check(status, name, proj_id=None):
+def name_unique_check(status: str, name: str, proj_id: str = None) -> bool:
     # load all projects
     projects = load_projects()
 
@@ -129,7 +130,7 @@ def name_unique_check(status, name, proj_id=None):
 
 
 # The manpower function should contain this, but as it is not made yet i wil use this temporally
-def load_manpower():
+def load_manpower() -> list:
     # Get a reference to DB
     ref = database.get_ref('manpower')
 
@@ -145,7 +146,7 @@ def load_manpower():
 
 
 # Output Roles - Count style List from manpower
-def load_members(project_name):
+def load_members(project_name: str) -> dict:
     # Get a reference to DB
     manpower = load_manpower()
     roles = {}
@@ -160,12 +161,8 @@ def load_members(project_name):
 
 
 # Output Resource - Count style list from Resources
-def load_res(project_name):
-    # Retrieve all resources as a list of dictionaries
+def load_res(project_name: str) -> dict:
     resources = load_resources(0)
-    # in Resource JSON, 'resource_assignments': [{"amount": "10", "project": "Project A"}]
-    # check resources for the project name, if it is there, add the amount to the resource list along with resource name
-    # Must output a dictionary with Resource Name and Amount
     resource_list = {}
     for resource in resources:
         for assignment in resource['resource_assignments']:
@@ -179,7 +176,7 @@ def load_res(project_name):
 
 
 # For other functions, export a list of project names
-def load_project_names():
+def load_project_names() -> list:
     projects = load_projects(2)
     project_names = []
     for project in projects:
@@ -188,7 +185,7 @@ def load_project_names():
 
 
 # For other functions, export a list of project names matching client
-def load_project_list(self, client_name):
+def load_project_list(self, client_name: str) -> list:
     if client_name is not None:
         projectList = []
         projects = load_projects(2)

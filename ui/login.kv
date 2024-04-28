@@ -41,12 +41,12 @@
                         padding: 20
                         spacing: 20
 
-                        CButton2:
+                        RButton3:
                                 text: 'Exit'
                                 on_release: root.dismiss_popup()
 
 
-                        CButton2:
+                        RButton3:
                                 text: 'Log In'
                                 on_release: root.login(email.text, password.text)
 
@@ -67,7 +67,7 @@
                                 size_hint: 0.8, 1
                                 bold: True
 
-                        CButton2:
+                        RButton3:
                                 text: 'Log Out'
                                 size_hint: 0.2, 1
                                 on_release: root.btn_click(self)
@@ -160,17 +160,17 @@
                         size_hint: 1, 0.15
                         padding: 20
                         spacing: 20
-                        CButton2:
+                        RButton3:
                                 size_hint: 0.3, 1
                                 text: 'Add'
                                 on_release: root.add_user(requestType="Validate")
 
-                        CButton2:
+                        RButton3:
                                 size_hint: 0.3, 1
                                 text: 'Edit'
                                 on_release: root.edit_user(requestType="Validate")
 
-                        CButton2:
+                        RButton3:
                                 size_hint: 0.3, 1
                                 text: 'Delete'
                                 on_release: root.delete_user(requestType="Validate")

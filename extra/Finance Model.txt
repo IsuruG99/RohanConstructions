@@ -51,6 +51,7 @@ BrainStorming :
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
 
 To-Do List:
+- ROUNDED EDGES FIRST I GUESS?
 - Get Refs will crash without internet, implement blank return
 - Supplier & Client Overview structure (Popup made, format and structure unknown)
 - Access Controls V3+ (Postponed till every function complete)

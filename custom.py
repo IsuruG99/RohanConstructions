@@ -1,4 +1,4 @@
-from kivy.graphics import Color, Rectangle, BoxShadow
+from kivy.graphics import Color, Rectangle, BoxShadow, RoundedRectangle
 from kivy.properties import BoundedNumericProperty
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -93,6 +93,93 @@ class CButton2(CButton):
     def update_shadow_size(self, instance, value):
         self.shadow.size = value[0], value[1]
 
+
+# 10% Edge RButton
+class RButton(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Transparent background color, so the button has no background color
+        self.color = button_normal_text_color
+        self.background_color = rgba(0, 0, 0, 0)
+        self.background_normal = ''
+        self.background_down = ''
+        self.font_name = 'Roboto'
+        self.font_size = '20sp'
+
+        # Then we use a rounded rectangle to draw the button in a color we want
+        with self.canvas.before:
+            self.rect_color = Color(rgba=button_normal_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos)
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+
+    def on_state(self, instance, value):
+        # On state should change the color of the rounded rectangle
+        if self.state == 'down':
+            self.rect_color.rgba = button_down_background_color
+            self.color = button_down_text_color
+        else:
+            self.color = button_normal_text_color
+            self.rect_color.rgba = button_normal_background_color
+
+
+class RButton2(RButton):
+    shadow_offset = BoundedNumericProperty(30, min=0)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.bind(pos=self.update_shadow_pos)
+        self.bind(size=self.update_shadow_size)
+
+        # Box Shadow Test
+        with self.canvas.before:
+            Color(0, 0, 0, 0.5)
+            self.shadow = BoxShadow(pos=self.pos,
+                                    size=self.size,
+                                    offset=(0, -10),
+                                    spread_radius=(-35, -35),
+                                    border_radius=(0, 0, 0, 10),
+                                    blur_radius=80)
+
+    def update_shadow_pos(self, instance, value):
+        self.shadow.pos = value[0], value[1] - self.shadow_offset
+
+    def update_shadow_size(self, instance, value):
+        self.shadow.size = value[0], value[1]
+
+# 25% Edge RButton
+class RButton3(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.color = button_normal_text_color
+        self.background_color = rgba(0, 0, 0, 0)
+        self.background_normal = ''
+        self.background_down = ''
+        self.font_name = 'Roboto'
+        self.font_size = '20sp'
+
+        # Then we use a rounded rectangle to draw the button in a color we want
+        with self.canvas.before:
+            self.rect_color = Color(rgba=button_normal_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[25])
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+
+    def on_state(self, instance, value):
+        # On state should change the color of the rounded rectangle
+        if self.state == 'down':
+            self.rect_color.rgba = button_down_background_color
+            self.color = button_down_text_color
+        else:
+            self.color = button_normal_text_color
+            self.rect_color.rgba = button_normal_background_color
 
 class CLabel(Label):
     def __init__(self, **kwargs):

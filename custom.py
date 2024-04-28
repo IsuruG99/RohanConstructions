@@ -48,6 +48,21 @@ class CPopup(Popup):
         self.title_height = 40
 
 
+class RPopup(CPopup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.background_color = rgba(0, 0, 0, 0)
+
+        with self.canvas.before:
+            self.rect_color = Color(*popup_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[25])
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+
+
 # Custom Button Test
 class CButton(Button):
     def __init__(self, **kwargs):
@@ -109,7 +124,7 @@ class RButton(Button):
         # Then we use a rounded rectangle to draw the button in a color we want
         with self.canvas.before:
             self.rect_color = Color(rgba=button_normal_background_color)
-            self.rect = RoundedRectangle(size=self.size, pos=self.pos)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
             self.bind(size=self.update_rect, pos=self.update_rect)
 
     def update_rect(self, instance, value):
@@ -151,6 +166,7 @@ class RButton2(RButton):
     def update_shadow_size(self, instance, value):
         self.shadow.size = value[0], value[1]
 
+
 # 25% Edge RButton
 class RButton3(Button):
     def __init__(self, **kwargs):
@@ -180,6 +196,7 @@ class RButton3(Button):
         else:
             self.color = button_normal_text_color
             self.rect_color.rgba = button_normal_background_color
+
 
 class CLabel(Label):
     def __init__(self, **kwargs):
@@ -237,7 +254,7 @@ class CSpinner(Spinner):
 
 
 class AutoFillText(CText):
-    def __init__(self, completions=["A"], **kwargs):
+    def __init__(self, completions: list = ["A"], **kwargs):
         super().__init__(**kwargs)
         self.completions = completions
         self.dropdown = DropDown()

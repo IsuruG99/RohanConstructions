@@ -51,7 +51,7 @@ class CPopup(Popup):
 class RPopup(CPopup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.background_color = rgba(0, 0, 0, 0)
+        self.background_color = 0, 0, 0, 0
 
         with self.canvas.before:
             self.rect_color = Color(*popup_background_color)

@@ -13,10 +13,13 @@ from validation import *
 
 # Add Project Popup Window
 class AddPopup(GridLayout):
-    def __init__(self, projects_screen: Screen, **kwargs) -> None:
+    def __init__(self, projects_screen: Screen, popup, **kwargs) -> None:
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
+        self.popup = popup
         self.validCheck = 0
+        self.cols = 1
+        self.rows = 1
 
     def addProj(self, requestType: str = "Submit") -> None:
         # Stringify Inputs
@@ -55,12 +58,15 @@ class AddPopup(GridLayout):
 
 # View Project Popup Window
 class ViewPopup(GridLayout):
-    def __init__(self, projects_screen: Screen, project_id: str, **kwargs):
+    def __init__(self, projects_screen: Screen, project_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.project_id = project_id
         self.populate_view()
         self.projects_screen = projects_screen
+        self.popup = popup
         self.validCheck = 0
+        self.cols = 1
+        self.rows = 1
 
     # Populate PopUp Window
     def populate_view(self) -> None:
@@ -118,9 +124,11 @@ class ViewPopup(GridLayout):
     # Open Reports Popup Window
     def reports_popup(self, project_name: str) -> None:
         self.projects_screen.dismiss_popup(self.popup)
-        reportsPop = CPopup(title=project_name, content=ReportsPopup(self, self.project_id), size_hint=(0.6, 0.95))
+        temp_reports_popup = Popup()
+        reports_popup = ReportsPopup(self.projects_screen, self.project_id, temp_reports_popup)
+        reportsPop = RPopup(title=project_name, content=reports_popup, size_hint=(0.6, 0.95))
+        reports_popup.popup = reportsPop
         reportsPop.open()
-        reportsPop.content.popup = reportsPop
 
     def load_clients(self) -> list:
         return load_client_names()
@@ -149,10 +157,13 @@ class ViewPopup(GridLayout):
 
 
 class ReportsPopup(GridLayout):
-    def __init__(self, projects_screen: Screen, proj_id: str, **kwargs) -> None:
+    def __init__(self, projects_screen: Screen, proj_id: str, popup, **kwargs) -> None:
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
         self.populate_reports(proj_id)
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     # We have the Proj_ID, populate the fields
     def populate_reports(self, pid: str) -> None:
@@ -180,7 +191,7 @@ class ReportsPopup(GridLayout):
             grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
             self.ids.assigned_resources.add_widget(grid)
 
-    def dismiss_popup(self, instance) -> None:
+    def dismissPopup(self,instance) -> None:
         instance.dismiss()
 
 
@@ -189,6 +200,7 @@ class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_projects(load_projects(0))
+
 
     # Populate the ScrollView with the projects
     def populate_projects(self, projects: list = load_projects(0), headers: list = None) -> None:
@@ -274,15 +286,19 @@ class ProjectsScreen(Screen):
     # Open View Popup Window
     def view_project(self, project_id: str, instance) -> None:
         # The project_id is passed to the ViewPopup Window
-        viewPop = CPopup(title='View Project', content=ViewPopup(self, project_id), size_hint=(0.5, 0.8))
+        temp_view_popup = Popup()
+        view_popup = ViewPopup(self, project_id, temp_view_popup)
+        viewPop = RPopup(title='View Project', content=view_popup, size_hint=(0.5, 0.8))
+        view_popup.popup = viewPop
         viewPop.open()
-        viewPop.content.popup = viewPop
 
     # Open Add Popup Window
     def add_popup(self) -> None:
-        addPop = CPopup(title='Add Project', content=AddPopup(self), size_hint=(0.5, 0.8))
+        temp_add_popup = Popup()
+        add_popup = AddPopup(self, temp_add_popup)
+        addPop = RPopup(title='Add Project', content=add_popup, size_hint=(0.5, 0.8))
+        add_popup.popup = addPop
         addPop.open()
-        addPop.content.popup = addPop
 
     # Button Click Event Handler
     def btn_click(self, instance) -> None:

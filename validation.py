@@ -16,6 +16,8 @@ class MsgPopUp(GridLayout):
         self.popup = None
         self.btn1click = btn1click
         self.createMessageBox()
+        self.cols = 1
+        self.rows = 1
 
     def createMessageBox(self):
         if self.context == 'Message':
@@ -41,6 +43,8 @@ class CfmPopUp(GridLayout):
         self.btn2click = btn2click
         self.popup = None
         self.createConfirmBox()
+        self.cols = 1
+        self.rows = 1
 
     def createConfirmBox(self):
         if self.context == 'Confirm':

@@ -19,16 +19,19 @@ from utils import *
 
 
 class LogInPopUp(GridLayout):
-    def __init__(self, mainScreen: Screen, **kwargs):
+    def __init__(self, mainScreen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.mainScreen = mainScreen
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def login(self, email: str, password: str) -> None:
         email = str(email)
         password = str(password)
         # Validate inputs
         if not validate_string(email, password):
-            self.mainScreen.CMessageBox('Error', 'All fields are required.','Message')
+            self.mainScreen.CMessageBox('Error', 'All fields are required.', 'Message')
 
         if checkCredentials(email, password):
             app = App.get_running_app()
@@ -36,20 +39,20 @@ class LogInPopUp(GridLayout):
             app.set_accessName(getAccessName(email))
             update_last_login(email)
             self.mainScreen.CMessageBox('Success', 'Welcome, ' + email, 'Message')
-            self.dismiss_popup()
+            self.popup.dismiss()
             self.mainScreen.loggedIn(email)
         else:
             self.mainScreen.CMessageBox('Error', 'Invalid email or password.', 'Message')
 
-    def dismiss_popup(self) -> None:
-        self.popup.dismiss()
-
 
 class AdminControls(GridLayout):
-    def __init__(self, main_screen: Screen, **kwargs):
+    def __init__(self, main_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.main_screen = main_screen
+        self.popup = popup
         self.populate_users(load_users(0))
+        self.cols = 1
+        self.rows = 1
 
     def populate_users(self, users: list = load_users(0), headers: list = None) -> None:
         self.ids.current_user.text = ''
@@ -192,7 +195,7 @@ class AdminControls(GridLayout):
         txt = instance.text
         if txt == 'Log Out':
             self.main_screen.openLogPopup('LogOut')
-            self.dismiss_popup(self.popup)
+            self.popup.dismiss()
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()

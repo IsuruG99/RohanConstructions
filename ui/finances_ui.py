@@ -17,11 +17,14 @@ import datetime
 
 
 class AddLogPopup(GridLayout):
-    def __init__(self, finances_screen: Screen, **kwargs):
+    def __init__(self, finances_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.finances_screen = finances_screen
         self.populate_projectNames()
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populate_projectNames(self) -> None:
         self.ids.addLog_project.values = []
@@ -75,12 +78,15 @@ class AddLogPopup(GridLayout):
 
 
 class ViewLogPopup(GridLayout):
-    def __init__(self, finances_screen: Screen, fin_id: str, **kwargs):
+    def __init__(self, finances_screen: Screen, fin_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.fin_id = fin_id
         self.populate_view()
         self.finances_screen = finances_screen
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     # Populate PopUp Window
     def populate_view(self) -> None:
@@ -240,20 +246,26 @@ class FinancesScreen(Screen):
             self.populate_logs(searchResults)
 
     def view_log(self, fin_id: str, instance) -> None:
-        # Message Box to display the finance id
-        viewPop = CPopup(title='View Finance Log', content=ViewLogPopup(self, fin_id), size_hint=(0.5, 0.8))
+        temp_viewPop_popup = Popup()
+        viewPop_popup = ViewLogPopup(self, fin_id, temp_viewPop_popup)
+        viewPop = RPopup(title='View Finance Log', content=viewPop_popup, size_hint=(0.5, 0.8))
+        viewPop_popup.popup = viewPop
         viewPop.open()
-        viewPop.content.popup = viewPop
+
 
     def overview_log(self) -> None:
-        overviewPop = CPopup(title='Finance Overview', content=FinanceOverview(self), size_hint=(0.5, 0.8))
+        temp_overview_popup = Popup()
+        overviewPop_popup = FinanceOverview(self, temp_overview_popup)
+        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.5, 0.8))
+        overviewPop_popup.popup = overviewPop
         overviewPop.open()
-        overviewPop.content.popup = overviewPop
 
     def add_log_popup(self) -> None:
-        addPop = CPopup(title='Add Finance Log', content=AddLogPopup(self), size_hint=(0.5, 0.8))
+        temp_addPop_popup = Popup()
+        addPop_popup = AddLogPopup(self, temp_addPop_popup)
+        addPop = RPopup(title='Add Finance Log', content=addPop_popup, size_hint=(0.5, 0.8))
+        addPop_popup.popup = addPop
         addPop.open()
-        addPop.content.popup = addPop
 
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel', btn1click: str = None, btn2click: str = None) -> None:
@@ -289,12 +301,15 @@ class FinancesScreen(Screen):
 
 
 class FinanceOverview(GridLayout):
-    def __init__(self, finance_screen: Screen, **kwargs):
+    def __init__(self, finance_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.finance_screen = finance_screen
         year = str(datetime.datetime.now().year)
         month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
         self.populate_overview(year, month)
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populate_overview(self, y: str, m: str) -> None:
         if y == '' or None:

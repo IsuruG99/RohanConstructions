@@ -16,10 +16,13 @@ from validation import *
 
 # add a popup window to insert client data to the database
 class AddClientPopup(GridLayout):
-    def __init__(self, clients_screen: Screen, **kwargs):
+    def __init__(self, clients_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.clients_screen = clients_screen
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def add_client(self, requestType: str = "Submit") -> None:
         # add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text
@@ -58,12 +61,15 @@ class AddClientPopup(GridLayout):
 
 # view clients via popup window
 class ViewClientPopup(GridLayout):
-    def __init__(self, clients_screen: Screen, client_id: str, **kwargs):
+    def __init__(self, clients_screen: Screen, client_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.client_id = client_id
         self.clients_screen = clients_screen
         self.populate_view()
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populate_view(self) -> None:
         # Get the client data from the database
@@ -128,9 +134,11 @@ class ClientsScreen(Screen):
         self.add_client_popup_instance = None
 
     def add_client_popup(self) -> None:
-        add_client_popup = CPopup(title='Add Client', content=AddClientPopup(self), size_hint=(0.5, 0.8))
+        temp_addClient_popup = Popup()
+        addClient_popup = AddClientPopup(self, temp_addClient_popup)
+        add_client_popup = RPopup(title='Add Client', content=addClient_popup, size_hint=(0.5, 0.8))
+        addClient_popup.popup = add_client_popup
         add_client_popup.open()
-        add_client_popup.content.popup = add_client_popup
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
@@ -205,14 +213,18 @@ class ClientsScreen(Screen):
             self.populate_clients(clients)
 
     def view_client(self, client_id: str, instance) -> None:
-        view_popup = CPopup(title='View Client', content=ViewClientPopup(self, client_id), size_hint=(0.5, 0.8))
+        temp_viewPopup = Popup()
+        viewPopup = ViewClientPopup(self, client_id, temp_viewPopup)
+        view_popup = RPopup(title='View Client', content=viewPopup, size_hint=(0.5, 0.8))
+        viewPopup.popup = view_popup
         view_popup.open()
-        view_popup.content.popup = view_popup
 
     def report_clients(self) -> None:
-        report_popup = CPopup(title='Clients Report', content=ClientsReport(self), size_hint=(0.5, 0.8))
+        temp_reportPopup = Popup()
+        reportPopup = ClientsReport(self, temp_reportPopup)
+        report_popup = RPopup(title='Clients Report', content=reportPopup, size_hint=(0.5, 0.8))
+        reportPopup.popup = report_popup
         report_popup.open()
-        report_popup.content.popup = report_popup
 
     def btn_click(self, instance) -> None:
         txt = instance.text
@@ -227,10 +239,13 @@ class ClientsScreen(Screen):
 
 
 class ClientsReport(GridLayout):
-    def __init__(self, client_screen: Screen, **kwargs):
+    def __init__(self, client_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.client_screen = client_screen
         self.populate_report()
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populate_report(self) -> None:
         # Assume the fields are in kv, populate it from the database

@@ -6,7 +6,8 @@
                 spacing: 10
 
                 GridLayout:
-                        size_hint: 1, 0.1
+                        size_hint: 1, 0.2
+                        padding: 30
                         rows: 1
                         cols: 2
                         CLabel:
@@ -27,68 +28,71 @@
                                         id: logStatus
                                         size_hint: 0.1, 0.5
 
-                CLabel:
-                        text: 'Rohan Constructions'
-                        font_size: '60sp'
-                        size_hint: 1, 0.1
-
-                # Empty Space in Middle
-                Label:
-                        size_hint: 1, 0.4
-
                 GridLayout:
                         rows: 2
                         cols: 3
-                        spacing: 30
+                        spacing: 40
                         padding: 30
-                        size_hint: 1, 0.3
+                        size_hint: 1, 0.7
 
-                        RButton2:
+                        MenuButton:
                                 id: projectsBtn
-                                text: 'Projects'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Projects'
+                                sub_text: 'View and Manage your \n Projects details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'projects'
                                         root.manager.transition.direction = 'left'
 
-                        RButton2:
+                        MenuButton:
                                 id: clientsBtn
-                                text: 'Clients'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Clients'
+                                sub_text: 'View and Manage your \n Clients details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'clients'
                                         root.manager.transition.direction = 'left'
 
-                        RButton2:
+                        MenuButton:
                                 id: suppliersBtn
-                                text: 'Suppliers'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Suppliers'
+                                sub_text: 'View and Manage your \n Suppliers details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'suppliers'
                                         root.manager.transition.direction = 'left'
 
-                        RButton2:
+                        MenuButton:
                                 id: resourcesBtn
-                                text: 'Resources'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Resources'
+                                sub_text: 'View and Manage your \n Resources details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'resources'
                                         root.manager.transition.direction = 'left'
 
-                        RButton2:
+                        MenuButton:
                                 id: personnelBtn
-                                text: 'Personnel'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Personnel'
+                                sub_text: 'View and Manage your \n Personnel details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'manpower'
                                         root.manager.transition.direction = 'left'
 
-                        RButton2:
+                        MenuButton:
                                 id: financesBtn
-                                text: 'Finances'
-                                font_size: '32sp'
+                                main_font_size: '38sp'
+                                sub_font_size: '22sp'
+                                main_text: 'Finances'
+                                sub_text: 'View and Manage your \n Finances details here'
                                 on_release:
-                                        root.btn_click(self)
+                                        root.parent.current = 'finances'
                                         root.manager.transition.direction = 'left'
 
 

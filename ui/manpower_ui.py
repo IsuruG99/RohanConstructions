@@ -10,10 +10,13 @@ from validation import *
 
 
 class AddManpower(GridLayout):
-    def __init__(self, manpower_screen: Screen, **kwargs):
+    def __init__(self, manpower_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.manpower_screen = manpower_screen
+        self.popup = popup
         self.validCheck = 0
+        self.cols = 1
+        self.rows = 1
 
     def add_employee(self, requestType: str = "Submit") -> None:
         # Stringify
@@ -50,12 +53,15 @@ class AddManpower(GridLayout):
 
 
 class ViewManpower(GridLayout):
-    def __init__(self, manpower_screen: Screen, emp_id: str, **kwargs):
+    def __init__(self, manpower_screen: Screen, emp_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.emp_id = emp_id
         self.manpower_screen = manpower_screen
         self.populateEmp()
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populateEmp(self) -> None:
         emp = get_employee(self.emp_id)
@@ -196,14 +202,18 @@ class ManpowerScreen(Screen):
             self.populate_manpower(results)
 
     def view_emp(self, emp_id: str, instance) -> None:
-        viewEmp = CPopup(title='View Employee', content=ViewManpower(self, emp_id), size_hint=(0.6, 0.8))
+        temp_viewEmp_popup = Popup()
+        viewEmp_popup = ViewManpower(self, emp_id, temp_viewEmp_popup)
+        viewEmp = RPopup(title='View Employee', content=viewEmp_popup, size_hint=(0.5, 0.8))
+        viewEmp_popup.popup = viewEmp
         viewEmp.open()
-        viewEmp.content.popup = viewEmp
 
     def add_emp(self) -> None:
-        addEmp = CPopup(title='Add Employee', content=AddManpower(self), size_hint=(0.5, 0.8))
+        temp_addEmp_popup = Popup()
+        addEmp_popup = AddManpower(self, temp_addEmp_popup)
+        addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.6, 0.8))
+        addEmp_popup.popup = addEmp
         addEmp.open()
-        addEmp.content.popup = addEmp
 
     def delete_employee(self, emp_id: str, instance) -> None:
         self.dempID = emp_id

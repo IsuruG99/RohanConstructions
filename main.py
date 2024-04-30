@@ -70,15 +70,19 @@ class MainScreen(Screen):
             cfmPopUp.content.popup = cfmPopUp
 
     def openAdminControls(self) -> None:
-        adminPop = CPopup(title='Admin Controls', content=AdminControls(self), size_hint=(0.5, 0.9))
+        temp_popup = Popup()  # Temporary Popup instance
+        admin_popup = AdminControls(self, temp_popup)
+        adminPop = RPopup(title='Admin Controls', content=admin_popup, size_hint=(0.5, 0.9))
+        admin_popup.popup = adminPop
         adminPop.open()
-        adminPop.content.popup = adminPop
 
     def openLogPopup(self, request: str) -> None:
         if request == 'LogIn':
-            logPop = CPopup(title='LogIn', content=LogInPopUp(self), size_hint=(0.5, 0.4))
+            temp_popup = Popup()  # Temporary Popup instance
+            login_popup = LogInPopUp(self, temp_popup)
+            logPop = RPopup(title='LogIn', content=login_popup, size_hint=(0.5, 0.4))
+            login_popup.popup = logPop  # Replace the temporary Popup with the actual RPopup
             logPop.open()
-            logPop.content.popup = logPop
         elif request == 'LogOut':
             self.CMessageBox('LogOut', 'You have been logged out.', 'Message')
             App.get_running_app().set_accessLV(None)
@@ -146,7 +150,7 @@ class MainApp(App):
 
     def build(self) -> ScreenManager:
         Window.size = (1200, 720)
-        Window.clearcolor = rgba('#411f2d')
+        Window.clearcolor = rgba('#343534')
         Window.set_icon('visuals/icon.png')
 
         # Screen Manager Initialized

@@ -14,12 +14,15 @@ from validation import *
 
 
 class ViewResource(GridLayout):
-    def __init__(self, res_screen: Screen, res_id: str, **kwargs):
+    def __init__(self, res_screen: Screen, res_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.res_id = res_id
         self.populate_view()
         self.res_screen = res_screen
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def populate_view(self) -> None:
         # Get the resource data from the DB
@@ -108,9 +111,11 @@ class ViewResource(GridLayout):
         return load_project_names()
 
     def reportRes(self) -> None:
-        reportPop = CPopup(title='Report Resource', content=ReportResource(self.res_id), size_hint=(0.5, 0.8))
+        temp_reportPop_popup = Popup()
+        reportPop_popup = ReportResource(self.res_id, temp_reportPop_popup)
+        reportPop = RPopup(title='Report Resource', content=reportPop_popup, size_hint=(0.5, 0.9))
+        reportPop_popup.popup = reportPop
         reportPop.open()
-        reportPop.content.popup = reportPop
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
@@ -118,10 +123,13 @@ class ViewResource(GridLayout):
 
 class ReportResource(GridLayout):
     # Report Popup, you will see an overview of the resource, that is all
-    def __init__(self, res_id, **kwargs):
+    def __init__(self, res_id, popup, **kwargs):
         super().__init__(**kwargs)
         self.res_id = res_id
+        self.popup = popup
         self.populate_report()
+        self.cols = 1
+        self.rows = 1
 
     def populate_report(self) -> None:
         res = get_res(self.res_id)
@@ -227,15 +235,19 @@ class ResourcesScreen(Screen):
 
     # Triggers the ViewResource PopUp Window
     def view_res(self, res_id: str, instance) -> None:
-        viewPop = CPopup(title='View Resource', content=ViewResource(self, res_id), size_hint=(0.55, 0.9))
+        temp_viewPop_popup = Popup()
+        viewPop_popup = ViewResource(self, res_id, temp_viewPop_popup)
+        viewPop = RPopup(title='View Resource', content=viewPop_popup, size_hint=(0.55, 0.9))
+        viewPop_popup.popup = viewPop
         viewPop.open()
-        viewPop.content.popup = viewPop
 
     # Triggers the AddResourcePopup Window
     def add_resource_popup(self) -> None:
-        addPop = CPopup(title='Add Resource', content=AddResource(self), size_hint=(0.5, 0.8))
+        temp_addPop_popup = Popup()
+        addPop_popup = AddResource(self, temp_addPop_popup)
+        addPop = RPopup(title='Add Resource', content=addPop_popup, size_hint=(0.5, 0.9))
+        addPop_popup.popup = addPop
         addPop.open()
-        addPop.content.popup = addPop
 
     # Button Click goes back to Main UI
     def btn_click(self, instance) -> None:
@@ -260,10 +272,13 @@ class ResourcesScreen(Screen):
 
 
 class AddResource(GridLayout):
-    def __init__(self, res_screen: Screen, **kwargs):
+    def __init__(self, res_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.res_screen = res_screen
         self.validCheck = 0
+        self.popup = popup
+        self.cols = 1
+        self.rows = 1
 
     def add_resource(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)

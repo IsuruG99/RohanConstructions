@@ -51,7 +51,10 @@ BrainStorming :
 - Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
 
 To-Do List:
-- ROUNDED EDGES FIRST I GUESS?
+- Rounded Borders now for buttons, what am i doing with my life...
+- Apply RPopup to message box
+- Redo the structure of popups
+- If anushka gives 1 more different UI well.... good luck to me
 - Get Refs will crash without internet, implement blank return
 - Supplier & Client Overview structure (Popup made, format and structure unknown)
 - Access Controls V3+ (Postponed till every function complete)
@@ -72,3 +75,4 @@ Best moments in project(Coding) so far:
 - Access Control Structure & Admin Panel
 - Figuring out the resource assignments (i did not expect it to require + -)
 - The way the project completion will work, and how it will connect to the finance function
+- I HATE ROUNDED EVERYTHING (On kivy, literally spent 2 weeks on nothing but visuals)

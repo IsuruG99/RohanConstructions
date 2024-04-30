@@ -41,6 +41,8 @@ def load_users(status: int = 0) -> list:
     ref = database.get_ref('users')
     users = []
     for user_id, user in ref.get().items():
+        if user['email'] == 'None':
+            continue
         user['id'] = user_id
         users.append(user)
 

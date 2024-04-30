@@ -12,10 +12,13 @@ from validation import *
 
 
 class AddSupPopup(GridLayout):
-    def __init__(self, suppliers_screen: Screen, **kwargs):
+    def __init__(self, suppliers_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
+        self.popup = popup
         self.validCheck = 0
+        self.cols = 1
+        self.rows = 1
 
     def add_Supplier(self, requestType: str = "Submit") -> None:
         supplierName = str(self.ids.supplierName.text)
@@ -56,12 +59,15 @@ class AddSupPopup(GridLayout):
 
 
 class ViewSupPopup(GridLayout):
-    def __init__(self, suppliers_screen: Screen, suppliers_id: str, **kwargs):
+    def __init__(self, suppliers_screen: Screen, suppliers_id: str, popup, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_id = suppliers_id
         self.populate_view()
+        self.popup = popup
         self.suppliers_screen = suppliers_screen
         self.validCheck = 0
+        self.cols = 1
+        self.rows = 1
 
     # Populate PopUp Window
     def populate_view(self) -> None:
@@ -115,10 +121,6 @@ class ViewSupPopup(GridLayout):
                 self.suppliers_screen.populate_suppliers(load_suppliers())
                 self.suppliers_screen.dismiss_popup(self.popup)
 
-    # Open Reports Popup Window
-    def reports_popup(self) -> None:
-        pass
-
     # Delete Supplier
     def deleteSupplier(self, requestType: str = "Submit") -> None:
         if requestType == "Validate":
@@ -139,10 +141,13 @@ class ViewSupPopup(GridLayout):
 
 
 class ReportSupPopup(GridLayout):
-    def __init__(self, suppliers_screen: Screen, **kwargs):
+    def __init__(self, suppliers_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
+        self.popup = popup
         self.populate_report()
+        self.cols = 1
+        self.rows = 1
 
     def populate_report(self) -> None:
         suppliers = load_suppliers()
@@ -232,20 +237,27 @@ class SuppliersScreen(Screen):
         self.populate_suppliers(suppliers)
 
     def view_suppliers(self, suppliers_id: str, instance) -> None:
-        viewPop = CPopup(title='View Supplier', content=ViewSupPopup(self, suppliers_id), size_hint=(0.6, 0.8))
+        temp_viewPop_popup = Popup()
+        viewPop_popup = ViewSupPopup(self, suppliers_id, temp_viewPop_popup)
+        viewPop = RPopup(title='View Supplier', content=viewPop_popup, size_hint=(0.6, 0.8))
+        viewPop_popup.popup = viewPop
         viewPop.open()
-        viewPop.content.popup = viewPop
+
 
     def overview_suppliers(self):
-        overviewPop = CPopup(title='Supplier Overview', content=ReportSupPopup(self), size_hint=(0.6, 0.8))
+        temp_overview_popup = Popup()
+        overviewPop_popup = ReportSupPopup(self, temp_overview_popup)
+        overviewPop = RPopup(title='Supplier Overview', content=overviewPop_popup, size_hint=(0.6, 0.8))
+        overviewPop_popup.popup = overviewPop
         overviewPop.open()
-        overviewPop.content.popup = overviewPop
 
     # Open to supplier add popup window
     def add_popup(self) -> None:
-        addPop = CPopup(title='Add Supplier', content=AddSupPopup(self), size_hint=(0.6, 0.8))
+        temp_addPop_popup = Popup()
+        addPop_popup = AddSupPopup(self, temp_addPop_popup)
+        addPop = RPopup(title='Add Supplier', content=addPop_popup, size_hint=(0.5, 0.8))
+        addPop_popup.popup = addPop
         addPop.open()
-        addPop.content.popup = addPop
 
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel', btn1click=None, btn2click=None) -> None:

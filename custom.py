@@ -41,6 +41,11 @@ spinner_font_size = '18sp'
 label_font_size = '18sp'
 text_input_font_size = '18sp'
 
+# Light Pink
+pieChart_color1 = rgba('#ff69b4')
+# Light Blue
+pieChart_color2 = rgba('#add8e6')
+
 
 class CPopup(Popup):
     def __init__(self, **kwargs):

@@ -10,6 +10,7 @@ from kivy.uix.screenmanager import Screen
 from functions.projects import load_projects
 
 from custom import *
+from pieChart import PieChart
 from utils import *
 from validation import *
 
@@ -222,7 +223,7 @@ class ClientsScreen(Screen):
     def report_clients(self) -> None:
         temp_reportPopup = Popup()
         reportPopup = ClientsReport(self, temp_reportPopup)
-        report_popup = RPopup(title='Clients Report', content=reportPopup, size_hint=(0.5, 0.8))
+        report_popup = RPopup(title='Clients Report', content=reportPopup, size_hint=(0.6, 0.95))
         reportPopup.popup = report_popup
         report_popup.open()
 
@@ -242,17 +243,138 @@ class ClientsReport(GridLayout):
     def __init__(self, client_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.client_screen = client_screen
-        self.populate_report()
+        year = str(datetime.datetime.now().year)
+        month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
+        self.populate_clientOverview(year, month)
         self.popup = popup
         self.cols = 1
         self.rows = 1
 
-    def populate_report(self) -> None:
+    def populate_clientOverview(self, y: str, m: str) -> None:
         # Assume the fields are in kv, populate it from the database
+        if y == '' or None:
+            self.finance_screen.CMessageBox('Error', 'Year is required.', 'Message')
+            return
+
         clients = load_clients(0)
+        projects = load_projects()
+        if m == '':
+            m = '00'
+        else:
+            m = str(convert_monthToNumber(m))
+        current_clients: list = []
+        # current_projects must hold name and client_name in key value pairs
+        current_projects: list = []
+        complete_projects: list = []
+        project_count = 0
+        profit = 0
+
+        for project in projects:
+            # project has to be within the year and month, there is start_date and end_date
+            # If project start date is lower or equal to the year and month and end date is higher or equal to the year and month
+            # project start_date and end_date are stored as string in the database
+            if project['start_date'][:7] <= y + '-' + m and project['end_date'][:7] >= y + '-' + m:
+                profit += currencyStringToFloat(project['budget'])
+                # append to current clients if not already in the list
+                if project['client_name'] not in current_clients:
+                    current_clients.append(project['client_name'])
+                # append to current_projects if status is In-Progress, as name: project name, client_name: client name
+                if project['status'] == 'In Progress':
+                    current_projects.append({'name': project['name'], 'client_name': project['client_name']})
+                    project_count += 1
+                if project['status'] == 'Completed':
+                    complete_projects.append({'name': project['name'], 'client_name': project['client_name']})
+            # elif month is 00 and year is the start_date year is lower or equal, end_date year is higher or equal
+            elif m == '00' and project['start_date'][:4] <= y and project['end_date'][:4] >= y:
+                profit += currencyStringToFloat(project['budget'])
+                if project['client_name'] not in current_clients:
+                    current_clients.append(project['client_name'])
+                if project['status'] == 'In Progress':
+                    current_projects.append({'name': project['name'], 'client_name': project['client_name']})
+                    project_count += 1
+                elif project['status'] == 'Completed':
+                    complete_projects.append({'name': project['name'], 'client_name': project['client_name']})
+            else:
+                continue
 
         # Show client count on reportClient_count
-        self.ids.reportClient_count.text = "Client Count: " + str(len(clients))
+        self.ids.reportClient_clientCount.text = "Clients: " + str(len(set(current_clients)))
+        self.ids.reportClient_projectCount.text = "Ongoing Projects: " + str(len(current_projects))
+        self.ids.reportClient_profit.text = "Total Budget: " + convert_currency(profit)
+
+        # clear the existing widgets
+        self.ids.ongoingProject_headers.clear_widgets()
+        self.ids.completedProject_headers.clear_widgets()
+        self.ids.reportClient_ongoingProjects.clear_widgets()
+        self.ids.reportClient_completedProjects.clear_widgets()
+        self.ids.reportClient_pieChart.clear_widgets()
+
+        #Adding the current_projects to reportClient_ongoingProjects
+        # current_projects = [{'name': 'Project Name', 'client_name': 'Client Name'}]
+        headers = GridLayout(cols=2, size_hint_y=None, height=40)
+        headers.add_widget(CLabel(text='Project'))
+        headers.add_widget(CLabel(text='Client'))
+        self.ids.ongoingProject_headers.add_widget(headers)
+
+        for project in current_projects:
+            gridCurrent = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+            gridCurrent.project = project
+            gridCurrent.add_widget(CLabel(text=project['name']))
+            gridCurrent.add_widget(CLabel(text=project['client_name']))
+            self.ids.reportClient_ongoingProjects.add_widget(gridCurrent)
+
+        #Adding the complete_projects to reportClient_completedProjects
+        # complete_projects = [{'name': 'Project Name', 'client_name': 'Client Name'}]
+        headers = GridLayout(cols=2, size_hint_y=None, height=40)
+        headers.add_widget(CLabel(text='Project Name'))
+        headers.add_widget(CLabel(text='Client Name'))
+        self.ids.completedProject_headers.add_widget(headers)
+
+        for project in complete_projects:
+            gridCompleted = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+            gridCompleted.project = project
+            gridCompleted.add_widget(CLabel(text=project['name']))
+            gridCompleted.add_widget(CLabel(text=project['client_name']))
+            self.ids.reportClient_completedProjects.add_widget(gridCompleted)
+
+        self.populate_pieChart(current_projects, complete_projects)
+
+    def populate_pieChart(self, ongoing: list, complete: list):
+        # take count of the lists
+        # each list is a list of dictionaries with name: name, client_name: client_name
+        # count the number of dictionaries in the list
+        ongoing_count = len(ongoing)
+        complete_count = len(complete)
+        if ongoing_count == 0 and complete_count == 0:
+            data = {"No Data": 1}
+        else:
+            if ongoing_count == 0:
+                data = {"Completed": complete_count}
+            elif complete_count == 0:
+                data = {"Ongoing": ongoing_count}
+            else:
+                data = {"Ongoing": ongoing_count, "Completed": complete_count}
+
+        print(ongoing_count)
+        print(complete_count)
+
+        # Pie Chart structure
+        # in_data = {"Opera": 350,
+        #            "Steam": 234,
+        #            "Overwatch": 532,
+        #            "PyCharm": 485,
+        #            "YouTube": 221}
+
+        # chart = PieChart(data=in_data, position=position, size=size, legend_enable=True)
+        #         self.add_widget(chart)
+
+        # we need to create the piechart and add it to reportClient_pieChart
+        grid = GridLayout(cols=1, size_hint_y=None, height=200)
+        chart = PieChart(data=data,position=(150, 150),
+                         size=(200,200), legend_enable=True)
+        grid.add_widget(chart)
+        self.ids.reportClient_pieChart.add_widget(grid)
+
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()

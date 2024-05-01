@@ -48,7 +48,7 @@ BrainStorming :
             2. One Log as Completion, include final calculated price
             3. ... ?
 
-- Understand Finance Reports (Financial Report Popup?Window, Format, Structure)
+- Understand Finance Reports (Financial Report Popup? Window, Format, Structure)
 
 To-Do List:
 - Rounded Borders now for buttons, what am i doing with my life...
@@ -57,6 +57,7 @@ To-Do List:
 - If anushka gives 1 more different UI well.... good luck to me
 - Get Refs will crash without internet, implement blank return
 - Supplier & Client Overview structure (Popup made, format and structure unknown)
+- Session Controls? (For super admin)
 - Access Controls V3+ (Postponed till every function complete)
 - Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
 
@@ -64,7 +65,7 @@ FINAL TASK: (After ALL Above)
 - Project Completion connectivity to Finance function and Budget calculation.
 
 Optional
--
+- Images for Employees (Optional), it is python, of course it can do that
 - Export a Report (?)
 
 Best moments in project(Coding) so far:

@@ -15,6 +15,7 @@ from ui.finances_ui import FinancesScreen
 from utils import *
 from custom import *
 from validation import *
+from pieChart import *
 
 # Load the KV file for the main screen
 Builder.load_file('main.kv')

@@ -162,7 +162,6 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
-
                 GridLayout:
                         cols: 2
                         rows: 4  # Adjusted to match the number of fields
@@ -231,28 +230,125 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
+                padding: 20
+                spacing: 20
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        spacing: 10
+                        padding: 0,10
+                        size_hint: 1, 0.4
+                        GridLayout:
+                                cols: 1
+                                rows: 3
+                                size_hint: 0.5, 1
+                                GridLayout:
+                                        cols: 2
+                                        rows: 2
+                                        spacing: 10
+                                        AutoFillText:
+                                                id: overview_year
+                                                text: '2024'
+                                                hint_text: 'Year'
+                                                size_hint: 0.3, 0.4
+                                                font_size: '25sp'
+                                                halign: 'center'
+                                                multiline: False
+                                                completions: [str(i) for i in range(1900, 2101)]
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        AutoFillText:
+                                                id: overview_month
+                                                size_hint: 0.3, 0.4
+                                                # how do i say that the text should be a month, but can be blank as well?
+                                                hint_text: 'Month (optional)'
+                                                font_size: '25sp'
+                                                halign: 'center'
+                                                multiline: False
+                                                completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                RButton:
+                                        text: 'Submit'
+                                        on_release: root.populate_clientOverview(overview_year.text, overview_month.text)
+
+                                GridLayout:
+                                        cols: 1
+                                        rows: 3
+                                        size_hint: 0.5, 1
+                                        spacing: 10
+                                        CLabel:
+                                                id: reportClient_clientCount
+                                        CLabel:
+                                                id: reportClient_projectCount
+                                        CLabel:
+                                                id: reportClient_profit
+
+
+                        GridLayout:
+                                cols: 1
+                                rows: 1
+                                size_hint: 0.5, 1
+                                id: reportClient_pieChart
+
                 GridLayout:
                         cols: 1
                         rows: 2
-                        size_hint: 0.9, 0.9
+                        size_hint: 1, 0.6
+                        spacing: 10
                         GridLayout:
-                                cols: 1
-                                rows: 2
-                                padding: 10
-                                spacing: 10
-                                size_hint: 1, 0.9
-
+                                rows: 3
+                                size_hint: 1, 0.5
+                                spacing:5
                                 CLabel:
-                                        text: 'Clients Report'
-                                        size_hint: 1, 0.4
-                                        font_size: '30sp'
-                                CLabel:
-                                        id: reportClient_count
-                                        size_hint: 1, 0.7
+                                        text: 'Ongoing Projects'
+                                        size_hint: 1, 0.05
+                                GridLayout:
+                                        size_hint: 1, 0.2
+                                        id: ongoingProject_headers
+                                        rows: 1
+                                        height: 50
 
-                        CButton2:
-                                text: 'Back'
-                                size_hint: 1, 0.1
-                                on_release: root.dismiss_popup(root.popup)
+                                ScrollView:
+                                        size_hint: 1, 0.75
+                                        do_scroll_x: False
+                                        GridLayout:
+                                                id: reportClient_ongoingProjects
+                                                cols: 1
+                                                size_hint_y: None
+                                                height: self.minimum_height
+                                                canvas.before:
+                                                        Color:
+                                                                rgba: 0, 0, 0, 0.6
+                                                        Rectangle:
+                                                                size: self.size
+                                                                pos: self.pos
+                        GridLayout:
+                                rows: 3
+                                size_hint: 1, 0.5
+                                spacing:5
+                                CLabel:
+                                        text: 'Completed Projects'
+                                        size_hint: 1, 0.05
+                                GridLayout:
+                                        size_hint: 1, 0.2
+                                        id: completedProject_headers
+                                        rows: 1
+                                        height: 50
+
+                                ScrollView:
+                                        size_hint: 1, 0.75
+                                        do_scroll_x: False
+                                        GridLayout:
+                                                id: reportClient_completedProjects
+                                                cols: 1
+                                                size_hint_y: None
+                                                height: self.minimum_height
+                                                canvas.before:
+                                                        Color:
+                                                                rgba: 0, 0, 0, 0.6
+                                                        Rectangle:
+                                                                size: self.size
+                                                                pos: self.pos
+
+
 
 

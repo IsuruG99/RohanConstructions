@@ -3,9 +3,12 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
+
+from functions.resources import load_resources
 from functions.suppliers import *
 from functools import partial
 
+from pieChart import PieChart
 from utils import *
 from custom import *
 from validation import *
@@ -145,19 +148,57 @@ class ReportSupPopup(GridLayout):
         super().__init__(**kwargs)
         self.suppliers_screen = suppliers_screen
         self.popup = popup
-        self.populate_report()
+        self.populate_supplierOverview()
         self.cols = 1
         self.rows = 1
 
-    def populate_report(self) -> None:
-        suppliers = load_suppliers()
-        self.ids.supTotal.text = "Total : " + str(len(suppliers))
-        self.ids.supLV1.text = "Suppliers Lv1 : " + str(
-            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '1']))
-        self.ids.supLV2.text = "Suppliers Lv2 : " + str(
-            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '2']))
-        self.ids.supLV3.text = "Suppliers Lv3 : " + str(
-            len([supplier for supplier in suppliers if supplier['supplierLevel'] == '3']))
+    def populate_supplierOverview(self, supplierName: str = None) -> None:
+        self.ids.reportSupplier_headers.clear_widgets()
+        self.ids.reportSupplier_resList.clear_widgets()
+        self.ids.reportSupplier_pieChart.clear_widgets()
+
+        suppliers: list = load_suppliers()
+        res: list = load_resources()
+        resList: list = []
+
+        self.ids.reportSupplier_supplierCount.text = "Total Suppliers : " + str(len(suppliers))
+        self.ids.reportSupplier_resCount.text = "Total Resource Types : " + str(len(res))
+
+        headers = GridLayout(cols=2, size_hint_y=None, height=40)
+        headers.add_widget(CLabel(text='Resource', bold=True))
+        headers.add_widget(CLabel(text='Quantity', bold=True))
+        self.ids.reportSupplier_headers.add_widget(headers)
+        if supplierName is not None:
+
+            for resource in res:
+                grid = GridLayout(cols=2, size_hint_y=None, height=40)
+                if resource["supplier_name"] == supplierName:
+                    grid.add_widget(CLabel(text=resource["name"]))
+                    grid.add_widget(CLabel(text=str(resource["quantity"])))
+                    resList.append({"name": resource["name"], "status": resource["status"]})
+                    self.ids.reportSupplier_resList.add_widget(grid)
+            self.populate_pieChart(resList)
+
+    def populate_pieChart(self, resList: list) -> None:
+        if resList is None or len(resList) == 0:
+            data = {"No Data": 1}
+        else:
+            data = {"In Stock": 0, "Out of Stock": 0}
+            for res in resList:
+                if res["status"] == "In Stock":
+                    data["In Stock"] += 1
+                else:
+                    data["Out of Stock"] += 1
+
+        grid = GridLayout(cols=1, size_hint_y=None, height=200)
+        chart = PieChart(data=data, position=(1, 1),
+                         size=(150, 150), legend_enable=True)
+        grid.add_widget(chart)
+        self.ids.reportSupplier_pieChart.add_widget(grid)
+
+
+    def load_suppliers(self) -> None:
+        return load_supplier_names()
 
     def dismiss_popup(self, instance) -> None:
         self.suppliers_screen.dismiss_popup(instance)
@@ -247,7 +288,7 @@ class SuppliersScreen(Screen):
     def overview_suppliers(self):
         temp_overview_popup = Popup()
         overviewPop_popup = ReportSupPopup(self, temp_overview_popup)
-        overviewPop = RPopup(title='Supplier Overview', content=overviewPop_popup, size_hint=(0.6, 0.8))
+        overviewPop = RPopup(title='Supplier Overview', content=overviewPop_popup, size_hint=(0.6, 0.95))
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 

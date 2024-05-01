@@ -266,8 +266,8 @@ class ClientsReport(GridLayout):
         # current_projects must hold name and client_name in key value pairs
         current_projects: list = []
         complete_projects: list = []
-        project_count = 0
-        profit = 0
+        project_count: int = 0
+        profit: int = 0
 
         for project in projects:
             # project has to be within the year and month, there is start_date and end_date
@@ -355,20 +355,6 @@ class ClientsReport(GridLayout):
             else:
                 data = {"Ongoing": ongoing_count, "Completed": complete_count}
 
-        print(ongoing_count)
-        print(complete_count)
-
-        # Pie Chart structure
-        # in_data = {"Opera": 350,
-        #            "Steam": 234,
-        #            "Overwatch": 532,
-        #            "PyCharm": 485,
-        #            "YouTube": 221}
-
-        # chart = PieChart(data=in_data, position=position, size=size, legend_enable=True)
-        #         self.add_widget(chart)
-
-        # we need to create the piechart and add it to reportClient_pieChart
         grid = GridLayout(cols=1, size_hint_y=None, height=200)
         chart = PieChart(data=data,position=(1, 1),
                          size=(150,150), legend_enable=True)

@@ -192,7 +192,7 @@ class ReportsPopup(GridLayout):
             self.ids.assigned_resources.add_widget(grid)
 
     def dismissPopup(self,instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 # Projects Main UI (Accessed by main.py)

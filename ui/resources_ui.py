@@ -118,7 +118,7 @@ class ViewResource(GridLayout):
         reportPop.open()
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 class ReportResource(GridLayout):
@@ -147,7 +147,7 @@ class ReportResource(GridLayout):
                 self.ids.assigned_projects.add_widget(grid)
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 # Manpower Main UI (Opens this from main.py)
@@ -245,7 +245,7 @@ class ResourcesScreen(Screen):
     def add_resource_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddResource(self, temp_addPop_popup)
-        addPop = RPopup(title='Add Resource', content=addPop_popup, size_hint=(0.5, 0.9))
+        addPop = RPopup(title='Add Resource', content=addPop_popup, size_hint=(0.45, 0.8))
         addPop_popup.popup = addPop
         addPop.open()
 
@@ -317,4 +317,4 @@ class AddResource(GridLayout):
         return load_supplier_names()
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()

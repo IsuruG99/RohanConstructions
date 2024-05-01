@@ -57,7 +57,7 @@ class AddClientPopup(GridLayout):
         return load_project_names()
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 # view clients via popup window
@@ -124,7 +124,7 @@ class ViewClientPopup(GridLayout):
                 self.clients_screen.CMessageBox('Error', 'Failed to delete client.', 'Message')
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 # below is client's main ui
@@ -133,13 +133,6 @@ class ClientsScreen(Screen):
         super().__init__(**kwargs)
         self.populate_clients()
         self.add_client_popup_instance = None
-
-    def add_client_popup(self) -> None:
-        temp_addClient_popup = Popup()
-        addClient_popup = AddClientPopup(self, temp_addClient_popup)
-        add_client_popup = RPopup(title='Add Client', content=addClient_popup, size_hint=(0.5, 0.8))
-        addClient_popup.popup = add_client_popup
-        add_client_popup.open()
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
@@ -165,8 +158,8 @@ class ClientsScreen(Screen):
 
         # Headers
         if headers is None:
-            headers = ['Name', 'Phone Number', 'Email', 'Action']
-        size_hints = [0.4, 0.2, 0.3, 0.1]
+            headers = ['Name', 'Phone Number', 'Email']
+        size_hints = [0.5, 0.2, 0.3]
         for header in headers:
             self.ids.clients_headers.add_widget(
                 CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
@@ -174,35 +167,34 @@ class ClientsScreen(Screen):
 
         # Add the clients to the ScrollView # Only name, phone_number and email are shown
         for client in clients:
-            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
+            grid = GridLayout(cols=3, spacing=10, size_hint_y=None, height=40)
             grid.client = client
-            grid.add_widget(CLabel(text=client['name'], size_hint_x=0.4))
+            grid.add_widget(Button(text=client['name'], on_release=partial(self.view_client, client['id']),
+                                   size_hint_x=0.5, background_normal='', font_name='Roboto',
+                                   background_color=(0.1, 0.1, 0.1, 0), font_size='20sp', bold=True))
             grid.add_widget(CLabel(text=client['phone_number'], size_hint_x=0.2))
             grid.add_widget(CLabel(text=client['email'], size_hint_x=0.3))
-            grid.add_widget(Button(text='View', on_release=partial(self.view_client, client['id']), size_hint_x=0.1,
-                                   background_normal='', background_color=(0.1, 0.1, 0.1, 0), font_size='20sp'))
-
             self.ids.clients_list.add_widget(grid)
 
     def sort_clients(self, clients: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             clients = sorted(clients, key=lambda x: x['name'])
-            self.populate_clients(clients, ['Name [A]', 'Phone Number', 'Email', 'Action'])
+            self.populate_clients(clients, ['Name [A]', 'Phone Number', 'Email'])
         elif header == 'Name [A]':
             clients = sorted(clients, key=lambda x: x['name'], reverse=True)
-            self.populate_clients(clients, ['Name [D]', 'Phone Number', 'Email', 'Action'])
+            self.populate_clients(clients, ['Name [D]', 'Phone Number', 'Email'])
         elif header == 'Phone Number' or header == 'Phone Number [D]':
             clients = sorted(clients, key=lambda x: str(x['phone_number']))
-            self.populate_clients(clients, ['Name', 'Phone Number [A]', 'Email', 'Action'])
+            self.populate_clients(clients, ['Name', 'Phone Number [A]', 'Email'])
         elif header == 'Phone Number [A]':
             clients = sorted(clients, key=lambda x: str(x['phone_number']), reverse=True)
-            self.populate_clients(clients, ['Name', 'Phone Number [D]', 'Email', 'Action'])
+            self.populate_clients(clients, ['Name', 'Phone Number [D]', 'Email'])
         elif header == 'Email' or header == 'Email [D]':
             clients = sorted(clients, key=lambda x: x['email'])
-            self.populate_clients(clients, ['Name', 'Phone Number', 'Email [A]', 'Action'])
+            self.populate_clients(clients, ['Name', 'Phone Number', 'Email [A]'])
         elif header == 'Email [A]':
             clients = sorted(clients, key=lambda x: x['email'], reverse=True)
-            self.populate_clients(clients, ['Name', 'Phone Number', 'Email [D]', 'Action'])
+            self.populate_clients(clients, ['Name', 'Phone Number', 'Email [D]'])
 
     def search_clients(self, searchValue: str) -> None:  # Finish this function
         if not searchValue == '':
@@ -213,10 +205,17 @@ class ClientsScreen(Screen):
                        or searchValue.lower() in client['email'].lower()]
             self.populate_clients(clients)
 
+    def add_client_popup(self) -> None:
+        temp_addClient_popup = Popup()
+        addClient_popup = AddClientPopup(self, temp_addClient_popup)
+        add_client_popup = RPopup(title='Add Client', content=addClient_popup, size_hint=(0.4, 0.65))
+        addClient_popup.popup = add_client_popup
+        add_client_popup.open()
+
     def view_client(self, client_id: str, instance) -> None:
         temp_viewPopup = Popup()
         viewPopup = ViewClientPopup(self, client_id, temp_viewPopup)
-        view_popup = RPopup(title='View Client', content=viewPopup, size_hint=(0.5, 0.8))
+        view_popup = RPopup(title='View Client', content=viewPopup, size_hint=(0.4, 0.65))
         viewPopup.popup = view_popup
         view_popup.open()
 
@@ -360,7 +359,3 @@ class ClientsReport(GridLayout):
                          size=(150,150), legend_enable=True)
         grid.add_widget(chart)
         self.ids.reportClient_pieChart.add_widget(grid)
-
-
-    def dismiss_popup(self, instance) -> None:
-        instance.dismiss()

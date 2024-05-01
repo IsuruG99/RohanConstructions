@@ -73,7 +73,7 @@ class MainScreen(Screen):
     def openAdminControls(self) -> None:
         temp_popup = Popup()  # Temporary Popup instance
         admin_popup = AdminControls(self, temp_popup)
-        adminPop = RPopup(title='Admin Controls', content=admin_popup, size_hint=(0.5, 0.9))
+        adminPop = RPopup(title='Admin Controls', content=admin_popup, size_hint=(0.6, 0.9))
         admin_popup.popup = adminPop
         adminPop.open()
 
@@ -81,7 +81,7 @@ class MainScreen(Screen):
         if request == 'LogIn':
             temp_popup = Popup()  # Temporary Popup instance
             login_popup = LogInPopUp(self, temp_popup)
-            logPop = RPopup(title='LogIn', content=login_popup, size_hint=(0.5, 0.4))
+            logPop = RPopup(title='LogIn', content=login_popup, size_hint=(0.5, 0.45))
             login_popup.popup = logPop  # Replace the temporary Popup with the actual RPopup
             logPop.open()
         elif request == 'LogOut':
@@ -153,6 +153,9 @@ class MainApp(App):
         Window.size = (1200, 720)
         Window.clearcolor = rgba('#343534')
         Window.set_icon('visuals/icon.png')
+
+        # Remove max/min buttons
+        Window.borderless = False
 
         # Screen Manager Initialized
         sm = ScreenManager()

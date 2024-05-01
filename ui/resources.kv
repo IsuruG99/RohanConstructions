@@ -2,53 +2,47 @@
         GridLayout:
                 rows: 2
                 cols: 1
-                padding: 40
+                padding: (20, 40, 20, 20)
                 spacing: 20
-
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        CButton2:
+                        RButton4:
                                 id: resource_filter
                                 text: 'Filter: All'
-                                size_hint: 0.2, 1
+                                size_hint: 0.3, 1
                                 on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Resources'
-                                size_hint: 0.5, 1
+                                size_hint: 0.4, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
-                                padding: 10
-
                         GridLayout:
                                 cols: 2
                                 size_hint: 0.3, 1
-                                spacing: 10, 0
-                                padding: (0, 0, 30, 0)
-                                CText:
+                                spacing: 10
+                                RText:
                                         id: search
                                         hint_text: 'Search'
                                         multiline: False
-                                        size_hint: 0.75, 1
+                                        size_hint: 0.7, 1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton2:
+                                RButton4:
                                         text: 'Search'
-                                        size_hint: 0.25, 1
+                                        size_hint: 0.3, 1
                                         on_release: root.search_res(search.text)
-
                 GridLayout:
                         rows: 3
                         size_hint: 1, 0.95
-
+                        spacing: 10
                         GridLayout:
                                 size_hint: 1, 0.1
                                 id: resource_headers
                                 rows: 1
                                 height: 50
-
                         ScrollView:
-                                size_hint: 0.95, 1
+                                size_hint: 1, 0.8
                                 do_scroll_x: False
                                 GridLayout:
                                         id: resources_list
@@ -65,15 +59,12 @@
                                 rows: 1
                                 cols: 2
                                 spacing: 20
-                                padding: 20
-                                size_hint: 1, 0.2
-
-                                CButton2:
+                                size_hint: 1, 0.1
+                                RButton4:
                                         text: 'Add'
                                         size_hint: 0.6, 1
                                         on_release: root.btn_click(self)
-
-                                CButton2:
+                                RButton4:
                                         text: 'Back'
                                         size_hint: 0.4, 1
                                         on_release:
@@ -86,19 +77,17 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 10
                 GridLayout:
                         cols: 4
                         rows: 3
-                        padding: 20
-                        spacing: 20
+                        spacing: 10
                         size_hint: 1, 0.35
-
                         CLabel:
                                 text: 'Material'
                                 size_hint: 0.3, 1
-
-                        CText:
+                        RText:
                                 id: viewPop_name
                                 multiline: False
                                 hint_text: 'Stone'
@@ -109,7 +98,7 @@
                                 text: 'Quantity'
                                 size_hint: 0.3, 1
 
-                        CText:
+                        RText:
                                 id: viewPop_qty
                                 multiline: False
                                 hint_text: '10'
@@ -120,7 +109,7 @@
                                 text: 'Supplier'
                                 size_hint: 0.3, 1
 
-                        AutoFillText:
+                        RAutoFillText:
                                 id: viewPop_supplier
                                 size_hint: 0.7, 0.1
                                 hint_text: 'XYZ Suppliers'
@@ -130,7 +119,7 @@
                         CLabel:
                                 text: 'Cost'
                                 size_hint: 0.3, 1
-                        CText:
+                        RText:
                                 id: viewPop_cost
                                 multiline: False
                                 hint_text: '15000'
@@ -140,7 +129,7 @@
                         CLabel:
                                 text: 'Status'
                                 size_hint: 0.3, 1
-                        CSpinner:
+                        RSpinner:
                                 id: viewPop_status
                                 text: 'In Stock'
                                 values: ['In Stock', 'Out of Stock']
@@ -150,45 +139,40 @@
                         cols: 1
                         rows: 4
                         size_hint: 1, 0.6
-                        padding: 10
                         spacing: 10
 
                         CLabel:
-                                size_hint: 1, 0.1
                                 text: 'Assignments'
                                 size_hint: 1, 0.1
-                                bold: True
 
                         GridLayout:
                                 rows: 1
                                 cols: 4
-                                size_hint: 1, 0.2
-                                padding: 10
+                                size_hint: 1, 0.15
                                 spacing: 10
-                                AutoFillText:
+                                RAutoFillText:
                                         id: projectList
                                         text: ''
                                         hint_text: 'Project Name'
                                         size_hint_x: 0.4
                                         completions: root.load_projects()
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CText:
+                                RText:
                                         id: projectQty
                                         hint_text: '10'
                                         size_hint_x: 0.1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton:
+                                RButton4:
                                         text: '+'
                                         size_hint_x: 0.1
                                         on_release: root.reload(projectQty.text, projectList.text, "Add", self)
-                                CButton:
+                                RButton4:
                                         text: '-'
                                         size_hint_x: 0.1
                                         on_release: root.reload(projectQty.text, projectList.text, "Subtract", self)
 
                         ScrollView:
                                 size_hint: 1, 0.6
-                                padding: 10
                                 spacing: 10
                                 GridLayout:
                                         id: viewRes_projects
@@ -203,19 +187,17 @@
                                                         pos: self.pos
                         GridLayout:
                                 cols: 3
-                                size_hint: 1, 0.1
-                                padding: 10
+                                size_hint: 1, 0.15
                                 spacing: 10
-
-                                CButton2:
+                                RButton4:
                                         text: 'Edit'
                                         on_release:
                                                 root.editRes(requestType="Validate")
-                                CButton2:
+                                RButton4:
                                         text: 'Delete'
                                         on_release: root.deleteRes(requestType="Validate")
 
-                                CButton2:
+                                RButton4:
                                         text: 'Report'
                                         on_release: root.reportRes()
 
@@ -226,18 +208,17 @@
                 rows: 3
                 size: root.size
                 pos: root.pos
-
+                padding: 20
                 GridLayout:
                         cols: 2
                         rows: 6
-                        padding: 10
                         spacing: 10
                         size_hint: 1, 0.85
 
                         CLabel:
                                 text: 'Name'
                                 size_hint: 0.3, 1
-                        CText:
+                        RText:
                                 id: addRes_name
                                 hint_text: 'Person or Group'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -246,7 +227,7 @@
                         CLabel:
                                 text: 'Quantity'
                                 size_hint: 0.3, 1
-                        CText:
+                        RText:
                                 id: addRes_qty
                                 hint_text: 'Unit Count'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -255,7 +236,7 @@
                         CLabel:
                                 text: 'Supplier'
                                 size_hint: 0.3, 1
-                        AutoFillText:
+                        RAutoFillText:
                                 id: addRes_supplier
                                 hint_text: 'XYZ Suppliers'
                                 size_hint: 0.7, 1
@@ -265,7 +246,7 @@
                         CLabel:
                                 text: 'Cost'
                                 size_hint: 0.3, 1
-                        CText:
+                        RText:
                                 id: addRes_cost
                                 hint_text: '10500.00'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -273,7 +254,7 @@
                         CLabel:
                                 text: 'Status'
                                 size_hint: 0.3, 1
-                        CSpinner:
+                        RSpinner:
                                 id: addRes_status
                                 hint_text: 'Permanent'
                                 values: ['In Stock', 'Out of Stock']
@@ -285,7 +266,7 @@
                         size_hint: 1, 0.15
                         padding: 10
 
-                        CButton2:
+                        RButton4:
                                 text: 'Add'
                                 size_hint: 1, 0.1
                                 on_release: root.add_resource(requestType="Validate")
@@ -298,11 +279,11 @@
                 rows: 2
                 padding: 20
                 spacing: 10
-
                 GridLayout:
                         size_hint: 1, 0.9
                         cols: 2
                         rows: 1
+                        spacing: 10
                         GridLayout:
                                 cols: 2
                                 rows: 5
@@ -368,7 +349,6 @@
                         size_hint: 1, 0.1
                         cols: 1
                         rows: 1
-
-                        CButton2:
+                        RButton4:
                                 text: 'Back'
                                 on_release: root.dismiss_popup(root.popup)

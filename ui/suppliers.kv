@@ -2,54 +2,47 @@
         GridLayout:
                 rows: 2
                 cols: 1
-                padding: 40
+                padding: (20, 40, 20, 20)
                 spacing: 20
-
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        CButton2:
+                        RButton4:
                                 text: 'Filter: All'
                                 id: supplierFilter
-                                size_hint: 0.2, 1
+                                size_hint: 0.3, 1
                                 on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Suppliers'
-                                size_hint: 0.5, 1
+                                size_hint: 0.4, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
-                                padding: 10
-
                         GridLayout:
                                 cols: 2
                                 size_hint: 0.3, 1
-                                spacing: 10, 0
-                                padding: (0, 0, 30, 0)
-                                CText:
+                                spacing: 10
+                                RText:
                                         id: searchBar
                                         hint_text: 'Search'
                                         multiline: False
-                                        size_hint: 0.75, 1
+                                        size_hint: 0.7, 1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton2:
+                                RButton4:
                                         text: 'Search'
-                                        size_hint: 0.25, 1
+                                        size_hint: 0.3, 1
                                         on_release: root.searchSuppliers(searchBar.text)
-
                 GridLayout:
                         rows: 3
-                        padding: 20
-                        size_hint: 1, 0.9
-
+                        spacing: 10
+                        size_hint: 1, 0.95
                         GridLayout:
                                 size_hint: 1, 0.1
                                 id: Supplier_headers
                                 rows: 1
                                 height: 50
-
                         ScrollView:
-                                size_hint: 1, 0.9
+                                size_hint: 1, 0.8
                                 do_scroll_x: False
                                 GridLayout:
                                         id: Supplier_list
@@ -62,33 +55,25 @@
                                                 Rectangle:
                                                         size: self.size
                                                         pos: self.pos
-
                         GridLayout:
                                 rows: 1
                                 cols: 3
                                 spacing: 20
-                                padding: 20
-                                size_hint: 1, 0.3
-
-                                CButton2:
+                                size_hint: 1, 0.1
+                                RButton4:
                                         text: 'Overview'
-                                        size_hint: 0.3, 1
+                                        size_hint: 0.4, 1
                                         on_release: root.overview_suppliers()
-
-                                CButton2:
+                                RButton4:
                                         text: 'Add New Supplier'
                                         size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
-
-                                CButton2:
+                                RButton4:
                                         text: 'Back'
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
-
-
-
 
 <AddSupPopup>:
         GridLayout:
@@ -96,186 +81,207 @@
                 cols: 1
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 10
                 GridLayout:
                         cols: 2
                         rows: 7
-                        padding: 10
                         spacing: 10
                         size_hint: 1, 0.8
 
-                        CLabel: # 1
+                        CLabel:
                                 text: 'Name'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: supplierName
                                 multiline: False
-                                hint_text: 'Mr.Mahinda Mahattaya'
+                                hint_text: 'Supplier Name'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
 
-                        CLabel: # 2
+                        CLabel:
                                 text: 'Business'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: business
                                 multiline: False
-                                hint_text: 'ABC Hardware'
+                                hint_text: 'Business Name'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
 
-                        CLabel: # 3
+                        CLabel:
                                 text: 'Contact No'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: contactNo
                                 multiline: False
                                 hint_text: '07xxxxxxxx'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
 
-			            CLabel: # 4
+			            CLabel:
                                 text: 'Email'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: email
                                 multiline: False
                                 hint_text: 'Email Address'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
 
-			            CLabel: # 5
+			            CLabel:
                                 text: 'Address'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: address
                                 multiline: False
                                 hint_text: 'No01, Merchan Tower, Kollupitiya.'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
-                        CLabel: # 6
+                        CLabel:
                                 text: 'Start Dealing'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: startDealing
                                 multiline: False
                                 hint_text: 'YYYY-MM-DD'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
-                        CLabel: # 7
+                                size_hint: 0.7, 1
+                        CLabel:
                                 text: 'Level'
                                 color: 1, 1, 1, 1
-                        CSpinner:
+                                size_hint: 0.3, 1
+                        RSpinner:
                                 id: supplierLevel
                                 text: 'Supplier Level'
                                 values: ['1','2','3']
-
+                                size_hint: 0.7, 1
                 GridLayout:
                         cols: 2
                         rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
-
-                        CButton2:
+                        spacing: 10
+                        size_hint: 1, 0.1
+                        RButton4:
                                 text: 'Submit'
                                 on_release:
                                         root.add_Supplier(requestType="Validate")
-
-                        CButton2:
+                        RButton4:
                                 text: 'Cancel'
                                 on_release: root.dismiss_popup(root.popup)
 
-
 <ViewSupPopup>:
-        size: 400, 600
         GridLayout:
                 cols: 1
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 10
                 GridLayout:
                         cols: 2
                         rows: 7
-                        padding: 5
-                        spacing: 5
+                        spacing: 10
                         size_hint: 1, 0.9
 
                         CLabel:
-                                text: 'Name'
+                                text: 'Supplier Name'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: supplierName
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: 'Supplier Name'
 
                         CLabel:
-                                text: 'Business'
+                                text: 'Business Name'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: business
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: 'Business Name'
 
                         CLabel:
                                 text: 'Contact No'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: contactNo
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: '07xxxxxxxx'
 
 			            CLabel:
                                 text: 'Email'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: email
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: 'Email Address'
 
 			            CLabel:
                                 text: 'Address'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: address
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: 'No01, Merchant Tower, Kollupitiya.'
 
                         CLabel:
-                                text: 'Start Dealing'
+                                text: 'Start Date'
                                 color: 1, 1, 1, 1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: startDealing
                                 multiline: False
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                size_hint: 0.7, 1
+                                hint_text: 'YYYY-MM-DD'
 
                         CLabel:
                                 text: 'Level'
                                 color: 1, 1, 1, 1
-                        CSpinner:
+                                size_hint: 0.3, 1
+                        RSpinner:
                                 id: supplierLevel
                                 values: ['1','2','3']
+                                size_hint: 0.7, 1
+                                hint_text: 'Supplier Level'
 
                 GridLayout:
                         cols: 4
                         rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
+                        spacing: 10
+                        size_hint: 1, 0.1
 
-                        CButton2:
+                        RButton4:
                                 text: 'Report'
                                 on_release: root.reports_popup()
 
-                        CButton2:
+                        RButton4:
                                 text: 'Save'
                                 on_release:
                                         root.editSupplier(requestType="Validate")
 
-                        CButton2:
+                        RButton4:
                                 text: 'Delete'
                                 on_release: root.deleteSupplier(requestType="Validate")
-
-                        CButton2:
-                                text: 'Cancel'
-                                on_release: root.dismiss_popup(root.popup)
 
 <ReportSupPopup>:
         GridLayout:
@@ -295,14 +301,15 @@
                                 cols: 1
                                 rows: 3
                                 size_hint: 0.5, 1
-                                AutoFillText:
+                                spacing: 10
+                                RAutoFillText:
                                         id: reportSupplier_supplierList
                                         text: ''
                                         hint_text: 'Supplier'
                                         size_hint_x: 0.4
                                         completions: root.load_suppliers()
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                RButton:
+                                RButton4:
                                         text: 'Search'
                                         on_release: root.populate_supplierOverview(reportSupplier_supplierList.text)
 

@@ -248,7 +248,7 @@ class FinancesScreen(Screen):
     def view_log(self, fin_id: str, instance) -> None:
         temp_viewPop_popup = Popup()
         viewPop_popup = ViewLogPopup(self, fin_id, temp_viewPop_popup)
-        viewPop = RPopup(title='View Finance Log', content=viewPop_popup, size_hint=(0.5, 0.8))
+        viewPop = RPopup(title='View Finance Log', content=viewPop_popup, size_hint=(0.45, 0.85))
         viewPop_popup.popup = viewPop
         viewPop.open()
 
@@ -256,14 +256,14 @@ class FinancesScreen(Screen):
     def overview_log(self) -> None:
         temp_overview_popup = Popup()
         overviewPop_popup = FinanceOverview(self, temp_overview_popup)
-        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.5, 0.8))
+        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.45, 0.85))
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
     def add_log_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddLogPopup(self, temp_addPop_popup)
-        addPop = RPopup(title='Add Finance Log', content=addPop_popup, size_hint=(0.5, 0.8))
+        addPop = RPopup(title='Add Finance Log', content=addPop_popup, size_hint=(0.45, 0.85))
         addPop_popup.popup = addPop
         addPop.open()
 
@@ -342,4 +342,4 @@ class FinanceOverview(GridLayout):
         self.ids.overview_balance.text = convert_currency(total_income - total_expense)
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()

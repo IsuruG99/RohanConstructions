@@ -2,54 +2,47 @@
         GridLayout:
                 rows: 2
                 cols: 1
-                padding: 40
+                padding: (20, 40, 20, 20)
                 spacing: 20
-
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        CButton2:
+                        RButton4:
                                 id: finances_filter
                                 text: 'Filter: All'
                                 size_hint: 0.3, 1
                                 on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Finances'
-                                size_hint: 0.7, 1
+                                size_hint: 0.4, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
-                                padding: 10
-
                         GridLayout:
                                 cols: 2
                                 size_hint: 0.3, 1
-                                spacing: 10, 0
-                                padding: (0, 0, 30, 0)
-                                CText:
+                                spacing: 10
+                                RText:
                                         id: search
                                         hint_text: 'Search'
                                         multiline: False
-                                        size_hint: 0.75, 1
+                                        size_hint: 0.7, 1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton2:
+                                RButton4:
                                         text: 'Search'
-                                        size_hint: 0.25, 1
+                                        size_hint: 0.3, 1
                                         on_release: root.searchLogs(search.text)
-
                 GridLayout:
                         rows: 3
-                        padding: 20
-                        size_hint: 1, 0.9
-
+                        size_hint: 1, 0.95
+                        spacing: 10
                         GridLayout:
                                 size_hint: 1, 0.1
                                 id: finance_headers
                                 rows: 1
                                 height: 50
-
                         ScrollView:
-                                size_hint: 1, 1
+                                size_hint: 1, 0.8
                                 do_scroll_x: False
                                 GridLayout:
                                         id: finances_list
@@ -62,51 +55,45 @@
                                                 Rectangle:
                                                         size: self.size
                                                         pos: self.pos
-
                         GridLayout:
                                 rows: 1
                                 cols: 3
                                 spacing: 20
-                                padding: 20
-                                size_hint: 1, 0.3
-
-                                CButton2:
+                                size_hint: 1, 0.1
+                                RButton4:
                                         text: 'Overview'
-                                        size_hint: 0.3, 1
+                                        size_hint: 0.4, 1
                                         on_release: root.overview_log()
-
-                                CButton2:
+                                RButton4:
                                         text: 'Add'
                                         size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
-
-                                CButton2:
+                                RButton4:
                                         text: 'Back'
-                                        size_hint: 0.3, 1
+                                        size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 
 
 <ViewLogPopup>:
-        size: 400, 600
         GridLayout:
                 cols: 1
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 20
                 GridLayout:
                         cols: 2
                         rows: 7
-                        padding: 5
-                        spacing: 5
+                        spacing: 10
                         size_hint: 1, 0.9
 
                         CLabel:
                                 text: 'Type'
                                 size_hint: 0.3, 0.1
-                        CSpinner:
+                        RSpinner:
                                 id: viewLog_type
                                 text: 'Type'
                                 values: ['Income', 'Expense']
@@ -116,7 +103,7 @@
                         CLabel:
                                 text: 'Amount'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: viewLog_amount
                                 size_hint: 0.7, 0.1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -124,7 +111,7 @@
                         CLabel:
                                 text: 'Date'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: viewLog_date
                                 size_hint: 0.7, 0.1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -132,7 +119,7 @@
                         CLabel:
                                 text: 'Description'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: viewLog_desc
                                 size_hint: 0.7, 0.1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -140,7 +127,7 @@
                         CLabel:
                                 text: 'Related Entity'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: viewLog_entity
                                 size_hint: 0.7, 0.1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
@@ -148,7 +135,7 @@
                         CLabel:
                                 text: 'Project Name'
                                 size_hint: 0.3, 0.1
-                        AutoFillText:
+                        RAutoFillText:
                                 id: viewLog_project
                                 size_hint: 0.7, 0.1
                                 completions: root.load_project_list()
@@ -157,7 +144,7 @@
                         CLabel:
                                 text: 'Category'
                                 size_hint: 0.3, 0.1
-                        CSpinner:
+                        RSpinner:
                                 id: viewLog_category
                                 text: 'Category'
                                 values: ['Materials', 'Payroll', 'Contract', 'Misc']
@@ -167,21 +154,20 @@
                 GridLayout:
                         cols: 3
                         rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
+                        spacing: 10
+                        size_hint: 1, 0.1
 
-                        CButton2:
+                        RButton4:
                                 text: 'Edit'
                                 on_release:
                                         root.edit_log(requestType="Validate")
 
-                        CButton2:
+                        RButton4:
                                 text: 'Delete'
                                 on_release:
                                         root.delete_log(requestType="Validate")
 
-                        CButton2:
+                        RButton4:
                                 text: 'Report'
 
 
@@ -191,87 +177,86 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 20
                 GridLayout:
                         cols: 2
                         rows: 7
-                        padding: 5
-                        spacing: 5
+                        spacing: 10
                         size_hint: 1, 0.9
 
                         CLabel:
                                 text: 'Type'
-                                size_hint: 0.3, 0.1
-                        CSpinner:
+                                size_hint: 0.3, 1
+                        RSpinner:
                                 id: addLog_type
                                 text: 'Type'
                                 values: ['Income', 'Expense']
                                 font_size: '20sp'
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
 
                         CLabel:
                                 text: 'Amount'
-                                size_hint: 0.3, 0.1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: addLog_amount
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
                                 hint_text: '10000'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Date'
-                                size_hint: 0.3, 0.1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: addLog_date
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
                                 hint_text: 'YYYY-MM-DD'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Description'
-                                size_hint: 0.3, 0.1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: addLog_desc
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
                                 hint_text: 'Description'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Related Entity'
-                                size_hint: 0.3, 0.1
-                        CText:
+                                size_hint: 0.3, 1
+                        RText:
                                 id: addLog_entity
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
                                 hint_text: 'Employee, Supplier, etc.'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Project Name'
-                                size_hint: 0.3, 0.1
-                        AutoFillText:
+                                size_hint: 0.3, 1
+                        RAutoFillText:
                                 id: addLog_project
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
+                                hint_text: 'Project Name'
                                 completions: root.load_project_list()
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
                                 text: 'Category'
-                                size_hint: 0.3, 0.1
-                        CSpinner:
+                                size_hint: 0.3, 1
+                        RSpinner:
                                 id: addLog_category
                                 text: 'Category'
                                 values: ['Materials', 'Payroll', 'Contract', 'Misc']
                                 font_size: '20sp'
-                                size_hint: 0.7, 0.1
+                                size_hint: 0.7, 1
 
                 GridLayout:
                         cols: 1
                         rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
-
-                        CButton2:
+                        spacing: 10
+                        size_hint: 1, 0.1
+                        RButton4:
                                 text: 'Insert'
                                 on_release:
                                         root.addLog(requestType="Validate")
@@ -289,7 +274,6 @@
                         rows: 2
                         size_hint: 0.9, 0.9
                         spacing: 20
-                        padding: 20
                         GridLayout:
                                 cols: 1
                                 rows: 3
@@ -297,13 +281,13 @@
                                 size_hint: 1, 0.4
                                 CLabel:
                                         text: 'Year and Month'
-                                        size_hint: 1, 0.4
+                                        size_hint: 1, 0.3
                                         font_size: '30sp'
 
                                 GridLayout:
                                         cols: 2
                                         rows: 1
-                                        size_hint: 1, 0.6
+                                        size_hint: 1, 0.4
                                         spacing: 10
                                         AutoFillText:
                                                 id: overview_year
@@ -325,9 +309,9 @@
                                                 multiline: False
                                                 completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
                                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton2:
+                                RButton4:
                                         text: 'Check'
-                                        size_hint: 0.3, 0.4
+                                        size_hint: 1, 0.3
                                         on_release: root.populate_overview(overview_year.text, overview_month.text)
 
                         GridLayout:
@@ -360,7 +344,7 @@
                                         size_hint: 0.5, 0.3
                                         multiline: False
 
-                CButton2:
+                RButton4:
                         text: 'Back'
                         size_hint: 1, 0.1
                         on_release: root.dismiss_popup(root.popup)

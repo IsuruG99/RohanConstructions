@@ -280,10 +280,9 @@ class SuppliersScreen(Screen):
     def view_suppliers(self, suppliers_id: str, instance) -> None:
         temp_viewPop_popup = Popup()
         viewPop_popup = ViewSupPopup(self, suppliers_id, temp_viewPop_popup)
-        viewPop = RPopup(title='View Supplier', content=viewPop_popup, size_hint=(0.6, 0.8))
+        viewPop = RPopup(title='View Supplier', content=viewPop_popup, size_hint=(0.45, 0.8))
         viewPop_popup.popup = viewPop
         viewPop.open()
-
 
     def overview_suppliers(self):
         temp_overview_popup = Popup()
@@ -296,7 +295,7 @@ class SuppliersScreen(Screen):
     def add_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddSupPopup(self, temp_addPop_popup)
-        addPop = RPopup(title='Add Supplier', content=addPop_popup, size_hint=(0.5, 0.8))
+        addPop = RPopup(title='Add Supplier', content=addPop_popup, size_hint=(0.45, 0.8))
         addPop_popup.popup = addPop
         addPop.open()
 

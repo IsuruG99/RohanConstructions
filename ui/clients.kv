@@ -2,156 +2,136 @@
         GridLayout:
                 rows: 2
                 cols: 1
-                padding: 40
+                padding: (20, 40, 20, 20)
                 spacing: 20
-
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        CButton2:
+                        RButton4:
                                 id: clients_filter
                                 text: 'Refresh'
                                 size_hint: 0.3, 1
                                 on_release: root.btn_click(self)
-
                         CLabel:
                                 text: 'Clients'
-                                size_hint: 0.6, 1
+                                size_hint: 0.4, 1
                                 font_size: '30sp'
                                 bold: True
-                                spacing: 10
                                 padding: 10
 
                         GridLayout:
                                 cols: 2
-                                size_hint: 0.4, 1
-                                spacing: 10, 0
-                                padding: (0, 0, 30, 0)
-                                CText:
+                                size_hint: 0.3, 1
+                                spacing: 10
+                                RText:
                                         id: search
                                         hint_text: 'Search'
                                         multiline: False
-                                        size_hint: 0.75, 1
+                                        size_hint: 0.7, 1
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                CButton2:
+                                RButton4:
                                         text: 'Search'
-                                        size_hint: 0.25, 1
+                                        size_hint: 0.3, 1
                                         on_release: root.search_clients(search.text)
 
                 GridLayout:
                         rows: 3
                         size_hint: 1, 0.95
+                        spacing: 10
 
                         GridLayout:
                                 size_hint: 1, 0.1
                                 id: clients_headers
                                 rows: 1
                                 height: 50
-
                         ScrollView:
-                                size_hint: 0.95, 1
+                                size_hint: 1, 0.8
                                 do_scroll_x: False
                                 GridLayout:
                                         id: clients_list
                                         cols: 1
                                         size_hint_y: None
                                         height: self.minimum_height
-                                        cols: 1
                                         canvas.before:
                                                 Color:
                                                         rgba: 0, 0, 0, 0.6
                                                 Rectangle:
                                                         pos: self.pos
                                                         size: self.size
-
                         GridLayout:
                                 rows: 1
                                 cols: 3
                                 spacing: 20
-                                padding: 20
-                                size_hint: 1, 0.3
-
-                                CButton2:
+                                size_hint: 1, 0.1
+                                RButton4:
                                         text: 'Overview'
                                         size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
-
-                                CButton2:
+                                RButton4:
                                         text: 'Add'
                                         size_hint: 0.4, 1
                                         on_release: root.add_client_popup()
-
-                                CButton2:
+                                RButton4:
                                         text: 'Back'
                                         size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
-
-
 <AddClientPopup>:
         GridLayout:
                 cols: 1
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 20
                 GridLayout:
                         cols: 2
                         rows: 4
-                        padding: 10
                         spacing: 10
                         size_hint: 1, 0.8
-
                         CLabel:
                                 text: 'Name'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: add_client_name
                                 multiline: False
                                 hint_text: 'Client Name'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
                         CLabel:
-                                text: 'Phone Number'
+                                text: 'Contact'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: add_client_phone_number
                                 multiline: False
                                 hint_text: 'Phone Number'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
                         CLabel:
                                 text: 'Email'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: add_client_email
                                 multiline: False
                                 hint_text: 'Email'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
                         CLabel:
                                 text: 'Address'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: add_client_address
                                 multiline: False
                                 hint_text: 'Address'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-
                 GridLayout:
                         cols: 2
                         rows: 1
-                        padding: 20
-                        spacing: 20
+                        spacing: 10
                         size_hint: 1, 0.2
-
-                        CButton2:
+                        RButton4:
                                 text: 'Insert'
                                 on_release:
                                         root.add_client(requestType="Validate")
-
-                        CButton2:
+                        RButton4:
                                 text: 'Cancel'
                                 on_release:
                                         root.dismiss_popup(self)
@@ -162,26 +142,27 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
+                padding: 20
+                spacing: 20
                 GridLayout:
                         cols: 2
                         rows: 4  # Adjusted to match the number of fields
-                        padding: 10
                         spacing: 10
                         size_hint: 1, 0.8
 
                         CLabel:
                                 text: 'Name'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: view_client_name
                                 multiline: False
                                 hint_text: 'Client Name'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Phone Number'
+                                text: 'Contact'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: view_client_phone_number
                                 multiline: False
                                 hint_text: 'Phone Number'
@@ -190,7 +171,7 @@
                         CLabel:
                                 text: 'Email'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: view_client_email
                                 multiline: False
                                 hint_text: 'Email'
@@ -199,7 +180,7 @@
                         CLabel:
                                 text: 'Address'
                                 size_hint: 0.3, 0.1
-                        CText:
+                        RText:
                                 id: view_client_address
                                 multiline: False
                                 hint_text: 'Address'
@@ -209,16 +190,15 @@
                 GridLayout:
                         cols: 2
                         rows: 1
-                        padding: 20
-                        spacing: 20
+                        spacing: 10
                         size_hint: 1, 0.2
 
-                        CButton2:
+                        RButton4:
                                 text: 'Edit'
                                 on_release:
                                         root.edit_client(requestType="Validate")
 
-                        CButton2:
+                        RButton4:
                                 text: 'Delete'
                                 on_release:
                                         root.delete_client(requestType="Validate")
@@ -241,39 +221,40 @@
                         GridLayout:
                                 cols: 1
                                 rows: 3
+                                spacing: 10
                                 size_hint: 0.5, 1
                                 GridLayout:
                                         cols: 2
                                         rows: 2
                                         spacing: 10
-                                        AutoFillText:
+                                        size_hint: 1, 0.35
+                                        RAutoFillText:
                                                 id: overview_year
                                                 text: '2024'
                                                 hint_text: 'Year'
-                                                size_hint: 0.3, 0.4
+                                                size_hint: 0.5, 1
                                                 font_size: '25sp'
                                                 halign: 'center'
                                                 multiline: False
                                                 completions: [str(i) for i in range(1900, 2101)]
                                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        AutoFillText:
+                                        RAutoFillText:
                                                 id: overview_month
-                                                size_hint: 0.3, 0.4
-                                                # how do i say that the text should be a month, but can be blank as well?
-                                                hint_text: 'Month (optional)'
+                                                size_hint: 0.5, 1
+                                                hint_text: 'Month'
                                                 font_size: '25sp'
                                                 halign: 'center'
                                                 multiline: False
                                                 completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
                                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                RButton:
+                                RButton4:
+                                        size_hint: 1, 0.25
                                         text: 'Submit'
                                         on_release: root.populate_clientOverview(overview_year.text, overview_month.text)
-
                                 GridLayout:
                                         cols: 1
                                         rows: 3
-                                        size_hint: 0.5, 1
+                                        size_hint: 1, 0.45
                                         spacing: 10
                                         CLabel:
                                                 id: reportClient_clientCount

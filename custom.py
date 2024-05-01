@@ -16,10 +16,10 @@ import database
 main_background_color = rgba('#343534')
 button_normal_text_color = rgba('#f0e29f')
 button_normal_background_color = rgba('#2d2c2d')
-button_normal_border_color = rgba('#bdb281')
+button_normal_border_color = rgba('#f0e29f')
 button_down_text_color = rgba('#9eacf0')
 button_down_background_color = rgba('#2d2c2d')
-button_down_border_color = rgba('#80bcb1')
+button_down_border_color = rgba('#9eacf0')
 label_text_color = rgba('#f0e29f')
 text_input_background_color = rgba('#d0c376')
 text_input_text_color = rgba('#2d2c2d')
@@ -41,10 +41,8 @@ spinner_font_size = '18sp'
 label_font_size = '18sp'
 text_input_font_size = '18sp'
 
-# Light Pink
-pieChart_color1 = rgba('#ff69b4')
-# Light Blue
-pieChart_color2 = rgba('#add8e6')
+pieChart_color1 = rgba('#ff69b4')  # Light Pink
+pieChart_color2 = rgba('#add8e6')  # Light Blue
 
 
 class CPopup(Popup):
@@ -242,6 +240,48 @@ class RButton3(Button):
             self.rect_color.rgba = button_normal_background_color
 
 
+# Rounded Bordered Button
+class RButton4(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.color = button_normal_text_color
+        self.background_color = rgba(0, 0, 0, 0)
+        self.background_normal = ''
+        self.background_down = ''
+        self.font_name = button_font_name
+        self.font_size = '20sp'
+
+        # Then we use a rounded rectangle to draw the button in a color we want
+        with self.canvas.before:
+            # Add a yellow border
+            self.border_color = Color(rgba=button_normal_border_color)  # yellow
+            self.border_rect = RoundedRectangle(size=(self.size[0] + 2, self.size[1] + 2), pos=self.pos,
+                                                radius=[12])
+
+            # The original rounded rectangle
+            self.rect_color = Color(rgba=button_normal_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
+
+        self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+        self.border_rect.pos = (instance.pos[0] - 1, instance.pos[1] - 1)
+        self.border_rect.size = (instance.size[0] + 2, instance.size[1] + 2)
+
+    def on_state(self, instance, value):
+        # On state should change the color of the rounded rectangle
+        if self.state == 'down':
+            self.rect_color = Color(rgba=button_down_background_color)
+            self.color = button_down_text_color
+            self.border_color = Color(rgba=button_down_border_color)
+        else:
+            self.color = button_normal_text_color
+            self.rect_color = Color(rgba=button_normal_background_color)
+            self.border_color = Color(rgba=button_normal_border_color)
+
+
 class CLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -263,8 +303,24 @@ class CText(TextInput):
         self.background_normal = ''
         self.background_active = ''
         self.multiline = False
-        #padding only on left and right, 0 on top bot
         self.padding_x = 15
+
+
+class RText(CText):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.padding = (10, 10, 10, 10)
+        self.background_color = (0, 0, 0, 0)
+
+        # rounded rectangle
+        with self.canvas.before:
+            Color(rgba=text_input_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
 
 
 class RLabelTop(CLabel):
@@ -288,13 +344,29 @@ class CSpinner(Spinner):
         self.background_color = spinner_background_color
         self.color = spinner_text_color
         self.option_cls.background_color = spinner_background_color
-        self.option_cls.color = spinner_text_color
+        self.option_cls.color = (1, 1, 1, 1)
         self.background_normal = ''
         self.background_down = ''
         self.valign = 'middle'
         self.padding = (10, 10)
         # scroll bar
         self.scroll_width = 20
+
+class RSpinner(CSpinner):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.padding = (10, 10, 10, 10)
+        self.background_color = (0, 0, 0, 0)
+
+        # rounded rectangle
+        with self.canvas.before:
+            Color(rgba=spinner_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
 
 
 class AutoFillText(CText):
@@ -332,6 +404,23 @@ class AutoFillText(CText):
             self.dropdown.dismiss()
 
 
+class RAutoFillText(AutoFillText):
+    def __init__(self, completions: list = ["A"], **kwargs):
+        super().__init__(completions, **kwargs)
+        self.padding = (10, 10, 10, 10)
+        self.background_color = (0, 0, 0, 0)
+
+        # rounded rectangle
+        with self.canvas.before:
+            Color(rgba=text_input_background_color)
+            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
+            self.bind(size=self.update_rect, pos=self.update_rect)
+
+    def update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+
+
 class MenuButton(RButton3):
     main_text = StringProperty('a')
     sub_text = StringProperty('b')
@@ -341,8 +430,10 @@ class MenuButton(RButton3):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.layout = GridLayout(cols=1, rows=2, size=self.size, pos=self.pos)
-        self.main_label = CLabel(text=self.main_text, size=self.size, pos=self.pos, font_size=self.main_font_size, color=button_normal_text_color)
-        self.sub_label = CLabel(text=self.sub_text, size=self.size, pos=self.pos, font_size=self.sub_font_size, color=button_normal_text_color)
+        self.main_label = CLabel(text=self.main_text, size=self.size, pos=self.pos, font_size=self.main_font_size,
+                                 color=button_normal_text_color)
+        self.sub_label = CLabel(text=self.sub_text, size=self.size, pos=self.pos, font_size=self.sub_font_size,
+                                color=button_normal_text_color)
         self.layout.add_widget(self.main_label)
         self.layout.add_widget(self.sub_label)
         self.add_widget(self.layout)
@@ -372,4 +463,3 @@ class MenuButton(RButton3):
             self.main_label.color = button_normal_text_color
             self.sub_label.color = button_normal_text_color
             self.color = button_normal_background_color
-

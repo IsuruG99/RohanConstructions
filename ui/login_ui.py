@@ -44,6 +44,9 @@ class LogInPopUp(GridLayout):
         else:
             self.mainScreen.CMessageBox('Error', 'Invalid email or password.', 'Message')
 
+    def dismiss_popup(self, instance) -> None:
+        self.popup.dismiss()
+
 
 class AdminControls(GridLayout):
     def __init__(self, main_screen: Screen, popup, **kwargs):
@@ -61,7 +64,7 @@ class AdminControls(GridLayout):
         self.ids.account_headers.clear_widgets()
         if headers is None:
             headers = ['Email', 'Password', 'Access', 'Status']
-        size_hints = [4, 3, 1, 2]
+        size_hints = [3, 3, 1, 3]
         for header in headers:
             self.ids.account_headers.add_widget(CButton(text=header,
                                                         bold=True,

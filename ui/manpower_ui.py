@@ -131,7 +131,7 @@ class ViewManpower(GridLayout):
         return load_project_names()
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss
+        self.popup.dismiss()
 
 
 class ManpowerScreen(Screen):
@@ -204,14 +204,14 @@ class ManpowerScreen(Screen):
     def view_emp(self, emp_id: str, instance) -> None:
         temp_viewEmp_popup = Popup()
         viewEmp_popup = ViewManpower(self, emp_id, temp_viewEmp_popup)
-        viewEmp = RPopup(title='View Employee', content=viewEmp_popup, size_hint=(0.5, 0.8))
+        viewEmp = RPopup(title='View Employee', content=viewEmp_popup, size_hint=(0.55, 0.8))
         viewEmp_popup.popup = viewEmp
         viewEmp.open()
 
     def add_emp(self) -> None:
         temp_addEmp_popup = Popup()
         addEmp_popup = AddManpower(self, temp_addEmp_popup)
-        addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.6, 0.8))
+        addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.45, 0.8))
         addEmp_popup.popup = addEmp
         addEmp.open()
 

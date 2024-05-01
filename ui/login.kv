@@ -4,32 +4,32 @@
                 rows: 2
                 size: root.size
                 pos: root.pos
-
+                padding: 20
+                spacing: 20
                 GridLayout:
                         cols: 2
                         rows: 2
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.6
+                        spacing: 10
+                        size_hint: 1, 0.7
 
                         CLabel:
                                 text: 'Email'
-                                size_hint: 0.4, 0.2
+                                size_hint: 0.4, 0.25
                                 bold: True
-                        CText:
+                        RText:
                                 id: email
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                size_hint: 0.6, 0.2
+                                size_hint: 0.6, 0.25
                                 text: 'a'
 
                         CLabel:
                                 text: 'Password'
-                                size_hint: 0.4, 0.2
+                                size_hint: 0.4, 0.25
                                 bold: True
-                        CText:
+                        RText:
                                 id: password
                                 text: 'a'
-                                size_hint: 0.6, 0.2
+                                size_hint: 0.6, 0.25
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 password: True
 
@@ -37,16 +37,18 @@
                 GridLayout:
                         cols: 2
                         rows: 1
-                        size_hint: 1, 0.4
-                        padding: 20
-                        spacing: 20
+                        size_hint: 1, 0.3
+                        padding: 80, 0
+                        spacing: 10
 
-                        RButton3:
+                        RButton4:
+                                size_hint: 0.5, 1
                                 text: 'Exit'
-                                on_release: root.dismiss_popup()
+                                on_release: root.dismiss_popup(root.popup)
 
 
-                        RButton3:
+                        RButton4:
+                                size_hint: 0.5, 1
                                 text: 'Log In'
                                 on_release: root.login(email.text, password.text)
 
@@ -67,7 +69,7 @@
                                 size_hint: 0.8, 1
                                 bold: True
 
-                        RButton3:
+                        RButton4:
                                 text: 'Log Out'
                                 size_hint: 0.2, 1
                                 on_release: root.btn_click(self)
@@ -113,7 +115,7 @@
                                         text: 'Email'
                                         size_hint: 0.2, 1
                                         bold: True
-                                CText:
+                                RText:
                                         id: edit_email
                                         hint_text: 'Email'
                                         size_hint: 0.8, 1
@@ -138,7 +140,7 @@
                                         text: 'Password'
                                         size_hint: 0.3, 1
                                         bold: True
-                                CText:
+                                RText:
                                         id: edit_password
                                         hint_text: 'Password'
                                         size_hint: 0.7, 1
@@ -149,7 +151,7 @@
                                         text: 'Access'
                                         size_hint: 0.3, 1
                                         bold: True
-                                CSpinner:
+                                RSpinner:
                                         id: edit_access
                                         values: ['0', '1', '2', '3']
                                         size_hint: 0.7, 1
@@ -160,17 +162,17 @@
                         size_hint: 1, 0.15
                         padding: 20
                         spacing: 20
-                        RButton3:
+                        RButton4:
                                 size_hint: 0.3, 1
                                 text: 'Add'
                                 on_release: root.add_user(requestType="Validate")
 
-                        RButton3:
+                        RButton4:
                                 size_hint: 0.3, 1
                                 text: 'Edit'
                                 on_release: root.edit_user(requestType="Validate")
 
-                        RButton3:
+                        RButton4:
                                 size_hint: 0.3, 1
                                 text: 'Delete'
                                 on_release: root.delete_user(requestType="Validate")

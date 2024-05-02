@@ -3,6 +3,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 from functions.projects import *
 from functions.clients import load_client_names
+from functions.manpower import calc_manpowerCost
+from functions.resources import calc_resourcesCost
 from functools import partial
 import datetime
 
@@ -121,15 +123,6 @@ class ViewPopup(GridLayout):
                     self.validCheck = 0
                     self.projects_screen.CMessageBox('Error', 'Failed to update project.', 'Message')
 
-    # Open Reports Popup Window
-    def reports_popup(self, project_name: str) -> None:
-        self.projects_screen.dismiss_popup(self.popup)
-        temp_reports_popup = Popup()
-        reports_popup = ReportsPopup(self.projects_screen, self.project_id, temp_reports_popup)
-        reportsPop = RPopup(title=project_name, content=reports_popup, size_hint=(0.6, 0.95))
-        reports_popup.popup = reportsPop
-        reportsPop.open()
-
     def load_clients(self) -> list:
         return load_client_names()
 
@@ -157,41 +150,81 @@ class ViewPopup(GridLayout):
 
 
 class ReportsPopup(GridLayout):
-    def __init__(self, projects_screen: Screen, proj_id: str, popup, **kwargs) -> None:
+    def __init__(self, projects_screen: Screen, popup, **kwargs) -> None:
         super().__init__(**kwargs)
         self.projects_screen = projects_screen
-        self.populate_reports(proj_id)
+        self.populate_reports()
         self.popup = popup
         self.cols = 1
         self.rows = 1
 
     # We have the Proj_ID, populate the fields
-    def populate_reports(self, pid: str) -> None:
+    def populate_reports(self, pName: str = None) -> None:
         # Get the project data from the DB
-        project = get_project(pid)
+        self.ids.reportProject_startDate.text = " Unavailable "
+        self.ids.reportProject_endDate.text = " Unavailable "
+        self.ids.reportProject_status.text = " Unavailable "
+        self.ids.reportProject_projectBudget.text = "0"
+        self.ids.reportProject_manpowerCost.text = "0"
+        self.ids.reportProject_resourceCost.text = "0"
+        self.ids.reportProject_netProfit.text = "0"
+        self.ids.assigned_manpower.clear_widgets()
+        self.ids.assigned_resources.clear_widgets()
+        manpower_cost: int = 0
+        resource_cost: int = 0
+        net_profit: int = 0
 
-        # Assign
-        self.ids.proj_desc.text = project["description"]
-        self.ids.proj_start.text = project["start_date"]
-        self.ids.proj_end.text = project["end_date"]
-        self.ids.proj_client.text = project["client_name"]
-        self.ids.proj_budget.text = str(project["budget"])
-        # Get relevant manpower data (manpower role, count)
-        roles = load_members(project["name"])
-        for role, count in roles.items():
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
-            grid.add_widget(CLabel(text=role, font_size='15sp'))
-            grid.add_widget(CLabel(text=str(count), font_size='15sp'))
-            self.ids.assigned_manpower.add_widget(grid)
-        # Get resource data (resource name, amount)
-        res = load_res(project["name"])
-        for resource, amount in res.items():
-            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
-            grid.add_widget(CLabel(text=resource, font_size='15sp'))
-            grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
-            self.ids.assigned_resources.add_widget(grid)
+        if pName is not None and pName != '':
+            # Get relevant manpower data (manpower role, count)
+            projects = load_projects()
+            for project in projects:
+                if project['name'] == pName:
+                    self.ids.reportProject_startDate.text = project['start_date']
+                    self.ids.reportProject_endDate.text = project['end_date']
+                    if project['status'] == 'Completed':
+                        self.ids.reportProject_status.text = project['status']
+                    else:
+                        # Count days left and display days leflt as Y M D left or M D left
+                        days_left = (datetime.datetime.strptime(project['end_date'], '%Y-%m-%d') - datetime.datetime.now()).days
+                        if days_left > 365:
+                            years = days_left // 365
+                            months = (days_left % 365) // 30
+                            days = (days_left % 365) % 30
+                            self.ids.reportProject_status.text = str(years) + "Y " + str(months) + "M " + str(days) + "D left"
+                        elif days_left > 30:
+                            months = days_left // 30
+                            days = days_left % 30
+                            self.ids.reportProject_status.text = str(months) + "M " + str(days) + "D left"
+                        else:
+                            self.ids.reportProject_status.text = str(days_left) + "D left"
 
-    def dismissPopup(self,instance) -> None:
+                    self.ids.reportProject_projectBudget.text = convert_currency(project['budget'])
+                    # costs must be calculated
+                    manpower_cost += calc_manpowerCost(pName)
+                    resource_cost += calc_resourcesCost(pName)
+                    net_profit = int(project['budget']) - manpower_cost - resource_cost
+                    self.ids.reportProject_manpowerCost.text = convert_currency(manpower_cost)
+                    self.ids.reportProject_resourceCost.text = convert_currency(resource_cost)
+                    self.ids.reportProject_netProfit.text = convert_currency(net_profit)
+
+            roles = load_members(pName)
+            for role, count in roles.items():
+                grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+                grid.add_widget(CLabel(text=role, font_size='15sp'))
+                grid.add_widget(CLabel(text=str(count), font_size='15sp'))
+                self.ids.assigned_manpower.add_widget(grid)
+            # Get resource data (resource name, amount)
+            res = load_res(pName)
+            for resource, amount in res.items():
+                grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+                grid.add_widget(CLabel(text=resource, font_size='15sp'))
+                grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
+                self.ids.assigned_resources.add_widget(grid)
+
+    def load_projects(self) -> list:
+        return load_project_names()
+
+    def dismissPopup(self, instance) -> None:
         self.popup.dismiss()
 
 
@@ -282,6 +315,14 @@ class ProjectsScreen(Screen):
                               size_hint=(0.35, 0.3))
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
+
+    # Open Reports Popup Window
+    def reports_popup(self) -> None:
+        temp_reports_popup = Popup()
+        reports_popup = ReportsPopup(self, temp_reports_popup)
+        reportsPop = RPopup(title='Projects Overview', content=reports_popup, size_hint=(0.6, 0.95))
+        reports_popup.popup = reportsPop
+        reportsPop.open()
 
     # Open View Popup Window
     def view_project(self, project_id: str, instance) -> None:

@@ -323,19 +323,6 @@ class RText(CText):
         self.rect.size = instance.size
 
 
-class RLabelTop(CLabel):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.padding = (10, 40, 10, 20)
-
-
-class RLabelBot(CLabel):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.padding = (10, 20, 10, 40)
-        self.font_size = '15sp'
-
-
 class CSpinner(Spinner):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -351,6 +338,7 @@ class CSpinner(Spinner):
         self.padding = (10, 10)
         # scroll bar
         self.scroll_width = 20
+
 
 class RSpinner(CSpinner):
     def __init__(self, **kwargs):

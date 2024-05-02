@@ -143,3 +143,11 @@ def add_employee(name: str, role: str, email: str, phone_number: str, employment
     else:
         message_box('Error', 'Failed to add employee: "manpower" reference not found.')
         return False
+
+def calc_manpowerCost(pName: str) -> int:
+    manpower = load_manpower()
+    cost = 0
+    for employee in manpower:
+        if pName in employee['project_assignments']:
+            cost += int(employee['salary'])
+    return cost

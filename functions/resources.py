@@ -163,3 +163,14 @@ def change_qty(res_id: str, amount: str, action: str) -> bool:
         new_qty = int(res['quantity']) - int(amount)
         ref.child(res_id).update({'quantity': str(new_qty)})
         return True
+
+
+def calc_resourcesCost(pName: str) -> int:
+    res = load_resources()
+    cost = 0
+    for resource in res:
+        for assignment in resource['resource_assignments']:
+            if assignment['project'] == pName:
+                cost += int(resource['unit_cost']) * int(assignment['amount'])
+    return cost
+

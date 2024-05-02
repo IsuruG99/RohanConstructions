@@ -57,16 +57,20 @@
                                                         pos: self.pos
                         GridLayout:
                                 rows: 1
-                                cols: 2
+                                cols: 3
                                 spacing: 20
                                 size_hint: 1, 0.1
                                 RButton4:
+                                        text: 'Overview'
+                                        size_hint: 0.4, 1
+                                        on_release: root.reports_popup()
+                                RButton4:
                                         text: 'Add'
-                                        size_hint: 0.6, 1
+                                        size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
                                 RButton4:
                                         text: 'Back'
-                                        size_hint: 0.4, 1
+                                        size_hint: 0.2, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
@@ -260,114 +264,132 @@
                                         root.deleteProj(requestType="Validate")
 
                         RButton4:
-                                text: 'Report'
-                                on_release: root.reports_popup(viewPop_name.text)
+                                text: 'Back'
+                                on_release: root.popup.dismiss()
 
 <ReportsPopup>:
         GridLayout:
                 size: root.size
                 pos: root.pos
                 cols: 1
-                rows: 2
-                padding: 30
+                rows: 4
+                padding: 20
                 spacing: 10
-
                 GridLayout:
-                        size_hint: 1, 0.9
-                        cols: 1
-                        rows: 3
-
+                        size_hint: 1, 0.25
+                        cols: 2
+                        rows: 1
+                        spacing: 20
                         GridLayout:
-                                cols: 4
-                                rows: 2
-                                padding: 10
-                                spacing: 10
-                                size_hint: 1, 0.15
-
-                                CLabel:
-                                        text: 'Client'
-                                        size_hint: 0.25, 1
-                                        valign: 'bottom'
-                                CLabel:
-                                        text: 'Start Date'
-                                        size_hint: 0.25, 1
-                                        valign: 'bottom'
-                                CLabel:
-                                        text: 'End Date'
-                                        size_hint: 0.25, 1
-                                        valign: 'bottom'
-                                CLabel:
-                                        text: 'Budget'
-                                        size_hint: 0.25, 1
-                                        valign: 'bottom'
-
-                                CLabel:
-                                        id: proj_client
-                                        size_hint: 0.25, 1
-                                        valign: 'top'
-                                CLabel:
-                                        id: proj_start
-                                        size_hint: 0.25, 1
-                                        valign: 'top'
-                                CLabel:
-                                        id: proj_end
-                                        size_hint: 0.25, 1
-                                        valign: 'top'
-                                CLabel:
-                                        id: proj_budget
-                                        multiline: False
-                                        size_hint: 0.25, 1
-                                        valign: 'top'
-                        GridLayout:
+                                size_hint: 0.5, 1
                                 cols: 1
                                 rows: 2
-                                padding: 20
                                 spacing: 10
-                                size_hint: 1, 0.15
-                                CLabel:
-                                        text: 'Description'
-                                        size_hint: 1, 0.2
-                                CLabel:
-                                        id: proj_desc
-                                        size_hint: 1, 0.8
-                                        font_size: '20sp'
+                                padding: 0, 10
+                                RAutoFillText:
+                                        id: reportProject_select
+                                        hint_text: 'Project Name'
+                                        multiline: False
+                                        size_hint: 1, 0.5
+                                        completions: root.load_projects()
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                RButton4:
+                                        text: 'Generate Report'
+                                        size_hint: 1, 0.5
+                                        on_release: root.populate_reports(reportProject_select.text)
                         GridLayout:
+                                size_hint: 0.5, 1
                                 cols: 2
-                                rows: 4
-                                padding: 10
-                                size_hint: 1, 0.7
-                                RLabelTop:
-                                        text: 'Assigned Members'
-                                        size_hint_y: 0.2
-                                RLabelTop:
-                                        text: 'Assigned Resources'
-                                        size_hint_y: 0.2
-                                ScrollView:
-                                        GridLayout:
-                                                id: assigned_manpower
-                                                cols: 1
-                                                size_hint_y: None
-                                                height: self.minimum_height
-                                                scroll_type: ['bars', 'content']
-                                                bar_width: 10
-                                                bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
-                                                bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
-                                ScrollView:
-                                        GridLayout:
-                                                id: assigned_resources
-                                                cols: 1
-                                                size_hint_y: None
-                                                height: self.minimum_height
-                                                scroll_type: ['bars', 'content']
-                                                bar_width: 10
-                                                bar_color: 1, 0, 0, 1  # RGBA for the scrollbar color
-                                                bar_inactive_color: 0.5, 0.5, 0.5, 1  # RGBA for the scrollbar's inactive color
-
+                                rows: 3
+                                spacing: 5
+                                CLabel:
+                                        text: 'Start Date'
+                                        size_hint: 0.2, 0.25
+                                RText:
+                                        id: reportProject_startDate
+                                        size_hint: 0.3, 0.3
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: 'End Date'
+                                        size_hint: 0.2, 0.25
+                                RText:
+                                        id: reportProject_endDate
+                                        size_hint: 0.3, 0.3
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: 'Status'
+                                        size_hint: 0.2, 0.25
+                                RText:
+                                        id: reportProject_status
+                                        size_hint: 0.3, 0.3
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                GridLayout:
+                        cols: 2
+                        rows: 4
+                        size_hint: 1, 0.55
+                        CLabel:
+                                text: 'Assigned Members'
+                                size_hint_y: 0.2
+                        CLabel:
+                                text: 'Assigned Resources'
+                                size_hint_y: 0.2
+                        ScrollView:
+                                GridLayout:
+                                        id: assigned_manpower
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        scroll_type: ['bars', 'content']
+                                        bar_width: 10
+                                        bar_color: 1, 0, 0, 1
+                                        bar_inactive_color: 0.5, 0.5, 0.5, 1
+                        ScrollView:
+                                GridLayout:
+                                        id: assigned_resources
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        scroll_type: ['bars', 'content']
+                                        bar_width: 10
+                                        bar_color: 1, 0, 0, 1
+                                        bar_inactive_color: 0.5, 0.5, 0.5, 1
+                GridLayout:
+                        size_hint: 1, 0.15
+                        cols: 4
+                        rows: 2
+                        spacing: 10
+                        CLabel:
+                                text: 'Manpower Cost'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: reportProject_manpowerCost
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Resource Cost'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: reportProject_resourceCost
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Project Budget'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: reportProject_projectBudget
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Net Profit'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: reportProject_netProfit
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                 GridLayout:
                         size_hint: 1, 0.1
                         cols: 1
                         rows: 1
-
                         RButton4:
                                 text: 'Back'
                                 on_release: root.popup.dismiss()

@@ -15,6 +15,7 @@ def load_resources(status: int = 0) -> list:
         resource['id'] = res_id
         res.append(resource)
 
+    # 0 is all, 1 is in stock, 2 is out of stock
     if status == 0:
         res = res
     elif status == 1:
@@ -30,9 +31,7 @@ def get_res(res_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('resources')
 
-    # Retrieve the resource data as a dictionary
     res = ref.child(res_id).get()
-
     return res
 
 
@@ -41,7 +40,6 @@ def update_res(res_id: str, name: str, quantity: str, status: str, supplier_name
     ref = database.get_ref('resources')
 
     if ref is not None:
-        # Set the res data under the new key
         ref.child(res_id).update({
             'name': name,
             'quantity': quantity,
@@ -51,7 +49,6 @@ def update_res(res_id: str, name: str, quantity: str, status: str, supplier_name
         })
         return True
     else:
-        message_box('Error', 'Failed to update resource: "resources" reference not found.')
         return False
 
 
@@ -60,25 +57,20 @@ def delete_res(res_id: str) -> bool:
     ref = database.get_ref('resources')
 
     if ref is not None:
-        # Delete the Resource
         ref.child(res_id).delete()
     else:
-        message_box('Error', 'Failed to delete Resource: "resources" reference not found.')
-
-    print("Resources deleted successfully.")
+        return False
     return True
 
 
 # Add resource function
 def add_res(name: str, quantity: str, status: str, supplier_name: str, cost: str) -> bool:
-    # Get a reference to the 'resources' collection in the database
+    # Get a reference to DB
     ref = database.get_ref('resources')
 
     if ref is not None:
-        # Generate a new unique key for the resource
         new_res_ref = ref.push()
 
-        # Set the resource data under the new key
         new_res_ref.set({
             'name': name,
             'quantity': quantity,
@@ -87,25 +79,19 @@ def add_res(name: str, quantity: str, status: str, supplier_name: str, cost: str
             'unit_cost': cost,
             'resource_assignments': [{"amount": "", "project": ""}]
         })
-
-        print("Resource added successfully.")
         return True
     else:
-        message_box('Error', 'Failed to add resource: "resources" reference not found.')
         return False
 
 
 def resource_assignment(res_id: str, amount: str, project_name: str, action: str) -> bool:
     ref = database.get_ref('resources')
-    # json structure 'resource_assignments': [{"amount": "11", "project": "ABC"}]
     assignments = ref.child(res_id).child('resource_assignments').get()
-    # if assignments have only 1 {amount, project} pair left, when removing, replace with a {amount: "", project: ""}
     if action == "Remove":
         if len(assignments) == 1:
             assignments = [{"amount": "", "project": ""}]
             ref.child(res_id).update({'resource_assignments': assignments})
             change_qty(res_id, amount, "AddQty")
-            print("Resource removed from project successfully.")
             return True
         else:
             for assignment in assignments:
@@ -113,7 +99,6 @@ def resource_assignment(res_id: str, amount: str, project_name: str, action: str
                     assignments.remove(assignment)
                     ref.child(res_id).update({'resource_assignments': assignments})
                     change_qty(res_id, amount, "AddQty")
-                    print("Resource removed from project successfully.")
                     return True
     elif action == "Add":
         project_exists = False
@@ -128,7 +113,6 @@ def resource_assignment(res_id: str, amount: str, project_name: str, action: str
 
         ref.child(res_id).update({'resource_assignments': assignments})
         change_qty(res_id, amount, "SubtractQty")
-        print("Resource added to project successfully.")
         return True
     elif action == "Subtract":
         for assignment in assignments:
@@ -137,13 +121,10 @@ def resource_assignment(res_id: str, amount: str, project_name: str, action: str
                     assignment['amount'] = str(int(assignment['amount']) - int(amount))
                     ref.child(res_id).update({'resource_assignments': assignments})
                     change_qty(res_id, amount, "AddQty")
-                    print("Resource subtracted from project successfully.")
                     return True
                 else:
-                    message_box('Error', 'Not enough resources assigned to project.')
                     return False
     else:
-        message_box('Error', 'Failed to perform action')
         return False
 
     message_box('Error', 'Failed to connect to Database.')

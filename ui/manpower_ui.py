@@ -25,11 +25,12 @@ class AddManpower(GridLayout):
         phone_number = str(self.ids.addEmp_phone.text)
         role = str(self.ids.addEmp_role.text)
         status = str(self.ids.addEmp_status.text)
-        salary = str(self.ids.addEmp_salary.text)
+        contract_fee = str(self.ids.addEmp_contractFee.text)
+        retainer_fee = str(self.ids.addEmp_retainerFee.text)
 
         # Check if all fields are full, except assignments
         if requestType == "Validate":
-            if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
+            if name == '' or email == '' or phone_number == '' or role == '' or status == '' or contract_fee == '' or retainer_fee == '':
                 self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                 return
             if not validate_email(email):
@@ -42,7 +43,7 @@ class AddManpower(GridLayout):
                                              'Confirm', 'Yes', 'No', self.add_employee)
             self.validCheck = 1
         if requestType == "Submit" and self.validCheck == 1:
-            if add_employee(name, role, email, phone_number, status, [""], salary):
+            if add_employee(name, role, email, phone_number, status, [""], contract_fee, retainer_fee):
                 self.manpower_screen.CMessageBox('Success', 'Employee added successfully.', 'Message')
                 self.validCheck = 0
                 self.manpower_screen.populate_manpower(load_manpower(0))
@@ -69,9 +70,10 @@ class ViewManpower(GridLayout):
         self.ids.viewEmp_name.text = emp["name"]
         self.ids.viewEmp_role.text = emp["role"]
         self.ids.viewEmp_status.text = emp["employment_status"]
-        self.ids.viewEmp_salary.text = emp["salary"]
         self.ids.viewEmp_email.text = emp["email"]
         self.ids.viewEmp_phone.text = emp["phone_number"]
+        self.ids.viewEmp_contractFee.text = emp["contract_fee"]
+        self.ids.viewEmp_retainerFee.text = emp["retainer_fee"]
 
         # emp["project_assignments"] is a list of projects, we display them in ScrollView named viewEmp_projects
         for project in emp["project_assignments"]:
@@ -100,11 +102,12 @@ class ViewManpower(GridLayout):
         phone_number = str(self.ids.viewEmp_phone.text)
         role = str(self.ids.viewEmp_role.text)
         status = str(self.ids.viewEmp_status.text)
-        salary = str(self.ids.viewEmp_salary.text)
+        contract_fee = str(self.ids.viewEmp_contractFee.text)
+        retainer_fee = str(self.ids.viewEmp_retainerFee.text)
 
         if requestType == "Validate":
             # Check if all fields are full, except assignments
-            if name == '' or email == '' or phone_number == '' or role == '' or status == '' or salary == '':
+            if name == '' or email == '' or phone_number == '' or role == '' or status == '' or contract_fee == '' or retainer_fee == '':
                 self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                 return
             if not validate_email(email):
@@ -118,7 +121,7 @@ class ViewManpower(GridLayout):
             self.validCheck = 1
         if requestType == "Submit":
             if self.validCheck == 1:
-                if update_employee(self.emp_id, name, role, email, phone_number, status, salary):
+                if update_employee(self.emp_id, name, role, email, phone_number, status, contract_fee, retainer_fee):
                     self.manpower_screen.CMessageBox('Success', 'Employee edited successfully.', 'Message')
                     self.validCheck = 0
                     self.manpower_screen.populate_manpower(load_manpower(0))
@@ -204,7 +207,7 @@ class ManpowerScreen(Screen):
     def view_emp(self, emp_id: str, instance) -> None:
         temp_viewEmp_popup = Popup()
         viewEmp_popup = ViewManpower(self, emp_id, temp_viewEmp_popup)
-        viewEmp = RPopup(title='View Employee', content=viewEmp_popup, size_hint=(0.55, 0.8))
+        viewEmp = RPopup(title='View Employee', content=viewEmp_popup, size_hint=(0.6, 0.9))
         viewEmp_popup.popup = viewEmp
         viewEmp.open()
 

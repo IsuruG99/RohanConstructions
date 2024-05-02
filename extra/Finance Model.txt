@@ -48,15 +48,34 @@ BrainStorming :
             2. One Log as Completion, include final calculated price
             3. ... ?
 
+- Employee Salaries (Perm and Temp)
+    - Permanent Employees will have a fixed salary
+    - Temporary Employees will have a salary based on the time they worked
+    Issues
+        - Monthly Weekly payments are bank related and will be automated outside of the system.
+        - Only Project completion salaries will be added to the system
+        - Permanent Employees payments will be handled by bank, and will not be paid via system.
+        - Temporary Employees will have to be added manually and handled manually by system admin and manager.
+
+        Temp employee will have a fixed salary for the entire project they sign up for.
+        - Receive Contract Pay for project completion and will be removed from system.
+        Perm employee will have a fixed salary per month, and this will be paid based on project duration.
+        - Have Contract Pay for completing projects.
+        - Retainer fee for unemployed periods, will not be handled by system.
+
+- Projects Overview will allow you to project status to "Finalized",
+        Finalizing (A Special status for a project that is done and dusted)
+        - Moves a copy of project overview to finalized projects database node.
+        - Removes Project, Emp Assignments & Allocations related will be removed from system.
+- Finalized Projects will be viewable on Finance Logs for payment and other purposes.
+
+
 - Understand Finance Reports (Financial Report Popup? Window, Format, Structure)
 
 To-Do List:
-- Rounded Borders now for buttons, what am i doing with my life...
 - Apply RPopup to message box
-- Redo the structure of popups
-- If anushka gives 1 more different UI well.... good luck to me
+- Redo Finance Report Structure
 - Get Refs will crash without internet, implement blank return
-- Supplier & Client Overview structure (Popup made, format and structure unknown)
 - Session Controls? (For super admin)
 - Access Controls V3+ (Postponed till every function complete)
 - Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
@@ -77,3 +96,5 @@ Best moments in project(Coding) so far:
 - Figuring out the resource assignments (i did not expect it to require + -)
 - The way the project completion will work, and how it will connect to the finance function
 - I HATE ROUNDED EVERYTHING (On kivy, literally spent 2 weeks on nothing but visuals)
+- Rounded Popup was an absolute cinema, the content encapsulation and triple class inheritance was a nightmare
+- Moving the pieChart forcefully with manual positioning over 1 hour and half

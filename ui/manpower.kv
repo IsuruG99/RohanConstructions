@@ -80,7 +80,7 @@
 
                 GridLayout:
                         cols: 2
-                        rows: 6
+                        rows: 7
                         padding: 10
                         spacing: 10
                         size_hint: 1, 0.85
@@ -121,11 +121,20 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Salary'
+                                text: 'Contract Fee'
                                 size_hint: 0.3, 1
                         RText:
-                                id: addEmp_salary
-                                hint_text: '1500.00'
+                                id: addEmp_contractFee
+                                hint_text: '35500.00'
+                                size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                        CLabel:
+                                text: 'Retainer Fee'
+                                size_hint: 0.3, 1
+                        RText:
+                                id: addEmp_retainerFee
+                                hint_text: '35500.00'
                                 size_hint: 0.7, 1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
@@ -145,7 +154,7 @@
                         padding: 10
 
                         RButton4:
-                                text: 'Add Project'
+                                text: 'Add Employee'
                                 size_hint: 1, 0.1
                                 on_release: root.add_employee(requestType="Validate")
 
@@ -158,8 +167,7 @@
                 padding: 10
                 GridLayout:
                         cols: 4
-                        rows: 3
-                        padding: 10
+                        rows: 4
                         spacing: 10
                         size_hint: 1, 0.35
 
@@ -200,11 +208,20 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Salary'
+                                text: 'Contract \n Fee'
                                 size_hint: 0.2, 1
                         RText:
-                                id: viewEmp_salary
-                                hint_text: '1500.00'
+                                id: viewEmp_contractFee
+                                hint_text: '35500.00'
+                                size_hint: 0.8, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                        CLabel:
+                                text: 'Retainer \n Fee'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: viewEmp_retainerFee
+                                hint_text: '35500.00'
                                 size_hint: 0.8, 1
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
@@ -228,6 +245,7 @@
                                 cols: 3
                                 size_hint: 1, 0.2
                                 spacing: 10
+                                padding: 10
 
                                 CLabel:
                                         text: 'Project Assignments'

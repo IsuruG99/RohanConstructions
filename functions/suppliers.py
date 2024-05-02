@@ -1,11 +1,10 @@
 from utils import *
 
-
+# Load all suppliers
 def load_suppliers(status: int = 0) -> list:
-    # Get a reference to Database
     ref = database.get_ref('suppliers')
 
-    # Retrieve all suppliers as a list of dictionaries
+    # Retrieve all suppliers
     suppliers = []
     for supplier_id, supplier in ref.get().items():
         if supplier_id == 'supplierZero':
@@ -13,6 +12,7 @@ def load_suppliers(status: int = 0) -> list:
         supplier['id'] = supplier_id
         suppliers.append(supplier)
 
+    # Status 0 = All, 1 = Level 1, 2 = Level 2, 3 = Level 3
     if status == 0:
         suppliers = suppliers
     elif status == 1:
@@ -28,14 +28,10 @@ def load_suppliers(status: int = 0) -> list:
 # Adding new supplier
 def add_supplier(supplierName: str, business: str, contactNo: str, email: str, address: str, startDealing: str,
                  supplierLevel: str) -> bool:
-    # Get a reference to Database
     ref = database.get_ref('suppliers')
 
     if ref is not None:
-        # Generate unique key for the new supplier
         new_supplier_ref = ref.push()
-
-        # Set the supplier data under the new key
         new_supplier_ref.set(
             {
                 'supplierName': supplierName,
@@ -48,24 +44,19 @@ def add_supplier(supplierName: str, business: str, contactNo: str, email: str, a
             })
         return True
     else:
-        message_box('Error', 'New supplier adding fail !: "suppliers" reference not found.')
         return False
 
 
 # Get a single supplier by ID
 def get_supplier(suppliers_id: str) -> dict:
-    # Get a reference to DB
     ref = database.get_ref('suppliers')
-
-    # Retrieve the supplier data as a dictionary
     supplier = ref.child(suppliers_id).get()
-
     return supplier
 
 
+# Update supplier details
 def edit_supplier(suppliers_id: str, supplierName: str, business: str, contactNo: str, email: str, address: str,
                   startDealing: str, supplierLevel: str) -> bool:
-    # Get a reference to Database
     ref = database.get_ref('suppliers')
 
     if ref is not None:
@@ -81,10 +72,10 @@ def edit_supplier(suppliers_id: str, supplierName: str, business: str, contactNo
             })
         return True
     else:
-        message_box('Error', 'Failed to connect to database.')
         return False
 
 
+# Delete a supplier by ID
 def delete_supplier(suppliers_id: str) -> bool:
     ref = database.get_ref('suppliers')
 
@@ -92,11 +83,10 @@ def delete_supplier(suppliers_id: str) -> bool:
         ref.child(suppliers_id).delete()
         return True
     else:
-        message_box('Error', 'Failed to connect to database.')
         return False
 
 
-# For other functions, export a list of supplier names
+# Return a list of supplier names for other functions
 def load_supplier_names() -> list:
     load_suppliers(0)
     supplier_names = []

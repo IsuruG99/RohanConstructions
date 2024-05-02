@@ -199,9 +199,9 @@
       "budget": "2345",
       "client_name": "ABC",
       "description": "AA",
-      "end_date": "2222-3-22",
+      "end_date": "2023-3-22",
       "name": "AAB",
-      "start_date": "2222-2-22",
+      "start_date": "2023-12-22",
       "status": "Completed"
     },
     "-Nr3f4jQf6532XjvOXNm": {
@@ -389,6 +389,84 @@
       "email": "c",
       "password": "c",
         "last_login": "2024-04-12T08:00:00.000Z"
+    }
+  },
+  "history": {
+    "history2": {
+      "budget": "1000000",
+      "client_name": "ABC Company",
+      "description": "Construction of a new office building",
+      "employee_allocations": [
+        {
+          "employee": "David Beckem",
+          "role": "Architect"
+        },
+        {
+          "employee": "Abbey Grange",
+          "role": "Site Engineer"
+        }
+      ],
+      "end_date": "2024-12-31",
+      "manpowerCost": "250500",
+      "name": "New Office Building",
+      "netProfit": "569500",
+      "resourceCost": "180000",
+      "resource_allocations": [
+        {
+          "amount": "10",
+          "resource": "ABC Equipment"
+        },
+        {
+          "amount": "50",
+          "resource": "Concrete"
+        }
+      ],
+      "start_date": "2024-01-01",
+      "user": "a"},
+    "historyZero": {
+      "budget": "None",
+      "client_name": "None",
+      "description": "None",
+      "employee_allocations": [],
+      "end_date": "None",
+      "manpowerCost": "None",
+      "name": "None",
+      "netProfit": "None",
+      "resourceCost": "None",
+      "resource_allocations": [],
+      "start_date": "None",
+      "user": "None"},
+    "history1": {
+        "budget": "10000",
+        "client_name": "ABC Company",
+        "description": "Project CL is a test  project",
+        "employee_allocations": [
+            {
+            "employee": "David Beckem",
+            "role": "Architect"
+            },
+            {
+            "employee": "Abbey Grange",
+            "role": "Site Engineer"
+            }
+        ],
+        "end_date": "2022-05-11",
+        "manpowerCost": "250500",
+        "name": "Project ClAA",
+        "netProfit": "569500",
+        "resourceCost": "180000",
+        "resource_allocations": [
+            {
+            "amount": "10",
+            "resource": "ABC Equipment"
+            },
+            {
+            "amount": "50",
+            "resource": "Concrete"
+            }
+        ],
+        "start_date": "2010-2-11",
+        "user": "a"
     }
   }
 }

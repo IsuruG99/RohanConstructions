@@ -2,6 +2,7 @@ import database
 from utils import message_box
 
 
+# Load finance logs function
 def load_all_finances(status: int = 0) -> list:
     # Get a reference to DB
     ref = database.get_ref('finances')
@@ -25,6 +26,7 @@ def load_all_finances(status: int = 0) -> list:
     return finances
 
 
+# Get a single finance log function
 def get_log(fin_id: str) -> dict:
     # Get a reference to DB
     ref = database.get_ref('finances')
@@ -34,7 +36,7 @@ def get_log(fin_id: str) -> dict:
 
     return finance
 
-
+# Update finance log function
 def edit_log(fin_id: str, fin_type: str, amount: str, date: str, desc: str, entity: str, project: str, category: str,
              user: str = "None") -> bool:
     # Get a reference to DB
@@ -57,7 +59,7 @@ def edit_log(fin_id: str, fin_type: str, amount: str, date: str, desc: str, enti
         message_box('Error', 'Failed to update log: "finances" reference not found.')
         return False
 
-
+# Add finance log function
 def add_log(fin_type: str, amount: str, date: str, desc: str, entity: str, project: str, category: str,
             user: str = "None") -> bool:
     # Get a reference to DB
@@ -78,18 +80,15 @@ def add_log(fin_type: str, amount: str, date: str, desc: str, entity: str, proje
         })
         return True
     else:
-        message_box('Error', 'Failed to add log: "finances" reference not found.')
         return False
 
-
+# Delete finance log function
 def delete_log(fin_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('finances')
 
-    # Delete the log
     if ref is not None:
         ref.child(fin_id).delete()
         return True
     else:
-        message_box('Error', 'Failed to delete log: "finances" reference not found.')
         return False

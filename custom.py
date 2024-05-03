@@ -293,6 +293,13 @@ class CLabel(Label):
         self.markup = True
 
 
+class CLabel2(CLabel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(size=self.setter('text_size'))
+
+
+
 class CText(TextInput):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

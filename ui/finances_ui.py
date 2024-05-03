@@ -76,6 +76,9 @@ class AddLogPopup(GridLayout):
     def load_project_list(self) -> list:
         return load_project_names()
 
+    def dismiss_popup(self, instance) -> None:
+        self.popup.dismiss()
+
 
 class ViewLogPopup(GridLayout):
     def __init__(self, finances_screen: Screen, fin_id: str, popup, **kwargs):
@@ -165,6 +168,9 @@ class ViewLogPopup(GridLayout):
                 self.finances_screen.dismiss_popup(self.popup)
             else:
                 self.finances_screen.CMessageBox('Error', 'Failed to delete log.', 'Message')
+
+    def dismiss_popup(self, instance) -> None:
+        self.popup.dismiss()
 
 
 # Financial Section Main UI (Opens this from main.py)
@@ -256,7 +262,7 @@ class FinancesScreen(Screen):
     def overview_log(self) -> None:
         temp_overview_popup = Popup()
         overviewPop_popup = FinanceOverview(self, temp_overview_popup)
-        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.45, 0.85))
+        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.96, 0.85))
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
@@ -297,7 +303,7 @@ class FinancesScreen(Screen):
                 self.ids.finances_filter.text = 'Filter: All'
 
     def dismiss_popup(self, instance) -> None:
-        instance.dismiss()
+        self.popup.dismiss()
 
 
 class FinanceOverview(GridLayout):
@@ -317,8 +323,15 @@ class FinanceOverview(GridLayout):
             return
 
         finances = load_all_finances(0)
+        contract = 0
+        payroll = 0
+        materials = 0
+        misc = 0
         total_income = 0
         total_expense = 0
+        year = datetime.datetime.now().year
+        month = datetime.datetime.now().month
+
         if m == '':
             m = '00'
         else:
@@ -326,20 +339,44 @@ class FinanceOverview(GridLayout):
         for finance in finances:
             # Date is stored as 'YYYY-MM-DD', it is a string, and we need to extract year and month
             # 2 conditions, year and month, year only (which means all months)
-            if finance['date'][:4] == y and finance['date'][5:7] == m:
+            if finance['date'][:4] == y and (finance['date'][5:7] == m or m == '00'):
+                amount = currencyStringToFloat(finance['amount'])
                 if finance['type'] == 'Income':
-                    total_income += currencyStringToFloat(finance['amount'])
+                    total_income += amount
                 else:
-                    total_expense += currencyStringToFloat(finance['amount'])
-            elif finance['date'][:4] == y and m == '00':
-                if finance['type'] == 'Income':
-                    total_income += currencyStringToFloat(finance['amount'])
-                else:
-                    total_expense += currencyStringToFloat(finance['amount'])
+                    total_expense += amount
 
+                # Add the amount to the respective category
+                if finance['category'] == 'Contract':
+                    contract += amount
+                elif finance['category'] == 'Misc':
+                    misc += amount
+                elif finance['category'] == 'Payroll':
+                    payroll += amount
+                elif finance['category'] == 'Materials':
+                    materials += amount
+        self.ids.overview_contract.text = convert_currency(contract)
+        self.ids.overview_payroll.text = convert_currency(payroll)
+        self.ids.overview_materials.text = convert_currency(materials)
+        self.ids.overview_misc.text = convert_currency(misc)
         self.ids.overview_income.text = convert_currency(total_income)
         self.ids.overview_expense.text = convert_currency(total_expense)
         self.ids.overview_balance.text = convert_currency(total_income - total_expense)
+
+        # headers for revenueView
+        headers = GridLayout(cols=2, size_hint_y=None, height=40)
+        headers.add_widget(CLabel(text='Month', bold=True))
+        headers.add_widget(CLabel(text='Amount', bold=True))
+        self.ids.overview_revenueView.add_widget(headers)
+
+        # self.ids.overview_revenueView must be given content
+        # Show past 6 months of revenue, starting from the current month
+        # Etc: Current month is May,
+        # Display April | 100000
+        # Display March | 200000
+        # And so on
+        # In finance['date'], the first 4 characters are the year, and the next 2 characters are the month
+
 
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()

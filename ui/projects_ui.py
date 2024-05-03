@@ -221,6 +221,15 @@ class ReportsPopup(GridLayout):
                 grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
                 self.ids.assigned_resources.add_widget(grid)
 
+
+    def finalize_projects(self, pName: str) -> None:
+        if pName is not None and pName != '':
+            self.projects_screen.CMessageBox(title='Finalize Project', content='Are you sure you want to finalize this project?',
+                                             context='Confirm', btn1='Yes', btn2='No', btn1click=partial(finalize_project, pName))
+            self.projects_screen.populate_projects(load_projects(0))
+            self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
+            self.popup.dismiss()
+
     def load_projects(self) -> list:
         return load_project_names()
 

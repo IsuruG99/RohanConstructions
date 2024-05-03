@@ -234,6 +234,7 @@ class ClientsScreen(Screen):
             self.parent.current = 'main'
         elif txt == 'Refresh':
             self.populate_clients(load_clients(0))
+            self.ids.search.text = ''
         elif txt == 'Overview':
             self.report_clients()
 
@@ -269,32 +270,22 @@ class ClientsReport(GridLayout):
         profit: int = 0
 
         for project in projects:
-            # project has to be within the year and month, there is start_date and end_date
-            # If project start date is lower or equal to the year and month and end date is higher or equal to the year and month
-            # project start_date and end_date are stored as string in the database
-            if project['start_date'][:7] <= y + '-' + m and project['end_date'][:7] >= y + '-' + m:
+            # Check if the project's start and end dates are within the specified year and month
+            if (project['start_date'][:7] <= y + '-' + m and project['end_date'][:7] >= y + '-' + m) or \
+                    (m == '00' and project['start_date'][:4] <= y and project['end_date'][:4] >= y):
+                # Add the project's budget to the profit
                 profit += currencyStringToFloat(project['budget'])
-                # append to current clients if not already in the list
+
+                # Add the project's client name to the current clients if it's not already in the list
                 if project['client_name'] not in current_clients:
                     current_clients.append(project['client_name'])
-                # append to current_projects if status is In-Progress, as name: project name, client_name: client name
-                if project['status'] == 'In Progress':
-                    current_projects.append({'name': project['name'], 'client_name': project['client_name']})
-                    project_count += 1
-                if project['status'] == 'Completed':
-                    complete_projects.append({'name': project['name'], 'client_name': project['client_name']})
-            # elif month is 00 and year is the start_date year is lower or equal, end_date year is higher or equal
-            elif m == '00' and project['start_date'][:4] <= y and project['end_date'][:4] >= y:
-                profit += currencyStringToFloat(project['budget'])
-                if project['client_name'] not in current_clients:
-                    current_clients.append(project['client_name'])
+
+                # Add the project to the current or completed projects based on its status
                 if project['status'] == 'In Progress':
                     current_projects.append({'name': project['name'], 'client_name': project['client_name']})
                     project_count += 1
                 elif project['status'] == 'Completed':
                     complete_projects.append({'name': project['name'], 'client_name': project['client_name']})
-            else:
-                continue
 
         # Show client count on reportClient_count
         self.ids.reportClient_clientCount.text = "Clients: " + str(len(set(current_clients)))

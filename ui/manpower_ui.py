@@ -52,6 +52,9 @@ class AddManpower(GridLayout):
                 self.manpower_screen.CMessageBox('Error', 'Failed to add Employee.', 'Message')
                 self.validCheck = 0
 
+    def dismiss_popup(self, instance) -> None:
+        self.popup.dismiss()
+
 
 class ViewManpower(GridLayout):
     def __init__(self, manpower_screen: Screen, emp_id: str, popup, **kwargs):
@@ -214,7 +217,7 @@ class ManpowerScreen(Screen):
     def add_emp(self) -> None:
         temp_addEmp_popup = Popup()
         addEmp_popup = AddManpower(self, temp_addEmp_popup)
-        addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.45, 0.8))
+        addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.45, 0.85))
         addEmp_popup.popup = addEmp
         addEmp.open()
 

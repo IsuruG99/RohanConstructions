@@ -87,7 +87,7 @@
                         rows: 6
                         padding: 10
                         spacing: 10
-                        size_hint: 1, 0.8
+                        size_hint: 1, 0.85
 
                         CLabel:
                                 text: 'Name'
@@ -151,16 +151,19 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                 GridLayout:
-                        cols: 1
+                        cols: 2
                         rows: 1
-                        padding: 20
-                        spacing: 20
-                        size_hint: 1, 0.2
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.15
 
                         RButton4:
                                 text: 'Insert'
                                 on_release:
                                         root.addProj(requestType = "Validate")
+                        RButton4:
+                                text: 'Back'
+                                on_release: root.popup.dismiss()
 
 <ViewPopup>:
         size: 400, 600
@@ -393,8 +396,14 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                 GridLayout:
                         size_hint: 1, 0.1
-                        cols: 1
+                        cols: 2
                         rows: 1
+                        spacing: 10
+                        RButton4:
+                                text: 'Finalize'
+                                size_hint: 0.5, 1
+                                on_release: root.finalize_projects(reportProject_select.text)
                         RButton4:
                                 text: 'Back'
+                                size_hint: 0.5, 1
                                 on_release: root.popup.dismiss()

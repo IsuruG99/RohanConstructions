@@ -112,7 +112,7 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Phone Number'
+                                text: 'Phone \nNumber'
                                 size_hint: 0.3, 1
                         RText:
                                 id: addEmp_phone
@@ -121,7 +121,7 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Contract Fee'
+                                text: 'Contract \nFee'
                                 size_hint: 0.3, 1
                         RText:
                                 id: addEmp_contractFee
@@ -130,7 +130,7 @@
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
 
                         CLabel:
-                                text: 'Retainer Fee'
+                                text: 'Retainer \nFee'
                                 size_hint: 0.3, 1
                         RText:
                                 id: addEmp_retainerFee
@@ -148,15 +148,18 @@
                                 size_hint: 0.8, 1
 
                 GridLayout:
-                        cols: 1
-                        rows: 1
+                        cols: 2
                         size_hint: 1, 0.15
                         padding: 10
-
+                        spacing: 10
                         RButton4:
                                 text: 'Add Employee'
                                 size_hint: 1, 0.1
                                 on_release: root.add_employee(requestType="Validate")
+                        RButton4:
+                                text: 'Back'
+                                size_hint: 1, 0.1
+                                on_release: root.dismiss_popup(root.popup)
 
 <ViewManpower>:
         GridLayout:
@@ -281,13 +284,22 @@
                                                         pos: self.pos
 
                         GridLayout:
-                                cols: 1
+                                cols: 3
                                 size_hint: 1, 0.2
                                 spacing: 10
+                                padding: 10
                                 RButton4:
                                         text: 'Edit'
                                         size_hint: 1, 1
                                         on_release: root.edit_employee(requestType="Validate")
+                                RButton4:
+                                        text: 'Delete'
+                                        size_hint: 1, 1
+                                RButton4:
+                                        text: 'Back'
+                                        size_hint: 1, 1
+                                        on_release: root.dismiss_popup(root.popup)
+
 
 
 

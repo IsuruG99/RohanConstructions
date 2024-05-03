@@ -75,8 +75,10 @@ def load_client_names() -> list:
     clientList = load_clients()
 
     clients = []
-    for client_id, client in clientList:
-        client['id'] = client_id
+    for client in clientList:
+        # skip placeholder client
+        if client['id'] == 'clientZero':
+            continue
         clients.append(client['name'])
 
     return clients

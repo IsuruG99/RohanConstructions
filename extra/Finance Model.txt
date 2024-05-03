@@ -78,10 +78,11 @@ To-Do List:
 - Get Refs will crash without internet, implement blank return
 - Session Controls? (For super admin)
 - Access Controls V3+ (Postponed till every function complete)
+- Project Report (Make the Dates look YYYY %B %d)
 - Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
 
 FINAL TASK: (After ALL Above)
-- Project Completion connectivity to Finance function and Budget calculation.
+- Project Deletion after Completion. Extremely difficult to implement, will require a lot of patience.
 
 Optional
 - Images for Employees (Optional), it is python, of course it can do that

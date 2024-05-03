@@ -12,6 +12,7 @@ from pieChart import PieChart
 from utils import *
 from custom import *
 from validation import *
+from kivy.clock import Clock
 
 
 class AddSupPopup(GridLayout):
@@ -44,6 +45,9 @@ class AddSupPopup(GridLayout):
 
             if not validate_date(startDealing):
                 self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if not validate_email(email):
+                self.suppliers_screen.CMessageBox('Error', 'Check email address.', 'Message')
                 return
             # Ask confirm
             self.suppliers_screen.CMessageBox('Add Supplier', 'Do you want to add supplier ?', 'Confirm', 'Yes', 'No',
@@ -109,6 +113,9 @@ class ViewSupPopup(GridLayout):
             if not validate_date(startDealing):
                 self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                 return
+            if not validate_email(email):
+                self.suppliers_screen.CMessageBox('Error', 'Check email address.', 'Message')
+                return
             self.suppliers_screen.CMessageBox('Edit Supplier', 'Do you want to save changes ?', 'Confirm', 'Yes',
                                               'No', self.editSupplier)
             self.validCheck = 1
@@ -117,7 +124,7 @@ class ViewSupPopup(GridLayout):
                 # Send data to suppliers.py
                 if edit_supplier(self.suppliers_id, supplierName, business, contactNo, email, address, startDealing,
                                  supplierLevel):
-                    self.suppliers_screen.CMessageBox('Success', 'Supplier edited successfully.', 'Message')
+                    self.suppliers_screen.CMessageBox('Success', 'Saved Changes successfully.', 'Message')
                 else:
                     self.suppliers_screen.CMessageBox('Error', 'Edit failed !')
                 self.validCheck = 0
@@ -219,7 +226,7 @@ class SuppliersScreen(Screen):
         if headers is None:
             headers = ['Business', 'Owner', 'Contact', 'Level']
         # Fill header list (Made to rewrite [A] [D] Sorting Header custom names in sorting)
-        size_hints = [4, 3, 2, 1]
+        size_hints = [3.5, 3, 2.5, 1]
         for header in headers:
             self.ids.Supplier_headers.add_widget(CButton(text=header,
                                                          bold=True,
@@ -232,15 +239,17 @@ class SuppliersScreen(Screen):
             grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
             button = Button(text=supplier["business"],
                             on_release=partial(self.view_suppliers, supplier["id"]),
-                            background_normal='', font_size='20sp',
+                            background_normal='',
+                            font_size='20sp',
                             background_color=(0.1, 0.1, 0.1, 0.0),
-                            font_name='Roboto', size_hint_x=4,
+                            font_name='Roboto',
+                            size_hint_x=3.5,
                             color=(1, 1, 1, 1),
                             bold=True)
             grid.supplier = supplier
             grid.add_widget(button)
             grid.add_widget(CLabel(text=supplier["supplierName"], size_hint_x=3))
-            grid.add_widget(CLabel(text=supplier["contactNo"], size_hint_x=2))
+            grid.add_widget(CLabel(text=supplier["contactNo"], size_hint_x=2.5))
             grid.add_widget(CLabel(text=supplier["supplierLevel"], size_hint_x=1))
             self.ids.Supplier_list.add_widget(grid)
 
@@ -280,6 +289,7 @@ class SuppliersScreen(Screen):
     def view_suppliers(self, suppliers_id: str, instance) -> None:
         temp_viewPop_popup = Popup()
         viewPop_popup = ViewSupPopup(self, suppliers_id, temp_viewPop_popup)
+
         viewPop = RPopup(title='View Supplier', content=viewPop_popup, size_hint=(0.45, 0.8))
         viewPop_popup.popup = viewPop
         viewPop.open()
@@ -319,20 +329,27 @@ class SuppliersScreen(Screen):
             self.parent.current = 'main'
         elif txt == 'Add New Supplier':
             self.add_popup()
+        elif txt == 'Refresh':
+            self.ids.supplierFilter.text = 'Filter : All'
+            self.clear_searchBar_text()
+            self.populate_suppliers(load_suppliers(0))
+
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
-        elif txt == 'Filter: All' or txt == 'Filter: Level 1' or txt == 'Filter: Level 2' or txt == 'Filter: Level 3':
-            if txt == 'Filter: All':
+        elif txt == 'Filter : All' or txt == 'Filter : Level 1' or txt == 'Filter : Level 2' or txt == 'Filter : Level 3':
+            if txt == 'Filter : All':
                 self.populate_suppliers(load_suppliers(1))
-                self.ids.supplierFilter.text = 'Filter: Level 1'
-            elif txt == 'Filter: Level 1':
+                self.ids.supplierFilter.text = 'Filter : Level 1'
+            elif txt == 'Filter : Level 1':
                 self.populate_suppliers(load_suppliers(2))
-                self.ids.supplierFilter.text = 'Filter: Level 2'
-            elif txt == 'Filter: Level 2':
+                self.ids.supplierFilter.text = 'Filter : Level 2'
+            elif txt == 'Filter : Level 2':
                 self.populate_suppliers(load_suppliers(3))
-                self.ids.supplierFilter.text = 'Filter: Level 3'
-            elif txt == 'Filter: Level 3':
+                self.ids.supplierFilter.text = 'Filter : Level 3'
+            elif txt == 'Filter : Level 3':
                 self.populate_suppliers(load_suppliers(0))
-                self.ids.supplierFilter.text = 'Filter: All'
+                self.ids.supplierFilter.text = 'Filter : All'
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
+    def clear_searchBar_text(self):
+        self.ids.searchBar.text = ''

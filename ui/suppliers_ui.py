@@ -45,6 +45,10 @@ class AddSupPopup(GridLayout):
             if not validate_date(startDealing):
                 self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                 return
+
+            if not validate_email(email):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid email format.', 'Message')
+                return
             # Ask confirm
             self.suppliers_screen.CMessageBox('Add Supplier', 'Do you want to add supplier ?', 'Confirm', 'Yes', 'No',
                                               self.add_Supplier)
@@ -109,6 +113,11 @@ class ViewSupPopup(GridLayout):
             if not validate_date(startDealing):
                 self.suppliers_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
                 return
+
+            if not validate_email(email):
+                self.suppliers_screen.CMessageBox('Error', 'Invalid email format.', 'Message')
+                return
+
             self.suppliers_screen.CMessageBox('Edit Supplier', 'Do you want to save changes ?', 'Confirm', 'Yes',
                                               'No', self.editSupplier)
             self.validCheck = 1

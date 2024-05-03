@@ -66,12 +66,15 @@ class AddLogPopup(GridLayout):
             self.validCheck = 1
         elif requestType == "Submit":
             if self.validCheck == 1:
-                add_log(fin_type, amount, date, desc, entity, project, category)
-                self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
-                self.finances_screen.populate_logs(load_all_finances(0))
-                self.validCheck = 0
-                self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                self.finances_screen.dismiss_popup(self.popup)
+                if add_log(fin_type, amount, date, desc, entity, project, category):
+                    self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
+                    self.finances_screen.populate_logs(load_all_finances(0))
+                    self.validCheck = 0
+                    self.finances_screen.ids.finances_filter.text = 'Filter: All'
+                    self.finances_screen.dismiss_popup(self.popup)
+                else:
+                    self.finances_screen.CMessageBox('Error', 'Failed to add log.', 'Message')
+                    self.validCheck = 0
 
     def load_project_list(self) -> list:
         return load_project_names()
@@ -262,7 +265,7 @@ class FinancesScreen(Screen):
     def overview_log(self) -> None:
         temp_overview_popup = Popup()
         overviewPop_popup = FinanceOverview(self, temp_overview_popup)
-        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.96, 0.85))
+        overviewPop = RPopup(title='Finance Overview', content=overviewPop_popup, size_hint=(0.55, 0.85))
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
@@ -329,8 +332,6 @@ class FinanceOverview(GridLayout):
         misc = 0
         total_income = 0
         total_expense = 0
-        year = datetime.datetime.now().year
-        month = datetime.datetime.now().month
 
         if m == '':
             m = '00'
@@ -362,20 +363,6 @@ class FinanceOverview(GridLayout):
         self.ids.overview_income.text = convert_currency(total_income)
         self.ids.overview_expense.text = convert_currency(total_expense)
         self.ids.overview_balance.text = convert_currency(total_income - total_expense)
-
-        # headers for revenueView
-        headers = GridLayout(cols=2, size_hint_y=None, height=40)
-        headers.add_widget(CLabel(text='Month', bold=True))
-        headers.add_widget(CLabel(text='Amount', bold=True))
-        self.ids.overview_revenueView.add_widget(headers)
-
-        # self.ids.overview_revenueView must be given content
-        # Show past 6 months of revenue, starting from the current month
-        # Etc: Current month is May,
-        # Display April | 100000
-        # Display March | 200000
-        # And so on
-        # In finance['date'], the first 4 characters are the year, and the next 2 characters are the month
 
 
     def dismiss_popup(self, instance) -> None:

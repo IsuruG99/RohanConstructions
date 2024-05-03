@@ -85,7 +85,6 @@ def edit_user(email: str, password: str, access: int) -> bool:
             ref.child(user).update({"password": password, "access": access})
             return True
     else:
-        message_box('Error', 'User not found')
         return False
 
 
@@ -105,7 +104,6 @@ def delete_user(email: str) -> bool:
             ref.child(user).delete()
             return True
     else:
-        message_box('Error', 'User not found')
         return False
 
 

@@ -87,6 +87,9 @@ class ViewResource(GridLayout):
                     self.validCheck = 0
                     self.res_screen.ids.resource_filter.text = 'Filter: All'
                     self.dismiss_popup(self.popup)
+                else:
+                    self.res_screen.CMessageBox('Error', 'Failed to edit resource.', 'Message')
+
 
     def deleteRes(self, requestType: str = "Submit") -> None:
         # Send res_id to resources.py and it will delete the entity

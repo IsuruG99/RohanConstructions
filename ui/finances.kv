@@ -267,168 +267,129 @@
 
 <FinanceOverview>:
         GridLayout:
-                cols: 3
-                rows: 1
+                cols: 1
+                rows: 3
                 size: root.size
                 pos: root.pos
                 padding: 20
                 spacing: 10
+
                 GridLayout:
                         cols: 1
                         rows: 3
-                        size_hint: 0.499, 1
                         spacing: 10
+                        size_hint: 1, 0.3
+                        CLabel:
+                                text: 'Year and Month'
+                                size_hint: 1, 0.3
+                                font_size: '25sp'
                         GridLayout:
-                                cols: 1
-                                rows: 3
-                                spacing: 10
+                                cols: 2
+                                rows: 1
                                 size_hint: 1, 0.4
-                                CLabel:
-                                        text: 'Year and Month'
-                                        size_hint: 1, 0.3
-                                        font_size: '30sp'
-                                GridLayout:
-                                        cols: 2
-                                        rows: 1
-                                        size_hint: 1, 0.4
-                                        spacing: 10
-                                        AutoFillText:
-                                                id: overview_year
-                                                text: '2024'
-                                                hint_text: 'Year'
-                                                size_hint: 0.5, 1
-                                                font_size: '25sp'
-                                                completions: [str(i) for i in range(1900, 2101)]
-                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        AutoFillText:
-                                                id: overview_month
-                                                size_hint: 0.5, 1
-                                                # how do i say that the text should be a month, but can be blank as well?
-                                                hint_text: 'Month (optional)'
-                                                font_size: '25sp'
-                                                completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                RButton4:
-                                        text: 'Check'
-                                        size_hint: 1, 0.3
-                                        on_release: root.populate_overview(overview_year.text, overview_month.text)
-                        GridLayout:
-                                cols: 1
-                                rows: 2
                                 spacing: 10
-                                size_hint: 1, 0.6
-                                GridLayout:
-                                        cols: 2
-                                        rows: 1
-                                        spacing: 10
-                                        size_hint: 1, 0.8
-                                        GridLayout:
-                                                cols: 2
-                                                rows: 3
-                                                size_hint: 0.5, 1
-                                                spacing: 10
-                                                CLabel:
-                                                        text: 'Contract'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_contract
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                                CLabel:
-                                                        text: 'Materials'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_materials
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                                CLabel:
-                                                        text: 'Total \nIncome'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_income
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        GridLayout:
-                                                cols: 2
-                                                rows: 3
-                                                size_hint: 0.5, 1
-                                                spacing: 10
-                                                CLabel:
-                                                        text: 'Payroll'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_payroll
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                                CLabel:
-                                                        text: 'Misc'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_misc
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                                CLabel:
-                                                        text: 'Total \nExpense'
-                                                        size_hint: 0.17, 1
-                                                RText:
-                                                        id: overview_expense
-                                                        size_hint: 0.33, 1
-                                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                GridLayout:
-                                        cols: 4
-                                        size_hint: 1, 0.2
-                                        spacing: 10
-                                        CLabel:
-                                                text: ''
-                                                size_hint: 0.25, 1
-                                        CLabel:
-                                                text: 'Balance'
-                                                size_hint: 0.15, 1
-                                        RText:
-                                                id: overview_balance
-                                                size_hint: 0.35, 1
-                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        CLabel:
-                                                text: ''
-                                                size_hint: 0.25, 1
-                # Add a horizontal seperator
-                # So a Line?
-                Widget:
-                        size_hint: 0.002, 1
-                        canvas:
-                                Color:
-                                        rgba: 0.941, 0.886, 0.62, 1
-                                Rectangle:
-                                        size: self.size
-                                        pos: self.pos
+                                AutoFillText:
+                                        id: overview_year
+                                        text: '2024'
+                                        hint_text: 'Year'
+                                        size_hint: 0.5, 1
+                                        font_size: '25sp'
+                                        completions: [str(i) for i in range(1900, 2101)]
+                                        halign: 'center'
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                AutoFillText:
+                                        id: overview_month
+                                        size_hint: 0.5, 1
+                                        # how do i say that the text should be a month, but can be blank as well?
+                                        hint_text: 'Month (optional)'
+                                        font_size: '25sp'
+                                        halign: 'center'
+                                        completions: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        RButton4:
+                                text: 'Check'
+                                size_hint: 1, 0.3
+                                on_release: root.populate_overview(overview_year.text, overview_month.text)
                 GridLayout:
                         cols: 1
-                        rows: 4
-                        size_hint: 0.499, 1
-                        CLabel:
-                                text: 'Monthly Revenue'
-                                size_hint: 1, 0.1
-                                font_size: '30sp'
+                        rows: 2
+                        spacing: 10
+                        size_hint: 1, 0.55
                         GridLayout:
-                                size_hint: 1, 0.1
-                                id: overview_revenueHeaders
+                                cols: 2
                                 rows: 1
-                                height: 50
-                        ScrollView:
-                                size_hint: 1, 0.7
-                                do_scroll_x: False
+                                spacing: 10
+                                size_hint: 1, 0.8
                                 GridLayout:
-                                        id: overview_revenueView
-                                        size_hint_y: None
-                                        height: self.minimum_height
-                                        cols: 1
-                                        canvas.before:
-                                                Color:
-                                                        rgba: 0, 0, 0, 0.6
-                                                Rectangle:
-                                                        size: self.size
-                                                        pos: self.pos
-                        RButton4:
-                                text: 'Back'
-                                size_hint: 1, 0.1
-                                on_release: root.dismiss_popup(root.popup)
+                                        cols: 2
+                                        rows: 3
+                                        size_hint: 0.5, 1
+                                        spacing: 10
+                                        CLabel:
+                                                text: 'Contract'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_contract
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        CLabel:
+                                                text: 'Materials'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_materials
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        CLabel:
+                                                text: 'Total \nIncome'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_income
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                GridLayout:
+                                        cols: 2
+                                        rows: 3
+                                        size_hint: 0.5, 1
+                                        spacing: 10
+                                        CLabel:
+                                                text: 'Payroll'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_payroll
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        CLabel:
+                                                text: 'Misc'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_misc
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                        CLabel:
+                                                text: 'Total \nExpense'
+                                                size_hint: 0.17, 1
+                                        RText:
+                                                id: overview_expense
+                                                size_hint: 0.33, 1
+                                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        GridLayout:
+                                cols: 4
+                                size_hint: 1, 0.2
+                                spacing: 10
+                                CLabel:
+                                        text: ''
+                                        size_hint: 0.25, 1
+                                CLabel:
+                                        text: 'Balance'
+                                        size_hint: 0.15, 1
+                                RText:
+                                        id: overview_balance
+                                        size_hint: 0.35, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: ''
+                                        size_hint: 0.25, 1
+                RButton4:
+                        text: 'Back'
+                        size_hint: 1, 0.15
+                        on_release: root.dismiss_popup(root.popup)

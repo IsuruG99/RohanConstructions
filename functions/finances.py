@@ -56,7 +56,6 @@ def edit_log(fin_id: str, fin_type: str, amount: str, date: str, desc: str, enti
         })
         return True
     else:
-        message_box('Error', 'Failed to update log: "finances" reference not found.')
         return False
 
 # Add finance log function

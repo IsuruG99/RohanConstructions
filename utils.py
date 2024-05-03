@@ -6,7 +6,7 @@ from custom import *
 
 
 # Check for Null Inputs
-def validate_string(*args):
+def validate_string(*args: str) -> bool:
     for arg in args:
         if arg is None or arg == '':
             return False
@@ -14,14 +14,14 @@ def validate_string(*args):
 
 
 # To check mobile number
-def validate_mobileNo(mobileNo):
+def validate_mobileNo(mobileNo: str) -> bool:
     if re.fullmatch(r'^0[0-9]{9}$', mobileNo):
         return True
     else:
         return False
 
 
-def validate_email(email):
+def validate_email(email: str) -> bool:
     if re.fullmatch(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
         return True
     else:
@@ -29,7 +29,7 @@ def validate_email(email):
 
 
 # Validate Date Strings
-def validate_date(*args):
+def validate_date(*args: str) -> bool:
     for arg in args:
         if arg is None or arg == '':
             return False
@@ -40,7 +40,7 @@ def validate_date(*args):
     return True
 
 
-def message_box(title, message):
+def message_box(title: str, message: str):
     from tkinter import messagebox
     messagebox.showinfo(title, message)
 

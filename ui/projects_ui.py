@@ -34,10 +34,13 @@ class AddPopup(GridLayout):
         # Validate inputs
         if requestType == "Validate":
             if not validate_string(name, description, client_name, budget):
-                message_box('Error', 'All fields are required.')
+                self.projects_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                 return
             if not validate_date(start_date, end_date):
-                message_box('Error', 'Invalid date format.')
+                self.projects_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if not validate_currency(budget):
+                self.projects_screen.CMessageBox('Error', 'Invalid budget format.', 'Message')
                 return
             if name_unique_check('add', name) is False:
                 message_box('Error', 'Project name must be unique.')
@@ -48,11 +51,13 @@ class AddPopup(GridLayout):
             self.validCheck = 1
         if requestType == "Submit":
             if self.validCheck == 1:
-                add_project(name, description, start_date, end_date, client_name, budget, "In Progress")
-                self.projects_screen.CMessageBox('Success', 'Project added successfully.', 'Message')
-                self.projects_screen.populate_projects(load_projects(0))
-                self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
-                self.projects_screen.dismiss_popup(self.popup)
+                if add_project(name, description, start_date, end_date, client_name, budget, "In Progress"):
+                    self.projects_screen.CMessageBox('Success', 'Project added successfully.', 'Message')
+                    self.projects_screen.populate_projects(load_projects(0))
+                    self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
+                    self.projects_screen.dismiss_popup(self.popup)
+                else:
+                    self.projects_screen.CMessageBox('Error', 'Failed to add project.', 'Message')
 
     def load_clients(self) -> list:
         return load_client_names()
@@ -101,6 +106,9 @@ class ViewPopup(GridLayout):
                 return
             if not validate_date(start_date, end_date):
                 self.projects_screen.CMessageBox('Error', 'Invalid date format.', 'Message')
+                return
+            if not validate_currency(budget):
+                self.projects_screen.CMessageBox('Error', 'Invalid budget format.', 'Message')
                 return
             if name_unique_check('update', name, self.project_id) is False:
                 self.projects_screen.CMessageBox('Error', 'Project name must be unique.', 'Message')

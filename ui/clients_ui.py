@@ -52,6 +52,9 @@ class AddClientPopup(GridLayout):
                     self.clients_screen.populate_clients(load_clients(0))
                     self.validCheck = 0
                     self.dismiss_popup(self.popup)
+                else:
+                    self.clients_screen.CMessageBox('Error', 'Failed to add client.', 'Message')
+                    self.validCheck = 0
 
     def load_project_list(self) -> list:
         return load_project_names()

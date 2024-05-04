@@ -332,7 +332,7 @@ class SuppliersScreen(Screen):
         elif txt == 'Add New Supplier':
             self.add_popup()
         elif txt == 'Refresh':
-            self.populate_suppliers(load_suppliers())
+            self.populate_suppliers(load_suppliers(0))
             self.ids.supplierFilter.text = 'Filter: All'
             self.ids.search.text = ''
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data

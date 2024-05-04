@@ -340,19 +340,15 @@ class SuppliersScreen(Screen):
             if txt == 'Filter: All':
                 self.populate_suppliers(load_suppliers(1))
                 self.ids.supplierFilter.text = 'Filter: Level 1'
-                self.ids.search.text = ''
             elif txt == 'Filter: Level 1':
                 self.populate_suppliers(load_suppliers(2))
                 self.ids.supplierFilter.text = 'Filter: Level 2'
-                self.ids.search.text = ''
             elif txt == 'Filter: Level 2':
                 self.populate_suppliers(load_suppliers(3))
                 self.ids.supplierFilter.text = 'Filter: Level 3'
-                self.ids.search.text = ''
             elif txt == 'Filter: Level 3':
                 self.populate_suppliers(load_suppliers(0))
                 self.ids.supplierFilter.text = 'Filter: All'
-                self.ids.search.text = ''
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()

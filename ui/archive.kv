@@ -69,7 +69,7 @@
                                 spacing: 20
                                 size_hint: 1, 0.1
                                 RButton4:
-                                        text: 'Add'
+                                        text: 'Archive Projects'
                                         size_hint: 0.4, 1
                                         on_release: root.btn_click(self)
                                 RButton4:
@@ -82,9 +82,36 @@
 <AddArchive>:
         GridLayout:
                 cols: 1
-                rows: 1
+                rows: 3
                 size: root.size
                 pos: root.pos
+                spacing: 10
+                padding: 10
+                CLabel:
+                        text: 'Warning!\nThis action is irreversible'
+                        size_hint: 1, 0.25
+                RAutoFillText:
+                        padding: 10
+                        id: addArchive_project
+                        hint_text: 'Description'
+                        size_hint: 1, 0.4
+                        completions: root.load_projects()
+                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        spacing: 10
+                        size_hint: 1, 0.35
+                        RButton4:
+                                text: 'Archive'
+                                size_hint: 0.5, 1
+                                on_release: root.addArchive(addArchive_project.text)
+                        RButton4:
+                                text: 'Back'
+                                size_hint: 0.5, 1
+                                on_release:
+                                        root.popup.dismiss()
 
 <ViewArchive>:
         GridLayout:

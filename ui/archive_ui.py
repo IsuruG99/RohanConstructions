@@ -20,10 +20,15 @@ class AddArchive(GridLayout):
     def __init__(self, archiveScreen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.archiveScreen = archiveScreen
-
         self.popup = popup
         self.cols = 1
         self.rows = 1
+
+    def addArchive(self) -> None:
+        pass
+
+    def load_projects(self):
+        return load_project_names(load_projects(3))
 
     def dismiss_popup(self):
         self.popup.dismiss()
@@ -46,21 +51,6 @@ class ViewArchive(GridLayout):
         self.ids.viewArchive_user.text = archive['user']
         self.ids.viewArchive_desc.text = archive['description']
 
-        # Manpower Assignment from "employee_allocations": [
-        #         {
-        #           "role": "Architect",
-        #           "count": "2"
-        #         },
-        #         {
-        #           "role": "Site Engineer",
-        #           "count": "5"
-        #         }
-        #       ],
-        #       "resource_allocations": [
-        #         {
-        #           "resource": "Cement",
-        #           "amount": "100"
-        #         }]
         for employee in archive['employee_allocations']:
             if employee['count'] is not None:
                 grid = GridLayout(cols=2, size_hint_y=None, height=40)
@@ -74,7 +64,6 @@ class ViewArchive(GridLayout):
                 grid.add_widget(CLabel(text=resource['resource'], size_hint_x=0.5))
                 grid.add_widget(CLabel(text=resource['amount'], size_hint_x=0.5))
                 self.ids.viewArchive_assignedRes.add_widget(grid)
-
 
         self.ids.viewArchive_budget.text = archive['budget']
         self.ids.viewArchive_resCost.text = archive['resourceCost']
@@ -118,7 +107,7 @@ class ArchiveScreen(Screen):
     def addArchive(self) -> None:
         temp_addArchive = Popup()
         addArchive = AddArchive(self, temp_addArchive)
-        addArch = RPopup(title="Add Archive", content=addArchive, size_hint=(0.8, 0.8))
+        addArch = RPopup(title="Add Archive", content=addArchive, size_hint=(0.45, 0.4))
         addArchive.popup = addArch
         addArch.open()
 
@@ -179,7 +168,7 @@ class ArchiveScreen(Screen):
 
     def btn_click(self, instance) -> None:
         txt = instance.text
-        if txt == "Add":
+        if txt == "Archive Projects":
             self.addArchive()
         elif txt == "Refresh":
             self.populate_archive(load_all_archives(0))

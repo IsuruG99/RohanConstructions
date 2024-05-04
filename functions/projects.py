@@ -46,6 +46,8 @@ def load_projects(status: int = 2) -> list:
         projects = [project for project in projects if project['status'] == 'Completed']
     elif status == 2:
         projects = projects
+    elif status == 3:
+        projects = [project for project in projects if project['status'] == 'Finalized']
 
     return projects
 
@@ -155,8 +157,7 @@ def load_res(project_name: str) -> dict:
 
 
 # Load all project names
-def load_project_names() -> list:
-    projects = load_projects(2)
+def load_project_names(projects:list= load_projects(2)) -> list:
     project_names = []
     for project in projects:
         project_names.append(project['name'])

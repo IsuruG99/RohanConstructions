@@ -7,31 +7,36 @@
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
+
                         GridLayout:
                                 cols: 2
+                                size_hint: 0.3,1
                                 spacing: 10
-                                size_hint: 0.3, 1
+
                                 RButton4:
                                         text: 'Refresh'
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
+
                                 RButton4:
-                                        text: 'Filter: All'
+                                        text: 'Filter : All'
                                         id: supplierFilter
                                         size_hint: 0.5, 1
                                         on_release: root.btn_click(self)
+
                         CLabel:
                                 text: 'Suppliers'
-                                size_hint: 0.6, 1
+                                size_hint: 0.4, 1
                                 font_size: '30sp'
                                 bold: True
                                 spacing: 10
+
                         GridLayout:
                                 cols: 2
                                 size_hint: 0.3, 1
                                 spacing: 10
                                 RText:
-                                        id: search
+                                        id: searchBar
                                         hint_text: 'Search'
                                         multiline: False
                                         size_hint: 0.7, 1
@@ -40,6 +45,7 @@
                                         text: 'Search'
                                         size_hint: 0.3, 1
                                         on_release: root.searchSuppliers(searchBar.text)
+
                 GridLayout:
                         rows: 3
                         spacing: 10
@@ -70,7 +76,7 @@
                                 size_hint: 1, 0.1
                                 RButton4:
                                         text: 'Overview'
-                                        size_hint: 0.4, 1
+                                        size_hint: 0.3, 1
                                         on_release: root.overview_suppliers()
                                 RButton4:
                                         text: 'Add New Supplier'
@@ -78,7 +84,7 @@
                                         on_release: root.btn_click(self)
                                 RButton4:
                                         text: 'Back'
-                                        size_hint: 0.2, 1
+                                        size_hint: 0.3, 1
                                         on_release:
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'

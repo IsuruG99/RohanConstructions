@@ -8,10 +8,15 @@
                         size_hint: 1, 0.2
                         padding: 30
                         rows: 1
-                        cols: 2
+                        cols: 3
+                        RButton4:
+                                id: archiveBtn
+                                size_hint: 0.1, 1
+                                text: 'Archive'
+                                on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Project Management System'
-                                size_hint: 0.8, 1
+                                size_hint: 0.7, 1
                                 font_size: '40sp'
                                 bold: True
 

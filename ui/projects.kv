@@ -7,11 +7,19 @@
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        RButton4:
-                                id: projects_filter
-                                text: 'Filter: In Progress'
+                        GridLayout:
+                                cols: 2
+                                spacing: 10
                                 size_hint: 0.3, 1
-                                on_release: root.btn_click(self)
+                                RButton4:
+                                        text: 'Refresh'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+                                RButton4:
+                                        id: projects_filter
+                                        text: 'Filter: In Progress'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Projects'
                                 size_hint: 0.4, 1
@@ -246,7 +254,7 @@
                         RSpinner:
                                 id: viewPop_status
                                 text: 'In Progress'
-                                values: ['In Progress', 'Completed', 'Cancelled']
+                                values: ['In Progress', 'Completed']
                                 size_hint: 0.7, 0.1
 
                 GridLayout:
@@ -328,7 +336,7 @@
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                 GridLayout:
                         cols: 2
-                        rows: 4
+                        rows: 2
                         size_hint: 1, 0.55
                         CLabel:
                                 text: 'Assigned Members'

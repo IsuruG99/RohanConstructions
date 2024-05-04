@@ -7,11 +7,19 @@
                 GridLayout:
                         cols: 3
                         size_hint: 1, 0.05
-                        RButton4:
-                                id: finances_filter
-                                text: 'Filter: All'
+                        GridLayout:
+                                cols: 2
+                                spacing: 10
                                 size_hint: 0.3, 1
-                                on_release: root.btn_click(self)
+                                RButton4:
+                                        text: 'Refresh'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+                                RButton4:
+                                        id: finances_filter
+                                        text: 'Filter: All'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
                         CLabel:
                                 text: 'Finances'
                                 size_hint: 0.4, 1

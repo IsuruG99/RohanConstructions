@@ -4,13 +4,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.scrollview import ScrollView
 
+from ui.archive_ui import ArchiveScreen
 from ui.manpower_ui import ManpowerScreen
 from ui.projects_ui import ProjectsScreen
 from ui.resources_ui import ResourcesScreen
 from ui.suppliers_ui import SuppliersScreen
 from ui.clients_ui import ClientsScreen
-from ui.login_ui import *
 from ui.finances_ui import FinancesScreen
+from ui.login_ui import *
 
 from utils import *
 from custom import *
@@ -26,7 +27,9 @@ Builder.load_file('ui/clients.kv')
 Builder.load_file('ui/resources.kv')
 Builder.load_file('ui/manpower.kv')
 Builder.load_file('ui/finances.kv')
+Builder.load_file('ui/archive.kv')
 Builder.load_file('validation.kv')
+
 
 
 class MainScreen(Screen):
@@ -54,6 +57,8 @@ class MainScreen(Screen):
                 self.parent.current = 'finances'
             elif instance.text == 'Personnel':
                 self.parent.current = 'manpower'
+            elif instance.text == 'Archive':
+                self.parent.current = 'archive'
             elif instance.text == 'Admin':
                 self.openAdminControls()
 
@@ -96,6 +101,8 @@ class MainScreen(Screen):
             self.ids.financesBtn.disabled = True
             self.ids.personnelBtn.disabled = True
             self.ids.resourcesBtn.disabled = True
+            self.ids.archiveBtn.visible = False
+            self.ids.archiveBtn.disabled = True
         else:
             self.CMessageBox('Error', 'Invalid Request', 'Message')
 
@@ -118,6 +125,8 @@ class MainScreen(Screen):
                 self.ids.financesBtn.disabled = False
                 self.ids.personnelBtn.disabled = False
                 self.ids.resourcesBtn.disabled = False
+                self.ids.archiveBtn.visible = True
+                self.ids.archiveBtn.disabled = False
                 self.ids.logBtn.text = 'Admin'
         else:
             self.ids.logBtn.text = 'LogIn'
@@ -128,6 +137,8 @@ class MainScreen(Screen):
             self.ids.financesBtn.disabled = True
             self.ids.personnelBtn.disabled = True
             self.ids.resourcesBtn.disabled = True
+            self.ids.archiveBtn.visible = False
+            self.ids.archiveBtn.disabled = True
 
 
 class MainApp(App):
@@ -168,6 +179,7 @@ class MainApp(App):
         sm.add_widget(ResourcesScreen(name='resources'))
         sm.add_widget(ManpowerScreen(name='manpower'))
         sm.add_widget(FinancesScreen(name='finances'))
+        sm.add_widget(ArchiveScreen(name='archive'))
 
         return sm
 

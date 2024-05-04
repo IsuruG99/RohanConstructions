@@ -99,6 +99,7 @@ class ViewPopup(GridLayout):
         budget = str(self.ids.viewPop_budget.text)
         status = str(self.ids.viewPop_status.text)
 
+        # Validate & Confirm first, then recursively call Submit
         if requestType == "Validate":
             # Validate inputs
             if not validate_string(name, description, client_name, budget, status):
@@ -118,6 +119,7 @@ class ViewPopup(GridLayout):
                                              content='Are you sure you want to update this project?',
                                              context='Confirm', btn1='Yes', btn2='No', btn1click=self.editProj)
             self.validCheck = 1
+        # Submit to projects.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if update_project(self.project_id, name, description, start_date, end_date, client_name, budget,
@@ -215,6 +217,7 @@ class ReportsPopup(GridLayout):
                     self.ids.reportProject_resourceCost.text = convert_currency(resource_cost)
                     self.ids.reportProject_netProfit.text = convert_currency(net_profit)
 
+            # Get manpower data (manpower role, count)
             roles = load_members(pName)
             for role, count in roles.items():
                 grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
@@ -228,7 +231,6 @@ class ReportsPopup(GridLayout):
                 grid.add_widget(CLabel(text=resource, font_size='15sp'))
                 grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
                 self.ids.assigned_resources.add_widget(grid)
-
 
     def finalize_projects(self, pName: str) -> None:
         if pName is not None and pName != '':
@@ -363,16 +365,23 @@ class ProjectsScreen(Screen):
         txt = instance.text
         if txt == 'Add':
             self.add_popup()
+        elif txt == 'Refresh':
+            self.populate_projects(load_projects(0))
+            self.ids.projects_filter.text = 'Filter: In Progress'
+            self.ids.search.text = ''
         elif txt == 'Filter: All' or txt == 'Filter: In Progress' or txt == 'Filter: Completed':
             if txt == 'Filter: In Progress':
                 self.populate_projects(load_projects(1))
                 self.ids.projects_filter.text = 'Filter: Completed'
+                self.ids.search.text = ''
             elif txt == 'Filter: Completed':
                 self.populate_projects(load_projects(2))
                 self.ids.projects_filter.text = 'Filter: All'
+                self.ids.search.text = ''
             elif txt == 'Filter: All':
                 self.populate_projects(load_projects(0))
                 self.ids.projects_filter.text = 'Filter: In Progress'
+                self.ids.search.text = ''
         elif txt == 'Back':
             self.parent.current = 'main'
 

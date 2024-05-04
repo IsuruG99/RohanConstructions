@@ -108,6 +108,7 @@ class ViewManpower(GridLayout):
         contract_fee = str(self.ids.viewEmp_contractFee.text)
         retainer_fee = str(self.ids.viewEmp_retainerFee.text)
 
+        # Validate & Confirm first, then call Submit
         if requestType == "Validate":
             # Check if all fields are full, except assignments
             if name == '' or email == '' or phone_number == '' or role == '' or status == '' or contract_fee == '' or retainer_fee == '':
@@ -122,6 +123,7 @@ class ViewManpower(GridLayout):
             self.manpower_screen.CMessageBox('Edit Employee', 'Are you sure you want to edit employee ' + name + '?',
                                              'Confirm', 'Yes', 'No', self.edit_employee)
             self.validCheck = 1
+        # Send to update_employee
         if requestType == "Submit":
             if self.validCheck == 1:
                 if update_employee(self.emp_id, name, role, email, phone_number, status, contract_fee, retainer_fee):
@@ -176,6 +178,8 @@ class ManpowerScreen(Screen):
             grid.emp = emp
             self.ids.manpower_list.add_widget(grid)
 
+    # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
+    # Manpower Sorting Function, takes headers, manpower List and calls populate function with sorted manpower list
     def sort_manpower(self, manpower: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             manpower = sorted(manpower, key=lambda x: x['name'])
@@ -260,16 +264,23 @@ class ManpowerScreen(Screen):
             self.parent.current = 'main'
         elif text == 'Add':
             self.add_emp()
+        elif text == 'Refresh':
+            self.populate_manpower(load_manpower(0))
+            self.ids.manpower_filter.text = 'Filter: All'
+            self.ids.search.text = ''
         elif text == 'Filter: All' or text == 'Filter: Perm' or text == 'Filter: Temp':
             if text == 'Filter: All':
                 self.populate_manpower(load_manpower(1))
                 self.ids.manpower_filter.text = 'Filter: Perm'
+                self.ids.search.text = ''
             elif text == 'Filter: Perm':
                 self.populate_manpower(load_manpower(2))
                 self.ids.manpower_filter.text = 'Filter: Temp'
+                self.ids.search.text = ''
             elif text == 'Filter: Temp':
                 self.populate_manpower(load_manpower(0))
                 self.ids.manpower_filter.text = 'Filter: All'
+                self.ids.search.text = ''
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss

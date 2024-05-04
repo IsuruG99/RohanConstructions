@@ -135,9 +135,11 @@ class ViewSupPopup(GridLayout):
 
     # Delete Supplier
     def deleteSupplier(self, requestType: str = "Submit") -> None:
+        # Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
             self.suppliers_screen.CMessageBox('Confirm', 'Do you want to delete supplier ?', 'Confirm', 'Yes', 'No',
                                               self.deleteSupplier)
+        # Send to suppliers.py
         elif requestType == "Submit":
             if delete_supplier(self.suppliers_id):
                 self.suppliers_screen.CMessageBox('Success', 'Supplier deleted successfully.', 'Message')
@@ -253,6 +255,7 @@ class SuppliersScreen(Screen):
             grid.add_widget(CLabel(text=supplier["supplierLevel"], size_hint_x=1))
             self.ids.Supplier_list.add_widget(grid)
 
+    # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
     # Main Sorting Function, take header list, supplier list, call populate function with sorted supplier list
     def sort_suppliers(self, suppliers: list, header: str, instance) -> None:
         if header == 'Business' or header == 'Business [D]':
@@ -328,6 +331,10 @@ class SuppliersScreen(Screen):
             self.parent.current = 'main'
         elif txt == 'Add New Supplier':
             self.add_popup()
+        elif txt == 'Refresh':
+            self.populate_suppliers(load_suppliers())
+            self.ids.supplierFilter.text = 'Filter: All'
+            self.ids.search.text = ''
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
         elif txt == 'Filter: All' or txt == 'Filter: Level 1' or txt == 'Filter: Level 2' or txt == 'Filter: Level 3':
             if txt == 'Filter: All':

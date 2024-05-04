@@ -1,0 +1,225 @@
+<ArchiveScreen>:
+        GridLayout:
+                rows: 2
+                cols: 1
+                padding: (20, 40, 20, 20)
+                spacing: 20
+                GridLayout:
+                        cols: 3
+                        size_hint: 1, 0.05
+                        GridLayout:
+                                cols: 2
+                                spacing: 10
+                                size_hint: 0.3, 1
+                                RButton4:
+                                        text: 'Refresh'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+                                RButton4:
+                                        id: archive_filter
+                                        text: 'Filter: All'
+                                        size_hint: 0.5, 1
+                                        on_release: root.btn_click(self)
+                        CLabel:
+                                text: 'Archive'
+                                size_hint: 0.4, 1
+                                font_size: '30sp'
+                                bold: True
+                                spacing: 10
+                        GridLayout:
+                                cols: 2
+                                size_hint: 0.3, 1
+                                spacing: 10
+                                RText:
+                                        id: search
+                                        hint_text: 'Search'
+                                        multiline: False
+                                        size_hint: 0.7, 1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                RButton4:
+                                        text: 'Search'
+                                        size_hint: 0.3, 1
+                                        on_release: root.searchArchive(search.text)
+                GridLayout:
+                        rows: 3
+                        size_hint: 1, 0.95
+                        spacing: 10
+                        GridLayout:
+                                size_hint: 1, 0.1
+                                id: archive_headers
+                                rows: 1
+                                height: 50
+                        ScrollView:
+                                size_hint: 1, 0.8
+                                do_scroll_x: False
+                                GridLayout:
+                                        id: archive_list
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                                        cols: 1
+                                        canvas.before:
+                                                Color:
+                                                        rgba: 0, 0, 0, 0.6
+                                                Rectangle:
+                                                        size: self.size
+                                                        pos: self.pos
+                        GridLayout:
+                                rows: 1
+                                cols: 2
+                                spacing: 20
+                                size_hint: 1, 0.1
+                                RButton4:
+                                        text: 'Add'
+                                        size_hint: 0.4, 1
+                                        on_release: root.btn_click(self)
+                                RButton4:
+                                        text: 'Back'
+                                        size_hint: 0.2, 1
+                                        on_release:
+                                                root.manager.current = 'main'
+                                                root.manager.transition.direction = 'right'
+
+<AddArchive>:
+        GridLayout:
+                cols: 1
+                rows: 1
+                size: root.size
+                pos: root.pos
+
+<ViewArchive>:
+        GridLayout:
+                cols: 1
+                rows: 4
+                size: root.size
+                pos: root.pos
+                padding: 20
+                spacing: 20
+                GridLayout:
+                        cols: 1
+                        rows: 2
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.33
+                        GridLayout:
+                                cols: 2
+                                rows: 1
+                                size_hint: 1, 0.35
+                                CLabel:
+                                        text: 'Desc'
+                                        size_hint: 0.3, 1
+                                RText:
+                                        id: viewArchive_desc
+                                        size_hint: 0.7, 1
+                        GridLayout:
+                                cols: 4
+                                rows: 2
+                                size_hint: 1, 0.6
+                                spacing: 10
+                                CLabel:
+                                        text: 'Client'
+                                        size_hint: 0.3, 0.1
+                                RText:
+                                        id: viewArchive_client
+                                        size_hint: 0.7, 0.1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: 'Finalized \nby'
+                                        size_hint: 0.3, 0.1
+                                RText:
+                                        id: viewArchive_user
+                                        size_hint: 0.7, 0.1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: 'Start Date'
+                                        size_hint: 0.3, 0.1
+                                RText:
+                                        id: viewArchive_start
+                                        size_hint: 0.7, 0.1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                CLabel:
+                                        text: 'End Date'
+                                        size_hint: 0.3, 0.1
+                                RText:
+                                        id: viewArchive_end
+                                        size_hint: 0.7, 0.1
+                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                GridLayout:
+                        cols: 2
+                        rows: 2
+                        spacing: 10
+                        size_hint: 1, 0.47
+                        CLabel:
+                                text: 'Assigned Employees'
+                                size_hint_y: 0.2
+                                canvas.before:
+                                        Color:
+                                                rgba: 0, 0, 0, 0.3
+                                        Rectangle:
+                                                size: self.size
+                                                pos: self.pos
+                        CLabel:
+                                text: 'Assigned Resources'
+                                size_hint_y: 0.2
+                                canvas.before:
+                                        Color:
+                                                rgba: 0, 0, 0, 0.3
+                                        Rectangle:
+                                                size: self.size
+                                                pos: self.pos
+                        ScrollView:
+                                GridLayout:
+                                        id: viewArchive_assignedEmp
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                        ScrollView:
+                                GridLayout:
+                                        id: viewArchive_assignedRes
+                                        cols: 1
+                                        size_hint_y: None
+                                        height: self.minimum_height
+                GridLayout:
+                        cols: 4
+                        rows: 2
+                        spacing: 10
+                        size_hint: 1, 0.15
+                        # EmpCost, ResCost, NetProfit and Budget
+                        CLabel:
+                                text: 'Emp Cost'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: viewArchive_empCost
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Res Cost'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: viewArchive_resCost
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Budget'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: viewArchive_budget
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                        CLabel:
+                                text: 'Net Profit'
+                                size_hint: 0.2, 1
+                        RText:
+                                id: viewArchive_netProfit
+                                size_hint: 0.3, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                GridLayout:
+                        cols: 1
+                        rows: 1
+                        padding: 10
+                        spacing: 10
+                        size_hint: 1, 0.1
+
+                        RButton4:
+                                text: 'Back'
+                                on_release: root.popup.dismiss()

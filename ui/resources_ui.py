@@ -36,12 +36,16 @@ class ViewResource(GridLayout):
 
         # res assignment format in DB, ('resource_assignments': [{"amount": "", "project": ""}])
         for assignment in res["resource_assignments"]:
-            grid = GridLayout(cols=3, spacing=10, size_hint_y=None, height=50)
-            grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.4))
-            grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.4))
-            grid.add_widget(
-                CButton(text='X', size_hint_x=0.05, on_release=partial(self.reload, assignment["amount"],
-                                                                       assignment["project"], "Remove")))
+            # skip blank assignment
+            if assignment["project"] == "":
+                continue
+            else:
+                grid = GridLayout(cols=3, spacing=10, size_hint_y=None, height=50)
+                grid.add_widget(CLabel(text=assignment["project"], size_hint_x=0.4))
+                grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.4))
+                grid.add_widget(
+                    CButton(text='X', size_hint_x=0.05, on_release=partial(self.reload, assignment["amount"],
+                                                                           assignment["project"], "Remove")))
             self.ids.viewRes_projects.add_widget(grid)
 
     def reload(self, amount: str, project_name: str, action: str, instance) -> None:
@@ -66,7 +70,7 @@ class ViewResource(GridLayout):
         status = self.ids.viewPop_status.text
         supplier = str(self.ids.viewPop_supplier.text)
         cost = str(self.ids.viewPop_cost.text)
-
+        # Validate & Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
             # Validate inputs
             if not validate_string(name, supplier):
@@ -90,13 +94,13 @@ class ViewResource(GridLayout):
                 else:
                     self.res_screen.CMessageBox('Error', 'Failed to edit resource.', 'Message')
 
-
     def deleteRes(self, requestType: str = "Submit") -> None:
-        # Send res_id to resources.py and it will delete the entity
+        # Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
             self.res_screen.CMessageBox('Delete Resource', 'Are you sure you want to delete this resource?', 'Confirm',
                                         'Yes', 'No', self.deleteRes)
             self.validCheck = 1
+        # Send res_id to resources.py and it will delete the entity
         elif requestType == "Submit":
             if delete_res(self.res_id):
                 self.res_screen.CMessageBox('Success', 'Resource deleted successfully.', 'Message')
@@ -201,6 +205,8 @@ class ResourcesScreen(Screen):
             cfmPopUp.open()
             cfmPopUp.content.popup = cfmPopUp
 
+    # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
+    # Resources Sorting Function, takes headers, res List and calls populate function with sorted res List
     def sort_resources(self, resources: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             resources = sorted(resources, key=lambda x: x['name'])
@@ -259,16 +265,23 @@ class ResourcesScreen(Screen):
             self.parent.current = 'main'
         elif txt == 'Add':
             self.add_resource_popup()
+        elif txt == 'Refresh':
+            self.populate_res(load_resources(0))
+            self.ids.resource_filter.text = 'Filter: All'
+            self.ids.search.text = ''
         elif txt == 'Filter: All' or txt == 'Filter: In Stock' or txt == 'Filter: Out of Stock':
             if txt == 'Filter: All':
                 self.ids.resource_filter.text = 'Filter: In Stock'
                 self.populate_res(load_resources(1))
+                self.ids.search.text = ''
             elif txt == 'Filter: In Stock':
                 self.ids.resource_filter.text = 'Filter: Out of Stock'
                 self.populate_res(load_resources(2))
+                self.ids.search.text = ''
             elif txt == 'Filter: Out of Stock':
                 self.ids.resource_filter.text = 'Filter: All'
                 self.populate_res(load_resources(3))
+                self.ids.search.text = ''
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
@@ -291,6 +304,7 @@ class AddResource(GridLayout):
         supplier = str(self.ids.addRes_supplier.text)
         cost = str(self.ids.addRes_cost.text)
 
+        # Validate & Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
             # Validate inputs
             if not validate_string(name, supplier, qty, status):
@@ -305,6 +319,7 @@ class AddResource(GridLayout):
             self.res_screen.CMessageBox('Add Resource', 'Are you sure you want to add this resource?', 'Confirm',
                                         'Yes', 'No', self.add_resource)
             self.validCheck = 1
+        # Send to add_res function in resources.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if add_res(name, qty, status, supplier, cost):

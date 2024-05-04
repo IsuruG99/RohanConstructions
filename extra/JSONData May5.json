@@ -1,0 +1,550 @@
+{
+  "clients": {
+    "-NuXKpBexRFYlH3d3oUh": {
+      "address": "MAS Holdings, Colombo 03",
+      "email": "mas@hotmail.com",
+      "name": "MAS",
+      "phone_number": "0123456789"
+    },
+    "-NuXZawsbIQA-2QLC4iF": {
+      "address": "mada colombo",
+      "email": "inukaB@gmail.com",
+      "name": "inuka ",
+      "phone_number": "0119"
+    },
+    "-NvOIL028z0uXSd4y3u0": {
+      "address": "aaaa",
+      "email": "a@aura.com",
+      "name": "Aura",
+      "phone_number": "0711223344"
+    },
+    "-Nwyrq21ly20Um8l2qBM": {
+      "address": "etgq",
+      "email": "iweuh@gmail.com",
+      "name": "dfge",
+      "phone_number": "0546464555"
+    },
+    "client3": {
+      "address": "123 Main St, City, Country",
+      "email": "ABC Company",
+      "name": "ABC Company",
+      "phone_number": "+1234567890"
+    },
+    "client4": {
+      "address": "123 Main St, City, Country",
+      "email": "K College Principal",
+      "name": "K College Principal",
+      "phone_number": "+1234567890"
+    },
+    "clientZero": {
+      "address": "None",
+      "email": "None",
+      "name": "None",
+      "phone_number": "None"
+    }
+  },
+  "finance": {
+    "-NuIZAu01atM8IVxK3ih": {
+      "amount": "200000",
+      "category": "Contract",
+      "date": "2024-04-12",
+      "description": "Building Renovation Project",
+      "project_name": "Project ClAA",
+      "related_entity": "ABC",
+      "type": "Income",
+      "user": "a"
+    },
+    "-NuUT9RjgjdFjgVSOUTR": {
+      "amount": "20000",
+      "category": "Misc",
+      "date": "2023-12-01",
+      "description": "Fundraiser",
+      "project_name": "School Repair Project",
+      "related_entity": "School Students Council",
+      "type": "Income",
+      "user": "None"
+    },
+    "-NunSjjWg6qytN7oJMq9": {
+      "amount": "100000",
+      "category": "Contract",
+      "date": "2024-12-31",
+      "description": "Project Completion",
+      "project_name": "New Office Building",
+      "related_entity": "ABC Company",
+      "type": "Income",
+      "user": "None"
+    },
+    "-Nv7Vz2WsqITNmQFDupW": {
+      "amount": "2345",
+      "category": "Contract",
+      "date": "2022-03-22",
+      "description": "Project Completion",
+      "project_name": "AAB",
+      "related_entity": "ABC",
+      "type": "Income",
+      "user": "a"
+    },
+    "logZero": {
+      "amount": "None",
+      "category": "None",
+      "date": "None",
+      "description": "None",
+      "project_name": "None",
+      "related_entity": "None",
+      "type": "None",
+      "user": "None"
+    },
+    "transaction1": {
+      "amount": "50011",
+      "category": "Misc",
+      "date": "2024-02-01",
+      "description": "Payment to supplier for concrete",
+      "project_name": "Old Office Building",
+      "related_entity": "supplier1",
+      "type": "Expense",
+      "user": "a"
+    }
+  },
+  "archive": {
+    "archive1": {
+      "budget": "10000",
+      "client_name": "ABC Company",
+      "description": "Project Black is a test  project",
+      "employee_allocations": [
+        {
+          "count": "3",
+          "role": "Master Mason"
+        },
+        {
+          "count": "1",
+          "role": "Project Manager"
+        }
+      ],
+      "end_date": "2022-05-11",
+      "manpowerCost": "250500",
+      "name": "Project Black",
+      "netProfit": "569500",
+      "resourceCost": "180000",
+      "resource_allocations": [
+        {
+          "amount": "10",
+          "resource": "ABC Equipment"
+        },
+        {
+          "amount": "50",
+          "resource": "Concrete"
+        }
+      ],
+      "start_date": "2010-2-11",
+      "user": "a"
+    },
+    "archive2": {
+      "budget": "1000000",
+      "client_name": "ABC Company",
+      "description": "Second Test project for Archives",
+      "employee_allocations": [
+        {
+          "role": "Architect",
+          "count": "2"
+        },
+        {
+          "role": "Site Engineer",
+          "count": "5"
+        }
+      ],
+      "end_date": "2024-12-31",
+      "manpowerCost": "250500",
+      "name": "Project White",
+      "netProfit": "569500",
+      "resourceCost": "180000",
+      "resource_allocations": [
+        {
+          "amount": "10",
+          "resource": "ABC Equipment"
+        },
+        {
+          "amount": "50",
+          "resource": "Concrete"
+        }
+      ],
+      "start_date": "2024-01-01",
+      "user": "a"
+    },
+    "arZero": {
+      "budget": "None",
+      "client_name": "None",
+      "description": "None",
+      "end_date": "None",
+      "manpowerCost": "None",
+      "name": "None",
+      "netProfit": "None",
+      "resourceCost": "None",
+      "start_date": "None",
+      "user": "None"
+    }
+  },
+  "manpower": {
+    "-NuVw6msFd_YvRuYty78": {
+      "contract_fee": "56500",
+      "email": "alicia333@yahoo.mail",
+      "employment_status": "Permanent",
+      "name": "Alicia Key",
+      "phone_number": "0711234567",
+      "project_assignments": [
+        "",
+        "New Office Building"
+      ],
+      "retainer_fee": "5000",
+      "role": "Manager"
+    },
+    "-NuXcxSCDqC1VGDWwt0j": {
+      "contract_fee": "71500",
+      "email": "david12345@msn.net",
+      "employment_status": "Permanent",
+      "name": "David Beckem",
+      "phone_number": "0711234567",
+      "project_assignments": [
+        "",
+        "New Office Building"
+      ],
+      "retainer_fee": "4900",
+      "role": "Architect"
+    },
+    "-Nx-fmJo4fb80ZvXHwrE": {
+      "contract_fee": "33333",
+      "email": "abc@def.com",
+      "employment_status": "Permanent",
+      "name": "M.Ali",
+      "phone_number": "0712121212",
+      "project_assignments": [
+        "",
+        "a"
+      ],
+      "retainer_fee": "3333",
+      "role": "Manager"
+    },
+    "empZero": {
+      "contract_fee": "None",
+      "email": "None",
+      "employment_status": "None",
+      "name": "None",
+      "phone_number": "None",
+      "project_assignments": [
+        ""
+      ],
+      "retainer_fee": "None",
+      "role": "None"
+    },
+    "employee1": {
+      "contract_fee": "50500",
+      "email": "alice@example.com",
+      "employment_status": "Permanent",
+      "name": "Alice Johnson",
+      "phone_number": "+1122334455",
+      "project_assignments": [
+        "",
+        "New Office Building"
+      ],
+      "retainer_fee": "5500",
+      "role": "Project Manager"
+    },
+    "employee2": {
+      "contract_fee": "41200",
+      "email": "ruwan@gmail.com",
+      "employment_status": "Permanent",
+      "name": "Ruwan Perera",
+      "phone_number": "0711234567",
+      "project_assignments": [
+        "",
+        "School Repair Project"
+      ],
+      "retainer_fee": "9100",
+      "role": "Site Engineer"
+    },
+    "employee3": {
+      "contract_fee": "65500",
+      "email": "abbey@gmail.com",
+      "employment_status": "Temp",
+      "name": "Abbey Grange",
+      "phone_number": "0711234567",
+      "project_assignments": [
+        "",
+        "New Office Building",
+        "School Repair Project"
+      ],
+      "retainer_fee": "7000",
+      "role": "Site Engineer"
+    }
+  },
+  "projects": {
+    "-Nr3dnCefKCWCiHhBo02": {
+      "budget": "10000",
+      "client_name": "ABC Company",
+      "description": "Project CL is a test  project",
+      "end_date": "2022-05-11",
+      "name": "Project ClAA",
+      "start_date": "2010-2-11",
+      "status": "In Progress"
+    },
+    "-Nr3ekhFFfkI5uluRaPd": {
+      "budget": "2345",
+      "client_name": "ABC",
+      "description": "AA",
+      "end_date": "2023-3-22",
+      "name": "AAB",
+      "start_date": "2023-12-22",
+      "status": "Completed"
+    },
+    "-Nr3f4jQf6532XjvOXNm": {
+      "budget": "400000",
+      "client_name": "K College Principal",
+      "description": "K College School Repairs",
+      "end_date": "2024-12-23",
+      "name": "School Repair Projects",
+      "start_date": "2023-12-23",
+      "status": "In Progress"
+    },
+    "-NuXl1ktBhfoslwWsAs1": {
+      "budget": "15000",
+      "client_name": "ABC",
+      "description": "A",
+      "end_date": "2222-12-02",
+      "name": "AB",
+      "start_date": "2222-11-01",
+      "status": "Completed"
+    },
+    "-Nx-fXZCbccsph1z6_iA": {
+      "budget": "10000",
+      "client_name": "ABC Company",
+      "description": "a",
+      "end_date": "2222-12-12",
+      "name": "a",
+      "start_date": "2222-11-12",
+      "status": "In Progress"
+    },
+    "pjZero": {
+      "budget": "None",
+      "client_name": "None",
+      "description": "None",
+      "end_date": "None",
+      "name": "None",
+      "start_date": "None",
+      "status": "None"
+    },
+    "project1": {
+      "budget": "1000000",
+      "client_name": "ABC Company",
+      "description": "Construction of a new office building",
+      "end_date": "2024-12-31",
+      "name": "New Office Building",
+      "start_date": "2024-01-01",
+      "status": "In Progress"
+    }
+  },
+  "resources": {
+    "-NuWTjrk5gQJ5P2HEftc": {
+      "name": "Stone",
+      "quantity": "24",
+      "resource_assignments": [
+        {
+          "amount": "5",
+          "project": "New Office Building"
+        },
+        {
+          "amount": "10",
+          "project": "School Repair Project"
+        },
+        {
+          "amount": "2",
+          "project": "AB"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "Mr. Validasa",
+      "unit_cost": "15000"
+    },
+    "-NuWV76x3y7lrUrY-XX6": {
+      "name": "ABC Equipment",
+      "quantity": "15",
+      "resource_assignments": [
+        {
+          "amount": "10",
+          "project": "Project ClAA"
+        },
+        {
+          "amount": "5",
+          "project": "AAB"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "Mr.A",
+      "unit_cost": "80000"
+    },
+    "-Nwz-bTSaPu9UA0jhCLv": {
+      "name": "Stone",
+      "quantity": "50",
+      "resource_assignments": [
+        {
+          "amount": "",
+          "project": ""
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "Mr.Gune",
+      "unit_cost": "10000.00"
+    },
+    "-Nx-fajJ6XmbEP_6CKAM": {
+      "name": "XYZ",
+      "quantity": "7",
+      "resource_assignments": [
+        {
+          "amount": "",
+          "project": ""
+        },
+        {
+          "amount": "4",
+          "project": "a"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "Mr. Validasa",
+      "unit_cost": "155"
+    },
+    "resource2": {
+      "name": "Wood",
+      "quantity": "128",
+      "resource_assignments": [
+        {
+          "amount": "15",
+          "project": "AB"
+        },
+        {
+          "amount": "4",
+          "project": "Project ClAA"
+        }
+      ],
+      "status": "In Stock",
+      "supplier_name": "XYZ Suppliers",
+      "unit_cost": "3000"
+    },
+    "resourceZero": {
+      "name": "None",
+      "quantity": "None",
+      "status": "None",
+      "supplier_name": "None",
+      "unit_cost": "None"
+    }
+  },
+  "suppliers": {
+    "-NuUNGXzN71FHLunmSt1": {
+      "address": "No1,MerchantRoad,Kelaniya",
+      "business": "ABC Hardware",
+      "contactNo": "0712990312",
+      "email": "marlon@gmail.com",
+      "startDealing": "2024-03-29",
+      "supplierLevel": "2",
+      "supplierName": "Marlon Dias"
+    },
+    "-NuXD7Hpu1uoc6Xua8L-": {
+      "address": "no:01, colombo",
+      "business": "BCA Hardware",
+      "contactNo": "0711122245",
+      "email": "styd@gmail.com",
+      "startDealing": "2021-02-03",
+      "supplierLevel": "3",
+      "supplierName": "mahi"
+    },
+    "-NuXiiIQ-mWHtwGpKy_R": {
+      "address": "main road, dehiwala",
+      "business": "CAB Hardware",
+      "contactNo": "0115556984",
+      "email": "bca@gmail.com",
+      "startDealing": "2020-05-11",
+      "supplierLevel": "1",
+      "supplierName": "Mr.A"
+    },
+    "-Nv0vnJopn5inVkfHyM2": {
+      "address": "Kamburupitiya Road, Thihagoda, Matara.",
+      "business": "Arunonanda Hardware",
+      "contactNo": "0701122244",
+      "email": "arunonanda@gmail.com",
+      "startDealing": "2020-02-11",
+      "supplierLevel": "1",
+      "supplierName": "Sudu Mahattaya"
+    },
+    "-Nv2QUMdGxp-agPtMeGX": {
+      "address": "aebtf",
+      "business": "aaaaa",
+      "contactNo": "0771126655",
+      "email": "kambidasa@gmail.com",
+      "startDealing": "2018-11-11",
+      "supplierLevel": "3",
+      "supplierName": "Mr. Kambidasa"
+    },
+    "-Nv2xuh_tlRobGsRZJjh": {
+      "address": "ksjdbcj",
+      "business": "bbbbb",
+      "contactNo": "0411234567",
+      "email": "vali@gmail.com",
+      "startDealing": "2019-08-26",
+      "supplierLevel": "2",
+      "supplierName": "Mr. Validasa"
+    },
+    "-Nv2y2MQuFtuKlIwbkss": {
+      "address": "kajwvbab5",
+      "business": "ccccc",
+      "contactNo": "0751234567",
+      "email": "shbvvsb",
+      "startDealing": "2018-11-22",
+      "supplierLevel": "2",
+      "supplierName": "Mr. Galdasa"
+    },
+    "-Nwyr9ip5vuIQ6Bkn7F_": {
+      "address": "Ramboda",
+      "business": "RaRaRa",
+      "contactNo": "0719999999",
+      "email": "auibdeyuui",
+      "startDealing": "2020-11-18",
+      "supplierLevel": "2",
+      "supplierName": "Ram Ram"
+    },
+    "-Nwyu0AF6FsO4AWts390": {
+      "address": "Gagen eha patte.",
+      "business": "Guna Hardware",
+      "contactNo": "0112444444",
+      "email": "gune@gmail.com",
+      "startDealing": "2019-12-25",
+      "supplierLevel": "1",
+      "supplierName": "Mr.Gune"
+    },
+    "supplierZero": {
+      "address": "None",
+      "business": "None",
+      "contactNo": "None",
+      "email": "None",
+      "startDealing": "None",
+      "supplierLevel": "None",
+      "supplierName": "None"
+    }
+  },
+  "users": {
+    "admin": {
+      "access": 0,
+      "email": "a",
+      "last_login": "2024-05-04T04:28:08.000Z",
+      "password": "a"
+    },
+    "manager": {
+      "access": 1,
+      "email": "b",
+      "last_login": "2024-04-12T08:00:00.000Z",
+      "password": "b"
+    },
+    "staff1": {
+      "access": 2,
+      "email": "c",
+      "last_login": "2024-04-12T08:00:00.000Z",
+      "password": "c"
+    }
+  }
+}

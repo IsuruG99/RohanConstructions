@@ -43,8 +43,8 @@ class AddLogPopup(GridLayout):
         project = str(self.ids.addLog_project.text)
         category = str(self.ids.addLog_category.text)
 
+        # Validate & Confirm first, then recursively go to Submit
         if requestType == "Validate":
-            # Validate inputs
             if not validate_string(fin_type, amount, date, desc, entity, project, category):
                 self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                 return
@@ -64,6 +64,8 @@ class AddLogPopup(GridLayout):
             self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to add this log?', 'Confirm',
                                              'Submit', 'Cancel', self.addLog)
             self.validCheck = 1
+
+        # Send to finances.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if add_log(fin_type, amount, date, desc, entity, project, category):
@@ -123,7 +125,7 @@ class ViewLogPopup(GridLayout):
         entity = str(self.ids.viewLog_entity.text)
         project = str(self.ids.viewLog_project.text)
         category = str(self.ids.viewLog_category.text)
-
+        # Validate & Confirm first, then recursively go to Submit
         if requestType == "Validate":
             # Validate inputs
             if not validate_string(fin_type, amount, date, desc, entity, project, category):
@@ -142,6 +144,8 @@ class ViewLogPopup(GridLayout):
             self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to edit this log?', 'Confirm',
                                              'Submit', 'Cancel', self.edit_log)
             self.validCheck = 1
+
+        # Send to finances.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
@@ -159,10 +163,12 @@ class ViewLogPopup(GridLayout):
         return load_project_names()
 
     def delete_log(self, requestType: str = "Submit") -> None:
+        # Validate first, then recursively go to Submit
         if requestType == "Validate":
             self.finances_screen.CMessageBox('Delete Finance Log', 'Are you sure you want to delete this log?',
                                              'Confirm',
                                              'Submit', 'Cancel', self.delete_log)
+        #
         elif requestType == "Submit":
             if delete_log(self.fin_id):
                 self.finances_screen.CMessageBox('Success', 'Log deleted successfully.', 'Message')
@@ -187,7 +193,6 @@ class FinancesScreen(Screen):
         # Clear the existing widgets in the ScrollView
         self.ids.finances_list.clear_widgets()
         self.ids.finance_headers.clear_widgets()
-
         # Headers
         if headers is None:
             headers = ["Amount", "Category", "Date", "User"]
@@ -200,7 +205,6 @@ class FinancesScreen(Screen):
 
         for log in financeList:
             if log["type"] == "Expense":
-                # Readable Lighter Red
                 cl = (1, 0.5, 0.5, 1)
             else:
                 cl = (0.5, 1, 0.5, 1)
@@ -216,6 +220,8 @@ class FinancesScreen(Screen):
             grid.add_widget(CLabel(text=log["user"], size_hint_x=0.2))
             self.ids.finances_list.add_widget(grid)
 
+    # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
+    # Finances Sorting Function, takes headers, finances List and calls populate function with sorted finances list
     def sort_logs(self, header: str, finances: list, instance) -> None:
         # Sort by header
         if header == "Amount" or header == "Amount [D]":
@@ -294,16 +300,23 @@ class FinancesScreen(Screen):
             self.parent.current = 'main'
         elif instance.text == 'Add':
             self.add_log_popup()
+        elif instance.text == 'Refresh':
+            self.sort_logs("Date", load_all_finances(0), None)
+            self.ids.finances_filter.text = 'Filter: All'
+            self.ids.search.text = ''
         elif instance.text == 'Filter: All' or instance.text == 'Filter: Income' or instance.text == 'Filter: Expense':
             if self.ids.finances_filter.text == 'Filter: All':
-                self.populate_logs(load_all_finances(1))
+                self.sort_logs("Date", load_all_finances(1), None)
                 self.ids.finances_filter.text = 'Filter: Income'
+                self.ids.search.text = ''
             elif self.ids.finances_filter.text == 'Filter: Income':
-                self.populate_logs(load_all_finances(2))
+                self.sort_logs("Date", load_all_finances(2), None)
                 self.ids.finances_filter.text = 'Filter: Expense'
+                self.ids.search.text = ''
             elif self.ids.finances_filter.text == 'Filter: Expense':
-                self.populate_logs(load_all_finances(0))
+                self.sort_logs("Date", load_all_finances(0), None)
                 self.ids.finances_filter.text = 'Filter: All'
+                self.ids.search.text = ''
 
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()

@@ -2,8 +2,8 @@ from kivy.app import App
 
 from utils import *
 from functions.finances import add_log
-from functions.resources import load_resources
-from functions.manpower import load_manpower
+from functions.resources import load_resources, resource_assignment
+from functions.manpower import load_manpower, project_assignment
 
 
 # Add a new project
@@ -63,7 +63,6 @@ def update_project(project_id: str, name: str, description: str, start_date: str
                    budget: str, status: str):
     # Get a reference to DB
     ref = database.get_ref('projects')
-
     if ref is not None:
         ref.child(project_id).update({
             'name': name,
@@ -75,17 +74,35 @@ def update_project(project_id: str, name: str, description: str, start_date: str
             'status': status
         })
         return True
-
     else:
         return False
 
 
-# Delete a project by ID
+# Delete a project by ID, and remove all relevant resource and employee assignments
 def delete_project(project_id: str) -> bool:
     ref = database.get_ref('projects')
-
+    res = load_resources()
+    emp = load_manpower()
+    # Get Project Name from ID
+    project = get_project(project_id)
     if ref is not None:
+        # Delete project from Projects Node
         ref.child(project_id).delete()
+        # Delete Relevant Resource Assignments
+        for resource in res:
+            for assignment in resource['resource_assignments']:
+                # use resource_assignment function to delete the assignment
+                if project['name'] == assignment['project']:
+                    print("Assignment Found"+assignment['project'])
+                    resource_assignment(resource['id'], assignment['amount'], project['name'], 'Remove')
+
+        # Delete Relevant Employee Assignments
+        for employee in emp:
+            # make sure it does check for the full name, 'in' is not reliable
+            for assignment in employee['project_assignments']:
+                # use project_assignment function to delete the assignment
+                if project['name'] == assignment:
+                    project_assignment(employee['id'], project['name'], 'Remove')
     else:
         return False
     return True

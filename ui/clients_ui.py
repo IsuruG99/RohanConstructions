@@ -32,6 +32,7 @@ class AddClientPopup(GridLayout):
         email = str(self.ids.add_client_email.text)
         address = str(self.ids.add_client_address.text)
 
+        # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
             if not validate_string(name, phone_number, email, address):
                 self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
@@ -45,6 +46,7 @@ class AddClientPopup(GridLayout):
             self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to add this client?', 'Confirm', 'Yes',
                                             'No', self.add_client)
             self.validCheck = 1
+        # Send the data to clients.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if add_client(name, phone_number, email, address):
@@ -90,6 +92,7 @@ class ViewClientPopup(GridLayout):
         phone_number = str(self.ids.view_client_phone_number.text)
         email = str(self.ids.view_client_email.text)
         address = str(self.ids.view_client_address.text)
+        # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
             if not validate_string(name, phone_number, email, address):
                 self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
@@ -103,6 +106,7 @@ class ViewClientPopup(GridLayout):
             self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to update this client?', 'Confirm', 'Yes',
                                             'No', self.edit_client)
             self.validCheck = 1
+        # Send data to clients.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if update_client(self.client_id, name, phone_number, email, address):
@@ -115,9 +119,11 @@ class ViewClientPopup(GridLayout):
                     self.validCheck = 0
 
     def delete_client(self, requestType: str = "Submit") -> None:
+        # Confirm first, recursively call Submit
         if requestType == "Validate":
             self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to delete this client?', 'Confirm', 'Yes',
                                             'No', self.delete_client)
+        # Send data to clients.py
         elif requestType == "Submit":
             if delete_client(self.client_id):
                 self.clients_screen.CMessageBox('Success', 'Client deleted successfully.', 'Message')
@@ -179,6 +185,8 @@ class ClientsScreen(Screen):
             grid.add_widget(CLabel(text=client['email'], size_hint_x=0.3))
             self.ids.clients_list.add_widget(grid)
 
+    # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
+    # Clients Sorting Function, takes headers, clients List and calls populate function with sorted clients list
     def sort_clients(self, clients: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             clients = sorted(clients, key=lambda x: x['name'])

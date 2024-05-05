@@ -221,19 +221,18 @@ class ResourcesScreen(Screen):
             self.ids.resources_list.add_widget(grid)
 
     # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
-    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
-                    btn1: str = 'Ok', btn2: str = 'Cancel',
-                    btn1click=None, btn2click=None) -> None:
+    def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'Message',
+                    btn1: str = 'OK', btn2: str = 'Cancel', btn1click=None, btn2click=None) -> None:
         if context == 'Message':
-            msgPopUp = CPopup(title=title, content=MsgPopUp(self, content, context, btn1, btn1click),
-                              size_hint=(0.35, 0.3))
-            msgPopUp.open()
-            msgPopUp.content.popup = msgPopUp
-        if context == 'Confirm':
-            cfmPopUp = CPopup(title=title, content=CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click),
-                              size_hint=(0.35, 0.3))
-            cfmPopUp.open()
-            cfmPopUp.content.popup = cfmPopUp
+            msg_popup = MsgPopUp(self, content, context, btn1, btn1click)
+            popup = RPopup(title=title, content=msg_popup, size_hint=(0.35, 0.3))
+            msg_popup.popup = popup
+            popup.open()
+        elif context == 'Confirm':
+            cfm_popup = CfmPopUp(self, content, context, btn1, btn2, btn1click, btn2click)
+            popup = RPopup(title=title, content=cfm_popup, size_hint=(0.35, 0.3))
+            cfm_popup.popup = popup
+            popup.open()
 
     # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
     # Resources Sorting Function, takes headers, res List and calls populate function with sorted res List

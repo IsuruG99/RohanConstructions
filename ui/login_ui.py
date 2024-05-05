@@ -104,7 +104,10 @@ class AdminControls(GridLayout):
             email = str(self.ids.edit_email.text)
             password = str(self.ids.edit_password.text)
             access = int(self.ids.edit_access.text)
-        except AttributeError or ValueError:
+        except AttributeError:
+            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
+        except ValueError:
             self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
 
@@ -134,7 +137,10 @@ class AdminControls(GridLayout):
             email = str(self.ids.edit_email.text)
             password = str(self.ids.edit_password.text)
             access = int(self.ids.edit_access.text)
-        except AttributeError or ValueError:
+        except AttributeError:
+            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
+        except ValueError:
             self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         if requestType == "Validate":

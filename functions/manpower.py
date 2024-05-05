@@ -70,39 +70,36 @@ def delete_employee(emp_id: str) -> bool:
         return False
 
 
+# Project Assignment function
 def project_assignment(emp_id: str, project_name: str, action: str) -> bool:
     ref = get_ref('manpower')
-    assignments = ref.child(emp_id).child('project_assignments').get()
-    if ref is not None:
-        if action == "Remove":
-            # if assignments count is 1, replace the assignments with an empty list
-            if len(assignments) == 1:
-                assignments = [""]
-                ref.child(emp_id).update({'project_assignments': assignments})
-            else:
-                if project_name in assignments:
-                    assignments.remove(project_name)
-                    ref.child(emp_id).update({'project_assignments': assignments})
-                else:
-                    print("Project not found in employee assignments.")
-                    return False
-
-            print("Project removed from employee successfully.")
-            return True
-        elif action == "Add":
-            if project_name not in assignments:
-                assignments.append(project_name)
-                ref.child(emp_id).update({'project_assignments': assignments})
-                return True
-            else:
-                # Project Already Exists
-                return False
-        else:
-            # Invalid Action
-            return False
-    else:
-        # Reference not found
+    if ref is None:
         return False
+
+    assignments = ref.child(emp_id).child('project_assignments').get()
+
+    if action == "Remove":
+        if project_name not in assignments:
+            print("Project not found in employee assignments.")
+            return False
+
+        assignments.remove(project_name)
+        if not assignments:
+            assignments = [""]
+
+        ref.child(emp_id).update({'project_assignments': assignments})
+        print("Project removed from employee successfully.")
+        return True
+
+    if action == "Add":
+        if project_name in assignments:
+            return False
+
+        assignments.append(project_name)
+        ref.child(emp_id).update({'project_assignments': assignments})
+        return True
+
+    return False  # Invalid Action
 
 
 # Add employee function
@@ -125,10 +122,10 @@ def add_employee(name: str, role: str, email: str, phone_number: str, employment
 
         return True
     else:
-        message_box('Error', 'Failed to add employee: "manpower" reference not found.')
         return False
 
-# For project Overview
+
+# For project Overview, calculate the total cost of manpower assigned to a project
 def calc_manpowerCost(pName: str) -> int:
     manpower = load_manpower()
     cost = 0

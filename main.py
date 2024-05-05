@@ -3,6 +3,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.scrollview import ScrollView
+import os
 
 from ui.archive_ui import ArchiveScreen
 from ui.manpower_ui import ManpowerScreen
@@ -13,23 +14,24 @@ from ui.clients_ui import ClientsScreen
 from ui.finances_ui import FinancesScreen
 from ui.login_ui import *
 
+import glob
+
 from utils import *
 from custom import *
 from validation import *
 from pieChart import *
 
-# Load the KV file for the main screen
-Builder.load_file('main.kv')
-Builder.load_file('ui/login.kv')
-Builder.load_file('ui/projects.kv')
-Builder.load_file('ui/suppliers.kv')
-Builder.load_file('ui/clients.kv')
-Builder.load_file('ui/resources.kv')
-Builder.load_file('ui/manpower.kv')
-Builder.load_file('ui/finances.kv')
-Builder.load_file('ui/archive.kv')
-Builder.load_file('validation.kv')
+# Get the directory of the current Python script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Use absolute path to load kv files
+kv_files = glob.glob(os.path.join(script_dir, 'ui', '*.kv'))
+kv_files.append(os.path.join(script_dir, 'main.kv'))
+kv_files.append(os.path.join(script_dir, 'validation.kv'))
+
+# Load each .kv file
+for kv in kv_files:
+    Builder.load_file(kv)
 
 
 class MainScreen(Screen):

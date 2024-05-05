@@ -12,16 +12,9 @@ def load_suppliers(status: int = 0) -> list:
         supplier['id'] = supplier_id
         suppliers.append(supplier)
 
-    # Status 0 = All, 1 = Level 1, 2 = Level 2, 3 = Level 3
-    if status == 0:
-        suppliers = suppliers
-    elif status == 1:
-        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '1']
-    elif status == 2:
-        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '2']
-    elif status == 3:
-        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == '3']
-
+    # Check if supplier level is equal to the given status of 1 2 or 3 otherwise provide all suppliers
+    if status in [1, 2, 3]:
+        suppliers = [supplier for supplier in suppliers if supplier['supplierLevel'] == str(status)]
     return suppliers
 
 

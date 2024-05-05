@@ -31,25 +31,25 @@ def add_project(name: str, description: str, start_date: str, end_date: str, cli
 def load_projects(status: int = 2) -> list:
     ref = database.get_ref('projects')
 
-    # Retrieve all projects as a list of dictionaries
-    projects = []
-    for project_id, project in ref.get().items():
-        if project_id == 'pjZero':
-            continue
-        project['id'] = project_id
-        projects.append(project)
+    if ref is not None:
+        projects = []
+        for project_id, project in ref.get().items():
+            if project_id == 'pjZero':
+                continue
+            project['id'] = project_id
+            projects.append(project)
 
-    # Status 1 = In Progress, 2 = Completed, 0 = All
-    if status == 0:
-        projects = [project for project in projects if project['status'] == 'In Progress']
-    elif status == 1:
-        projects = [project for project in projects if project['status'] == 'Completed']
-    elif status == 2:
-        projects = projects
-    elif status == 3:
-        projects = [project for project in projects if project['status'] == 'Finalized']
+        # Status 1 = In Progress, 2 = Completed, 0 = All Projects, 3 = Finalized
+        if status == 0:
+            projects = [project for project in projects if project['status'] == 'In Progress']
+        elif status == 1:
+            projects = [project for project in projects if project['status'] == 'Completed']
+        elif status == 2:
+            projects = projects
+        elif status == 3:
+            projects = [project for project in projects if project['status'] == 'Finalized']
 
-    return projects
+        return projects
 
 
 # Get a single project by ID
@@ -83,30 +83,21 @@ def update_project(project_id: str, name: str, description: str, start_date: str
 # Delete a project by ID, and remove all relevant resource and employee assignments
 def delete_project(project_id: str) -> bool:
     ref = database.get_ref('projects')
-    res = load_resources()
-    emp = load_manpower()
-    # Get Project Name from ID
     project = get_project(project_id)
-    if ref is not None:
-        # Delete project from Projects Node
-        ref.child(project_id).delete()
-        # Delete Relevant Resource Assignments
-        for resource in res:
-            for assignment in resource['resource_assignments']:
-                # use resource_assignment function to delete the assignment
-                if project['name'] == assignment['project']:
-                    print("Assignment Found"+assignment['project'])
-                    resource_assignment(resource['id'], assignment['amount'], project['name'], 'Remove')
-
-        # Delete Relevant Employee Assignments
-        for employee in emp:
-            # make sure it does check for the full name, 'in' is not reliable
-            for assignment in employee['project_assignments']:
-                # use project_assignment function to delete the assignment
-                if project['name'] == assignment:
-                    project_assignment(employee['id'], project['name'], 'Remove')
-    else:
+    if ref is None or project is None:
         return False
+
+    ref.child(project_id).delete()
+
+    for resource in load_resources():
+        for assignment in resource['resource_assignments']:
+            if project['name'] == assignment['project']:
+                resource_assignment(resource['id'], assignment['amount'], project['name'], 'Remove')
+
+    for employee in load_manpower():
+        if project['name'] in employee['project_assignments']:
+            project_assignment(employee['id'], project['name'], 'Remove')
+
     return True
 
 
@@ -157,7 +148,7 @@ def load_res(project_name: str) -> dict:
 
 
 # Load all project names
-def load_project_names(projects:list= load_projects(2)) -> list:
+def load_project_names(projects: list = load_projects(2)) -> list:
     project_names = []
     for project in projects:
         project_names.append(project['name'])

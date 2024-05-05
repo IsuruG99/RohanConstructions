@@ -1,8 +1,7 @@
 from utils import *
 
 
-# Here you will write all in depth functions
-
+# Load all resources from the database
 def load_resources(status: int = 0) -> list:
     # Get reference from database
     ref = database.get_ref('resources')
@@ -35,6 +34,7 @@ def get_res(res_id: str) -> dict:
     return res
 
 
+# Update resource details
 def update_res(res_id: str, name: str, quantity: str, status: str, supplier_name: str, cost: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('resources')
@@ -52,6 +52,7 @@ def update_res(res_id: str, name: str, quantity: str, status: str, supplier_name
         return False
 
 
+# Delete resource function
 def delete_res(res_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('resources')
@@ -84,66 +85,51 @@ def add_res(name: str, quantity: str, status: str, supplier_name: str, cost: str
         return False
 
 
+# Resource assignment function
 def resource_assignment(res_id: str, amount: str, project_name: str, action: str) -> bool:
     ref = database.get_ref('resources')
     assignments = ref.child(res_id).child('resource_assignments').get()
+
+    # In addition to performing the remove action, the function also checks if the resource has no assignments
+    # In case it has none, assign a blank assignment to prevent firebase deleting the key
     if action == "Remove":
-        if len(assignments) == 1:
-            assignments = [{"amount": "", "project": ""}]
-            ref.child(res_id).update({'resource_assignments': assignments})
-            change_qty(res_id, amount, "AddQty")
-            return True
-        else:
-            for assignment in assignments:
-                if assignment['project'] == project_name:
-                    assignments.remove(assignment)
-                    ref.child(res_id).update({'resource_assignments': assignments})
-                    change_qty(res_id, amount, "AddQty")
-                    return True
+        assignments = [{"amount": "", "project": ""}] if len(assignments) == 1 \
+            else [a for a in assignments if a['project'] != project_name]
+        change_qty(res_id, amount, "AddQty")
     elif action == "Add":
-        project_exists = False
         for assignment in assignments:
             if assignment['project'] == project_name:
                 assignment['amount'] = str(int(assignment['amount']) + int(amount))
-                project_exists = True
                 break
-
-        if not project_exists:
+        else:
             assignments.append({"amount": amount, "project": project_name})
-
-        ref.child(res_id).update({'resource_assignments': assignments})
         change_qty(res_id, amount, "SubtractQty")
-        return True
     elif action == "Subtract":
         for assignment in assignments:
-            if assignment['project'] == project_name:
-                if int(assignment['amount']) >= int(amount):
-                    assignment['amount'] = str(int(assignment['amount']) - int(amount))
-                    ref.child(res_id).update({'resource_assignments': assignments})
-                    change_qty(res_id, amount, "AddQty")
-                    return True
-                else:
-                    return False
+            if assignment['project'] == project_name and int(assignment['amount']) >= int(amount):
+                assignment['amount'] = str(int(assignment['amount']) - int(amount))
+                change_qty(res_id, amount, "AddQty")
+                break
+        else:
+            return False
     else:
         return False
 
-    message_box('Error', 'Failed to connect to Database.')
+    ref.child(res_id).update({'resource_assignments': assignments})
+    return True
 
 
 # Separate function to subtract amount from resource quantity
 def change_qty(res_id: str, amount: str, action: str) -> bool:
+    ref = database.get_ref('resources')
+    res = get_res(res_id)
+    new_qty = 0
     if action == "AddQty":
-        ref = database.get_ref('resources')
-        res = get_res(res_id)
         new_qty = int(res['quantity']) + int(amount)
-        ref.child(res_id).update({'quantity': str(new_qty)})
-        return True
     elif action == "SubtractQty":
-        ref = database.get_ref('resources')
-        res = get_res(res_id)
         new_qty = int(res['quantity']) - int(amount)
-        ref.child(res_id).update({'quantity': str(new_qty)})
-        return True
+    ref.child(res_id).update({'quantity': str(new_qty)})
+    return True
 
 
 def calc_resourcesCost(pName: str) -> int:

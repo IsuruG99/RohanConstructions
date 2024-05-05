@@ -58,11 +58,12 @@
                 rows: 4
                 size: root.size
                 pos: root.pos
-
+                padding: 10
+                spacing: 10
                 GridLayout:
                         cols: 2
-                        padding: 20
-                        size_hint: 1.0, 0.15
+                        spacing: 10
+                        size_hint: 1.0, 0.10
 
                         CLabel:
                                 id: current_user
@@ -77,17 +78,17 @@
                 GridLayout:
                         cols: 1
                         rows: 2
-                        padding: 20
-                        size_hint: 1, 0.5
+                        spacing: 10
+                        size_hint: 1, 0.8
 
                         GridLayout:
-                                size_hint: 0.95, 0.1
+                                size_hint: 1, 0.1
                                 id: account_headers
                                 rows: 1
                                 height: 50
 
                         ScrollView:
-                                size_hint: 0.95, 0.9
+                                size_hint: 1, 0.9
                                 do_scroll_x: False
                                 GridLayout:
                                         id: account_list
@@ -100,79 +101,133 @@
                                                 Rectangle:
                                                         size: self.size
                                                         pos: self.pos
+
                 GridLayout:
                         cols: 2
-                        size_hint: 1, 0.2
-                        padding: 20
-                        spacing: 20
-                        GridLayout:
-                                cols: 2
-                                rows: 2
-                                spacing: 20
-                                size_hint: 0.55, 1
-
-                                CLabel:
-                                        text: 'Email'
-                                        size_hint: 0.2, 1
-                                        bold: True
-                                RText:
-                                        id: edit_email
-                                        hint_text: 'Email'
-                                        size_hint: 0.8, 1
-                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        disabled: True
-
-                                CLabel:
-                                        text: 'Status'
-                                        size_hint: 0.2, 1
-                                        bold: True
-                                CLabel:
-                                        id: edit_last_login
-                                        size_hint: 0.8, 1
-
-                        GridLayout:
-                                cols: 2
-                                rows: 2
-                                size_hint: 0.45, 1
-                                spacing: 20
-
-                                CLabel:
-                                        text: 'Password'
-                                        size_hint: 0.3, 1
-                                        bold: True
-                                RText:
-                                        id: edit_password
-                                        hint_text: 'Password'
-                                        size_hint: 0.7, 1
-                                        padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
-                                        password: True
-
-                                CLabel:
-                                        text: 'Access'
-                                        size_hint: 0.3, 1
-                                        bold: True
-                                RSpinner:
-                                        id: edit_access
-                                        values: ['0', '1', '2', '3']
-                                        size_hint: 0.7, 1
-
-                GridLayout:
-                        cols: 3
                         rows: 1
-                        size_hint: 1, 0.15
-                        padding: 20
-                        spacing: 20
+                        size_hint: 1, 0.10
+                        spacing: 10
                         RButton4:
                                 size_hint: 0.3, 1
                                 text: 'Add'
-                                on_release: root.add_user(requestType="Validate")
+                                on_release: root.add_user_popup()
 
                         RButton4:
                                 size_hint: 0.3, 1
+                                text: 'Back'
+                                on_release: root.popup.dismiss()
+
+<AddUserPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+                padding: 10
+                spacing: 10
+                GridLayout:
+                        cols: 2
+                        rows: 3
+                        spacing: 10
+                        size_hint: 1, 0.85
+                        CLabel:
+                                text: 'Email'
+                                size_hint: 0.2, 1
+                                bold: True
+                        RText:
+                                id: add_user_email
+                                hint_text: 'Email'
+                                size_hint: 0.8, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                        CLabel:
+                                text: 'Password'
+                                size_hint: 0.3, 1
+                                bold: True
+                        RText:
+                                id: add_user_password
+                                hint_text: 'Password'
+                                size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                password: True
+
+                        CLabel:
+                                text: 'Access'
+                                size_hint: 0.3, 1
+                                bold: True
+                        RSpinner:
+                                id: add_user_access
+                                values: ['0', '1', '2', '3']
+                                size_hint: 0.7, 1
+
+                RButton4:
+                        size_hint: 1, 0.15
+                        text: 'Add'
+                        on_release: root.add_user(requestType="Validate")
+
+<EditUserPopup>:
+        GridLayout:
+                cols: 1
+                rows: 2
+                size: root.size
+                pos: root.pos
+                padding: 10
+                spacing: 10
+                GridLayout:
+                        cols: 2
+                        rows: 4
+                        spacing: 10
+                        size_hint: 1, 0.85
+                        CLabel:
+                                text: 'Email'
+                                size_hint: 0.2, 1
+                                bold: True
+                        RText:
+                                id: edit_user_email
+                                hint_text: 'Email'
+                                size_hint: 0.8, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+
+                        CLabel:
+                                text: 'Password'
+                                size_hint: 0.3, 1
+                                bold: True
+                        RText:
+                                id: edit_user_password
+                                hint_text: 'Password'
+                                size_hint: 0.7, 1
+                                padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
+                                password: True
+
+                        CLabel:
+                                text: 'Access'
+                                size_hint: 0.3, 1
+                                bold: True
+                        RSpinner:
+                                id: edit_user_access
+                                values: ['0', '1', '2', '3']
+                                size_hint: 0.7, 1
+
+                        CLabel:
+                                text: 'Last Login'
+                                size_hint: 0.3, 1
+                                bold: True
+                        CLabel:
+                                id: edit_user_last_login
+                                size_hint: 0.7, 1
+
+                GridLayout:
+                        cols: 2
+                        rows: 1
+                        size_hint: 1, 0.15
+                        padding: 10
+                        spacing: 10
+                        RButton4:
+                                size_hint: 0.5, 1
                                 text: 'Edit'
                                 on_release: root.edit_user(requestType="Validate")
 
                         RButton4:
-                                size_hint: 0.3, 1
+                                size_hint: 0.5, 1
                                 text: 'Delete'
                                 on_release: root.delete_user(requestType="Validate")

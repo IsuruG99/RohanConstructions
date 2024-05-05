@@ -79,7 +79,7 @@ class MainScreen(Screen):
     def openAdminControls(self) -> None:
         temp_popup = Popup()  # Temporary Popup instance
         admin_popup = AdminControls(self, temp_popup)
-        adminPop = RPopup(title='Admin Controls', content=admin_popup, size_hint=(0.6, 0.9))
+        adminPop = RPopup(title='Admin Controls', content=admin_popup, size_hint=(0.6, 0.8))
         admin_popup.popup = adminPop
         adminPop.open()
 

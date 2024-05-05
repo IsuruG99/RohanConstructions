@@ -64,14 +64,14 @@ def get_user(user_id: str) -> dict:
 
 
 # Updates the last login time of a user in the database.
-def update_last_login(email: str) -> None:
+def update_last_login(email: str) -> bool:
     ref = database.get_ref('users')
     users = ref.get()
     for user in users:
         if users[user]['email'] == email:
             # Update the 'last_login' field of the user in the database with the current time
             ref.child(user).update({"last_login": datetime.now().strftime('%Y-%m-%dT%H:%M:%S.000Z')})
-            return
+            return True
 
 
 # Updates the details of a user in the database.
@@ -89,10 +89,12 @@ def edit_user(email: str, password: str, access: int) -> bool:
 
 
 # Adds a new user to the database.
-def add_user(email: str, password: str, access: int) -> None:
+def add_user(email: str, password: str, access: int) -> bool:
     ref = database.get_ref('users')
-    ref.push({"email": email, "password": password, "access": access, "last_login": "None"})
-    return
+    if ref is not None:
+        ref.push({"email": email, "password": password, "access": access, "last_login": "None"})
+        return True
+    return False
 
 
 # Deletes a user from the database.
@@ -116,7 +118,7 @@ def check_unique_email(email: str, action: str) -> bool:
             if users[user]['email'] == email:
                 return False
     elif action == "Update":
-        # Not entirely sure, for now this is empty
+        # Not used, old idea
         pass
 
     return True

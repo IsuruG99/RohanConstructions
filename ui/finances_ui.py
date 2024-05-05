@@ -65,7 +65,7 @@ class AddLogPopup(GridLayout):
             entity = str(self.ids.addLog_entity.text)
             project = str(self.ids.addLog_project.text)
             category = str(self.ids.addLog_category.text)
-        except AttributeError or ValueError:
+        except (AttributeError, ValueError):
             self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
 
@@ -92,17 +92,16 @@ class AddLogPopup(GridLayout):
             self.validCheck = 1
 
         # Send to finances.py
-        elif requestType == "Submit":
-            if self.validCheck == 1:
-                if add_log(fin_type, amount, date, desc, entity, project, category):
-                    self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
-                    self.finances_screen.populate_logs(load_all_finances(0))
-                    self.validCheck = 0
-                    self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                    self.finances_screen.dismiss_popup(self.popup)
-                else:
-                    self.finances_screen.CMessageBox('Error', 'Failed to add log.', 'Message')
-                    self.validCheck = 0
+        elif requestType == "Submit" and self.validCheck == 1:
+            if add_log(fin_type, amount, date, desc, entity, project, category):
+                self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
+                self.finances_screen.populate_logs(load_all_finances(0))
+                self.validCheck = 0
+                self.finances_screen.ids.finances_filter.text = 'Filter: All'
+                self.finances_screen.dismiss_popup(self.popup)
+            else:
+                self.finances_screen.CMessageBox('Error', 'Failed to add log.', 'Message')
+                self.validCheck = 0
 
     def load_project_list(self) -> list:
         return load_project_names()
@@ -153,7 +152,7 @@ class ViewLogPopup(GridLayout):
             entity = str(self.ids.viewLog_entity.text)
             project = str(self.ids.viewLog_project.text)
             category = str(self.ids.viewLog_category.text)
-        except AttributeError or ValueError:
+        except (AttributeError, ValueError):
             self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
         # Validate & Confirm first, then recursively go to Submit
@@ -177,18 +176,17 @@ class ViewLogPopup(GridLayout):
             self.validCheck = 1
 
         # Send to finances.py
-        elif requestType == "Submit":
-            if self.validCheck == 1:
-                if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
-                            App.get_running_app().get_accessName()):
-                    self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
-                    self.finances_screen.populate_logs(load_all_finances(0))
-                    self.validCheck = 0
-                    self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                    self.finances_screen.dismiss_popup(self.popup)
-                else:
-                    self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
-                    self.validCheck = 0
+        elif requestType == "Submit" and self.validCheck == 1:
+            if edit_log(self.fin_id, fin_type, amount, date, desc, entity, project, category,
+                        App.get_running_app().get_accessName()):
+                self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
+                self.finances_screen.populate_logs(load_all_finances(0))
+                self.validCheck = 0
+                self.finances_screen.ids.finances_filter.text = 'Filter: All'
+                self.finances_screen.dismiss_popup(self.popup)
+            else:
+                self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
+                self.validCheck = 0
 
     def load_project_list(self) -> list:
         return load_project_names()

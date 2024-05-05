@@ -117,57 +117,51 @@ class ViewClientPopup(GridLayout):
 
     @AccessControl
     def edit_client(self, requestType: str = "Submit") -> None:
-        # view_client_name.text, view_client_phone_number.text, view_client_email.text, view_client_address.text
+        # Get the data from the text inputs
         try:
             name = str(self.ids.view_client_name.text)
             phone_number = str(self.ids.view_client_phone_number.text)
             email = str(self.ids.view_client_email.text)
             address = str(self.ids.view_client_address.text)
-        except AttributeError:
-            return
-        except ValueError:
+        except (AttributeError, ValueError):
             self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
+
         # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
-            if not validate_string(name, phone_number, email, address):
-                self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
-                return
-            if not validate_mobileNo(phone_number):
-                self.clients_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
-                return
-            if not validate_email(email):
-                self.clients_screen.CMessageBox('Error', 'Invalid email address.', 'Message')
+            if not all([validate_string(name, phone_number, email, address),
+                        validate_mobileNo(phone_number),
+                        validate_email(email)]):
+                self.clients_screen.CMessageBox('Error', 'Invalid input.', 'Message')
                 return
             self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to update this client?', 'Confirm', 'Yes',
                                             'No', self.edit_client)
             self.validCheck = 1
-        # Send data to clients.py
-        elif requestType == "Submit":
-            if self.validCheck == 1:
-                if update_client(self.client_id, name, phone_number, email, address):
-                    self.clients_screen.CMessageBox('Success', 'Client updated successfully.', 'Message')
-                    self.clients_screen.populate_clients(load_clients(0))
-                    self.validCheck = 0
-                    self.dismiss_popup(self.popup)
-                else:
-                    self.clients.CMessageBox('Error', 'Failed to update client.', 'Message')
-                    self.validCheck = 0
+
+        # Send the data to clients.py
+        elif requestType == "Submit" and self.validCheck == 1:
+            if update_client(self.client_id, name, phone_number, email, address):
+                self.clients_screen.CMessageBox('Success', 'Client updated successfully.', 'Message')
+                self.clients_screen.populate_clients(load_clients(0))
+                self.validCheck = 0
+                self.dismiss_popup(self.popup)
+            else:
+                self.clients_screen.CMessageBox('Error', 'Failed to update client.', 'Message')
+                self.validCheck = 0
 
     @AccessControl
     def delete_client(self, requestType: str = "Submit") -> None:
-        # Confirm first, recursively call Submit
+        # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
             self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to delete this client?', 'Confirm', 'Yes',
                                             'No', self.delete_client)
-        # Send data to clients.py
-        elif requestType == "Submit":
-            if delete_client(self.client_id):
-                self.clients_screen.CMessageBox('Success', 'Client deleted successfully.', 'Message')
-                self.clients_screen.populate_clients(load_clients(0))
-                self.dismiss_popup(self.popup)
-            else:
-                self.clients_screen.CMessageBox('Error', 'Failed to delete client.', 'Message')
+        # Send the data to clients.py
+        elif requestType == "Submit" and delete_client(self.client_id):
+            self.clients_screen.CMessageBox('Success', 'Client deleted successfully.', 'Message')
+            self.clients_screen.populate_clients(load_clients(0))
+            self.dismiss_popup(self.popup)
+        else:
+            self.clients_screen.CMessageBox('Error', 'Failed to delete client.', 'Message')
 
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()
@@ -301,83 +295,59 @@ class ClientsReport(GridLayout):
         self.rows = 1
 
     def populate_clientOverview(self, y: str, m: str) -> None:
-        # Assume the fields are in kv, populate it from the database
-        if y == '' or None:
+        if not y:
             self.finance_screen.CMessageBox('Error', 'Year is required.', 'Message')
             return
 
+        m = '00' if not m else str(convert_monthToNumber(m))
         clients = load_clients(0)
         projects = load_projects()
-        if m == '':
-            m = '00'
-        else:
-            m = str(convert_monthToNumber(m))
-        current_clients: list = []
-        # current_projects must hold name and client_name in key value pairs
-        current_projects: list = []
-        complete_projects: list = []
-        project_count: int = 0
-        profit: int = 0
+
+        current_clients, current_projects, complete_projects = [], [], []
+        profit = 0
 
         for project in projects:
-            # Check if the project's start and end dates are within the specified year and month
-            if (project['start_date'][:7] <= y + '-' + m and project['end_date'][:7] >= y + '-' + m) or \
-                    (m == '00' and project['start_date'][:4] <= y and project['end_date'][:4] >= y):
-                # Add the project's budget to the profit
+            if (project['start_date'][:7] <= y + '-' + m <= project['end_date'][:7]) or (
+                    m == '00' and project['start_date'][:4] <= y <= project['end_date'][:4]):
                 profit += currencyStringToFloat(project['budget'])
-
-                # Add the project's client name to the current clients if it's not already in the list
                 if project['client_name'] not in current_clients:
                     current_clients.append(project['client_name'])
 
-                # Add the project to the current or completed projects based on its status
+                project_dict = {'name': project['name'], 'client_name': project['client_name']}
                 if project['status'] == 'In Progress':
-                    current_projects.append({'name': project['name'], 'client_name': project['client_name']})
-                    project_count += 1
+                    current_projects.append(project_dict)
                 elif project['status'] == 'Completed':
-                    complete_projects.append({'name': project['name'], 'client_name': project['client_name']})
+                    complete_projects.append(project_dict)
 
-        # Show client count on reportClient_count
-        self.ids.reportClient_clientCount.text = "Clients: " + str(len(set(current_clients)))
-        self.ids.reportClient_projectCount.text = "Ongoing Projects: " + str(len(current_projects))
-        self.ids.reportClient_profit.text = "Total Budget: " + convert_currency(profit)
+        self.ids.reportClient_clientCount.text = f"Clients: {len(set(current_clients))}"
+        self.ids.reportClient_projectCount.text = f"Ongoing Projects: {len(current_projects)}"
+        self.ids.reportClient_profit.text = f"Total Budget: {convert_currency(profit)}"
 
-        # clear the existing widgets
         self.ids.ongoingProject_headers.clear_widgets()
         self.ids.completedProject_headers.clear_widgets()
         self.ids.reportClient_ongoingProjects.clear_widgets()
         self.ids.reportClient_completedProjects.clear_widgets()
         self.ids.reportClient_pieChart.clear_widgets()
 
-        #Adding the current_projects to reportClient_ongoingProjects
-        # current_projects = [{'name': 'Project Name', 'client_name': 'Client Name'}]
-        headers = GridLayout(cols=2, size_hint_y=None, height=40)
-        headers.add_widget(CLabel(text='Project'))
-        headers.add_widget(CLabel(text='Client'))
-        self.ids.ongoingProject_headers.add_widget(headers)
-
-        for project in current_projects:
-            gridCurrent = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
-            gridCurrent.project = project
-            gridCurrent.add_widget(CLabel(text=project['name']))
-            gridCurrent.add_widget(CLabel(text=project['client_name']))
-            self.ids.reportClient_ongoingProjects.add_widget(gridCurrent)
-
-        #Adding the complete_projects to reportClient_completedProjects
-        # complete_projects = [{'name': 'Project Name', 'client_name': 'Client Name'}]
-        headers = GridLayout(cols=2, size_hint_y=None, height=40)
-        headers.add_widget(CLabel(text='Project Name'))
-        headers.add_widget(CLabel(text='Client Name'))
-        self.ids.completedProject_headers.add_widget(headers)
-
-        for project in complete_projects:
-            gridCompleted = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
-            gridCompleted.project = project
-            gridCompleted.add_widget(CLabel(text=project['name']))
-            gridCompleted.add_widget(CLabel(text=project['client_name']))
-            self.ids.reportClient_completedProjects.add_widget(gridCompleted)
+        self.populate_project_list('Project', 'Client', current_projects, self.ids.ongoingProject_headers,
+                                   self.ids.reportClient_ongoingProjects)
+        self.populate_project_list('Project Name', 'Client Name', complete_projects, self.ids.completedProject_headers,
+                                   self.ids.reportClient_completedProjects)
 
         self.populate_pieChart(current_projects, complete_projects)
+
+    def populate_project_list(self, header1: str, header2: str, projects: list, header_widget, project_widget) -> None:
+        headers = GridLayout(cols=2, size_hint_y=None, height=40)
+        headers.add_widget(CLabel(text=header1))
+        headers.add_widget(CLabel(text=header2))
+        header_widget.add_widget(headers)
+
+        for project in projects:
+            grid = GridLayout(cols=2, spacing=10, size_hint_y=None, height=40)
+            grid.project = project
+            grid.add_widget(CLabel(text=project['name']))
+            grid.add_widget(CLabel(text=project['client_name']))
+            project_widget.add_widget(grid)
 
     def populate_pieChart(self, ongoing: list, complete: list):
         # take count of the lists

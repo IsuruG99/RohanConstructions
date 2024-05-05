@@ -15,6 +15,29 @@ from utils import *
 from validation import *
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            if accessLV in [2,3]:
+                blockList = ['add_client_popup', 'edit_client', 'delete_client']
+                # If lv3 add 'reports_clients'
+                if accessLV == 3:
+                    blockList.append('report_clients')
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.clients_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 # add a popup window to insert client data to the database
 class AddClientPopup(GridLayout):
     def __init__(self, clients_screen: Screen, popup, **kwargs):
@@ -27,10 +50,16 @@ class AddClientPopup(GridLayout):
 
     def add_client(self, requestType: str = "Submit") -> None:
         # add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text
-        name = str(self.ids.add_client_name.text)
-        phone_number = str(self.ids.add_client_phone_number.text)
-        email = str(self.ids.add_client_email.text)
-        address = str(self.ids.add_client_address.text)
+        try:
+            name = str(self.ids.add_client_name.text)
+            phone_number = str(self.ids.add_client_phone_number.text)
+            email = str(self.ids.add_client_email.text)
+            address = str(self.ids.add_client_address.text)
+        except AttributeError:
+            return
+        except ValueError:
+            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
@@ -86,12 +115,19 @@ class ViewClientPopup(GridLayout):
         self.ids.view_client_email.text = client['email']
         self.ids.view_client_address.text = client['address']
 
+    @AccessControl
     def edit_client(self, requestType: str = "Submit") -> None:
         # view_client_name.text, view_client_phone_number.text, view_client_email.text, view_client_address.text
-        name = str(self.ids.view_client_name.text)
-        phone_number = str(self.ids.view_client_phone_number.text)
-        email = str(self.ids.view_client_email.text)
-        address = str(self.ids.view_client_address.text)
+        try:
+            name = str(self.ids.view_client_name.text)
+            phone_number = str(self.ids.view_client_phone_number.text)
+            email = str(self.ids.view_client_email.text)
+            address = str(self.ids.view_client_address.text)
+        except AttributeError:
+            return
+        except ValueError:
+            self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
         # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
             if not validate_string(name, phone_number, email, address):
@@ -118,6 +154,7 @@ class ViewClientPopup(GridLayout):
                     self.clients.CMessageBox('Error', 'Failed to update client.', 'Message')
                     self.validCheck = 0
 
+    @AccessControl
     def delete_client(self, requestType: str = "Submit") -> None:
         # Confirm first, recursively call Submit
         if requestType == "Validate":
@@ -146,6 +183,7 @@ class ClientsScreen(Screen):
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel',
                     btn1click: str = None, btn2click: str = None) -> None:
@@ -216,6 +254,7 @@ class ClientsScreen(Screen):
                        or searchValue.lower() in client['email'].lower()]
             self.populate_clients(clients)
 
+    @AccessControl
     def add_client_popup(self) -> None:
         temp_addClient_popup = Popup()
         addClient_popup = AddClientPopup(self, temp_addClient_popup)
@@ -230,6 +269,7 @@ class ClientsScreen(Screen):
         viewPopup.popup = view_popup
         view_popup.open()
 
+    @AccessControl
     def report_clients(self) -> None:
         temp_reportPopup = Popup()
         reportPopup = ClientsReport(self, temp_reportPopup)
@@ -251,9 +291,9 @@ class ClientsScreen(Screen):
 
 
 class ClientsReport(GridLayout):
-    def __init__(self, client_screen: Screen, popup, **kwargs):
+    def __init__(self, clients_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
-        self.client_screen = client_screen
+        self.clients_screen = clients_screen
         year = str(datetime.datetime.now().year)
         month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
         self.populate_clientOverview(year, month)

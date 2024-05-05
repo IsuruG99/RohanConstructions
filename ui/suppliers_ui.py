@@ -15,6 +15,29 @@ from validation import *
 from kivy.clock import Clock
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            if accessLV in [2,3]:
+                blockList = ['editSupplier', 'deleteSupplier', 'add_popup']
+                # If lv3 add 'reports_clients'
+                if accessLV == 3:
+                    blockList.append('overview_suppliers')
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.suppliers_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 class AddSupPopup(GridLayout):
     def __init__(self, suppliers_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -25,13 +48,17 @@ class AddSupPopup(GridLayout):
         self.rows = 1
 
     def add_Supplier(self, requestType: str = "Submit") -> None:
-        supplierName = str(self.ids.supplierName.text)
-        business = str(self.ids.business.text)
-        contactNo = str(self.ids.contactNo.text)
-        email = str(self.ids.email.text)
-        address = str(self.ids.address.text)
-        startDealing = str(self.ids.startDealing.text)
-        supplierLevel = str(self.ids.supplierLevel.text)
+        try:
+            supplierName = str(self.ids.supplierName.text)
+            business = str(self.ids.business.text)
+            contactNo = str(self.ids.contactNo.text)
+            email = str(self.ids.email.text)
+            address = str(self.ids.address.text)
+            startDealing = str(self.ids.startDealing.text)
+            supplierLevel = str(self.ids.supplierLevel.text)
+        except AttributeError or ValueError:
+            self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         if requestType == "Validate":
             # Validate inputs
@@ -91,15 +118,20 @@ class ViewSupPopup(GridLayout):
         self.ids.supplierLevel.text = supplier["supplierLevel"]
 
     # Edit Supplier
+    @AccessControl
     def editSupplier(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
-        supplierName = str(self.ids.supplierName.text)
-        business = str(self.ids.business.text)
-        email = str(self.ids.email.text)
-        contactNo = str(self.ids.contactNo.text)
-        startDealing = str(self.ids.startDealing.text)
-        supplierLevel = str(self.ids.supplierLevel.text)
-        address = str(self.ids.address.text)
+        try:
+            supplierName = str(self.ids.supplierName.text)
+            business = str(self.ids.business.text)
+            email = str(self.ids.email.text)
+            contactNo = str(self.ids.contactNo.text)
+            startDealing = str(self.ids.startDealing.text)
+            supplierLevel = str(self.ids.supplierLevel.text)
+            address = str(self.ids.address.text)
+        except AttributeError or ValueError:
+            self.suppliers_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         if requestType == "Validate":
             # Validate inputs
@@ -135,6 +167,7 @@ class ViewSupPopup(GridLayout):
                 self.suppliers_screen.dismiss_popup(self.popup)
 
     # Delete Supplier
+    @AccessControl
     def deleteSupplier(self, requestType: str = "Submit") -> None:
         # Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
@@ -299,6 +332,7 @@ class SuppliersScreen(Screen):
         viewPop_popup.popup = viewPop
         viewPop.open()
 
+    @AccessControl
     def overview_suppliers(self):
         temp_overview_popup = Popup()
         overviewPop_popup = ReportSupPopup(self, temp_overview_popup)
@@ -307,6 +341,7 @@ class SuppliersScreen(Screen):
         overviewPop.open()
 
     # Open to supplier add popup window
+    @AccessControl
     def add_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddSupPopup(self, temp_addPop_popup)
@@ -314,6 +349,7 @@ class SuppliersScreen(Screen):
         addPop_popup.popup = addPop
         addPop.open()
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel', btn1click=None, btn2click=None) -> None:
         if context == 'Message':

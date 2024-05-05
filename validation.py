@@ -67,3 +67,14 @@ class CfmPopUp(GridLayout):
             self.popup.dismiss()
         else:
             self.popup.dismiss()
+
+
+# Part of the AccessControl Decorator
+def validate_access(accessLV: int, functionName: str, functionList: list) -> bool:
+    if accessLV == 0:
+        return True
+    else:
+        if functionName in functionList:
+            return False
+        else:
+            return True

@@ -16,6 +16,26 @@ from functions.projects import load_projects, load_project_names
 import datetime
 
 
+# Manages user access to most functions.
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            if accessLV in [2, 3]:
+                blockList = ['addArchive', 'viewArchive', 'populate_archive']
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.archiveScreen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 class AddArchive(GridLayout):
     def __init__(self, archiveScreen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -80,6 +100,7 @@ class ArchiveScreen(Screen):
         super().__init__(**kwargs)
         self.populate_archive(load_all_archives(0))
 
+
     def populate_archive(self, archiveList: list = load_all_archives(), headers: list = None) -> None:
         self.ids.archive_list.clear_widgets()
         self.ids.archive_headers.clear_widgets()
@@ -104,6 +125,7 @@ class ArchiveScreen(Screen):
             grid.add_widget(CLabel(text=convert_currency(archive["budget"]), size_hint_x=0.3))
             self.ids.archive_list.add_widget(grid)
 
+    @AccessControl
     def addArchive(self) -> None:
         temp_addArchive = Popup()
         addArchive = AddArchive(self, temp_addArchive)
@@ -111,6 +133,7 @@ class ArchiveScreen(Screen):
         addArchive.popup = addArch
         addArch.open()
 
+    @AccessControl
     def viewArchive(self, archive_id: str, aName:str, instance) -> None:
         temp_viewArchive = Popup()
         viewArchive = ViewArchive(self, temp_viewArchive, archive_id)

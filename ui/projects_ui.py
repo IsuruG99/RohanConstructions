@@ -13,6 +13,30 @@ from custom import *
 from validation import *
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            # Lv2 and 3 can't add/edit and delete anything in Finances.
+            # View block is handled by main.py preventing the function opening entirely.
+            if accessLV in [2, 3]:
+                blockList = ['add_popup', 'editProj', 'deleteProj', 'finalize_projects']
+                if accessLV == 3:
+                    blockList.append('reports_popup')
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.projects_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 # Add Project Popup Window
 class AddPopup(GridLayout):
     def __init__(self, projects_screen: Screen, popup, **kwargs) -> None:
@@ -25,12 +49,16 @@ class AddPopup(GridLayout):
 
     def addProj(self, requestType: str = "Submit") -> None:
         # Stringify Inputs
-        name = str(self.ids.project_name.text)
-        description = str(self.ids.project_desc.text)
-        start_date = str(self.ids.project_start.text)
-        end_date = str(self.ids.project_end.text)
-        client_name = str(self.ids.project_client.text)
-        budget = str(self.ids.project_budget.text)
+        try:
+            name = str(self.ids.project_name.text)
+            description = str(self.ids.project_desc.text)
+            start_date = str(self.ids.project_start.text)
+            end_date = str(self.ids.project_end.text)
+            client_name = str(self.ids.project_client.text)
+            budget = str(self.ids.project_budget.text)
+        except AttributeError or ValueError:
+            self.projects_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
         # Validate inputs
         if requestType == "Validate":
             if not validate_string(name, description, client_name, budget):
@@ -89,15 +117,20 @@ class ViewPopup(GridLayout):
         self.ids.viewPop_status.text = project["status"]
 
     # Edit Project
+    @AccessControl
     def editProj(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
-        name = str(self.ids.viewPop_name.text)
-        description = str(self.ids.viewPop_desc.text)
-        start_date = str(self.ids.viewPop_startDate.text)
-        end_date = str(self.ids.viewPop_endDate.text)
-        client_name = str(self.ids.viewPop_client.text)
-        budget = str(self.ids.viewPop_budget.text)
-        status = str(self.ids.viewPop_status.text)
+        try:
+            name = str(self.ids.viewPop_name.text)
+            description = str(self.ids.viewPop_desc.text)
+            start_date = str(self.ids.viewPop_startDate.text)
+            end_date = str(self.ids.viewPop_endDate.text)
+            client_name = str(self.ids.viewPop_client.text)
+            budget = str(self.ids.viewPop_budget.text)
+            status = str(self.ids.viewPop_status.text)
+        except AttributeError or ValueError:
+            self.projects_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Validate & Confirm first, then recursively call Submit
         if requestType == "Validate":
@@ -137,6 +170,7 @@ class ViewPopup(GridLayout):
         return load_client_names()
 
     # Delete Project
+    @AccessControl
     def deleteProj(self, requestType: str = "Submit") -> None:
         if requestType == "Validate":
             # Send project_id to projects.py
@@ -232,6 +266,7 @@ class ReportsPopup(GridLayout):
                 grid.add_widget(CLabel(text=str(amount), font_size='15sp'))
                 self.ids.assigned_resources.add_widget(grid)
 
+    @AccessControl
     def finalize_projects(self, pName: str) -> None:
         if pName is not None and pName != '':
             self.projects_screen.CMessageBox(title='Finalize Project', content='Are you sure you want to finalize this project?',
@@ -321,6 +356,7 @@ class ProjectsScreen(Screen):
                         project['end_date'].lower()]
             self.populate_projects(projects)
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel',
                     btn1click=None, btn2click=None) -> None:
@@ -336,6 +372,7 @@ class ProjectsScreen(Screen):
             cfmPopUp.content.popup = cfmPopUp
 
     # Open Reports Popup Window
+    @AccessControl
     def reports_popup(self) -> None:
         temp_reports_popup = Popup()
         reports_popup = ReportsPopup(self, temp_reports_popup)
@@ -353,6 +390,7 @@ class ProjectsScreen(Screen):
         viewPop.open()
 
     # Open Add Popup Window
+    @AccessControl
     def add_popup(self) -> None:
         temp_add_popup = Popup()
         add_popup = AddPopup(self, temp_add_popup)
@@ -384,19 +422,6 @@ class ProjectsScreen(Screen):
                 self.ids.search.text = ''
         elif txt == 'Back':
             self.parent.current = 'main'
-
-    # Font Size Adjustment Test
-    #     def fontSizer(self, instance):
-    #         for grid in self.ids.projects_list.children:
-    #             for child in grid.children:
-    #                 if isinstance(child, (Label, Button)):
-    #                     if instance.text == '+':
-    #                         child.font_size += 5
-    #                     else:
-    #                         child.font_size -= 5
-    #                     child.size_hint_y = None
-    #                     child.texture_update()
-    #                     child.size = child.texture_size
 
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()

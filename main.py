@@ -101,7 +101,6 @@ class MainScreen(Screen):
             self.ids.financesBtn.disabled = True
             self.ids.personnelBtn.disabled = True
             self.ids.resourcesBtn.disabled = True
-            self.ids.archiveBtn.visible = False
             self.ids.archiveBtn.disabled = True
         else:
             self.CMessageBox('Error', 'Invalid Request', 'Message')
@@ -111,13 +110,18 @@ class MainScreen(Screen):
         if perms is not None:
             self.ids.logBtn.text = 'LogOut'
             self.ids.logStatus.text = 'Welcome, ' + cutEmail(email) + '!'
-            if perms > 1:
-                self.ids.projectsBtn.disabled = True
-                self.ids.clientsBtn.disabled = True
-                self.ids.suppliersBtn.disabled = True
+            # If user is access 2 and 3, enable the Personnel and Resources buttons
+            if perms in [2, 3]:
                 self.ids.financesBtn.disabled = True
+                self.ids.archiveBtn.disabled = True
+                self.ids.projectsBtn.disabled = False
+                self.ids.clientsBtn.disabled = False
+                self.ids.suppliersBtn.disabled = False
                 self.ids.personnelBtn.disabled = False
                 self.ids.resourcesBtn.disabled = False
+                if perms == 2:
+                    self.ids.financesBtn.disabled = False
+            # If user is access 1 or 0, enable all buttons, show Admin Panel
             else:
                 self.ids.projectsBtn.disabled = False
                 self.ids.clientsBtn.disabled = False
@@ -125,9 +129,9 @@ class MainScreen(Screen):
                 self.ids.financesBtn.disabled = False
                 self.ids.personnelBtn.disabled = False
                 self.ids.resourcesBtn.disabled = False
-                self.ids.archiveBtn.visible = True
                 self.ids.archiveBtn.disabled = False
                 self.ids.logBtn.text = 'Admin'
+        # if user us not logged in disable all buttons
         else:
             self.ids.logBtn.text = 'LogIn'
             self.ids.logStatus.text = 'Not Logged In.'
@@ -137,7 +141,6 @@ class MainScreen(Screen):
             self.ids.financesBtn.disabled = True
             self.ids.personnelBtn.disabled = True
             self.ids.resourcesBtn.disabled = True
-            self.ids.archiveBtn.visible = False
             self.ids.archiveBtn.disabled = True
 
 

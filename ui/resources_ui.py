@@ -13,6 +13,27 @@ from utils import *
 from validation import *
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            # Lv3 users cant add/edit/delete/view report, everyone else can.
+            if accessLV == 3:
+                blockList = ['add_resource_popup', 'editRes', 'deleteRes', 'reportRes', 'reload']
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.res_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 class ViewResource(GridLayout):
     def __init__(self, res_screen: Screen, res_id: str, popup, **kwargs):
         super().__init__(**kwargs)
@@ -48,6 +69,7 @@ class ViewResource(GridLayout):
                                                                            assignment["project"], "Remove")))
             self.ids.viewRes_projects.add_widget(grid)
 
+    @AccessControl
     def reload(self, amount: str, project_name: str, action: str, instance) -> None:
         if project_name == "":
             self.res_screen.CMessageBox('Error', 'Project Name is required.', 'Message')
@@ -63,13 +85,18 @@ class ViewResource(GridLayout):
                 self.ids.viewRes_projects.clear_widgets()
                 self.populate_view()
 
+    @AccessControl
     def editRes(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
-        name = str(self.ids.viewPop_name.text)
-        qty = str(self.ids.viewPop_qty.text)
-        status = self.ids.viewPop_status.text
-        supplier = str(self.ids.viewPop_supplier.text)
-        cost = str(self.ids.viewPop_cost.text)
+        try:
+            name = str(self.ids.viewPop_name.text)
+            qty = str(self.ids.viewPop_qty.text)
+            status = self.ids.viewPop_status.text
+            supplier = str(self.ids.viewPop_supplier.text)
+            cost = str(self.ids.viewPop_cost.text)
+        except AttributeError or ValueError:
+            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
         # Validate & Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
             # Validate inputs
@@ -94,6 +121,7 @@ class ViewResource(GridLayout):
                 else:
                     self.res_screen.CMessageBox('Error', 'Failed to edit resource.', 'Message')
 
+    @AccessControl
     def deleteRes(self, requestType: str = "Submit") -> None:
         # Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":
@@ -117,6 +145,7 @@ class ViewResource(GridLayout):
     def load_projects(self) -> list:
         return load_project_names()
 
+    @AccessControl
     def reportRes(self) -> None:
         temp_reportPop_popup = Popup()
         reportPop_popup = ReportResource(self.res_id, temp_reportPop_popup)
@@ -191,6 +220,7 @@ class ResourcesScreen(Screen):
             grid.add_widget(CLabel(text=str(res["quantity"]), size_hint_x=0.1))
             self.ids.resources_list.add_widget(grid)
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel',
                     btn1click=None, btn2click=None) -> None:
@@ -251,6 +281,7 @@ class ResourcesScreen(Screen):
         viewPop.open()
 
     # Triggers the AddResourcePopup Window
+    @AccessControl
     def add_resource_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddResource(self, temp_addPop_popup)
@@ -298,11 +329,15 @@ class AddResource(GridLayout):
 
     def add_resource(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
-        name = str(self.ids.addRes_name.text)
-        qty = str(self.ids.addRes_qty.text)
-        status = self.ids.addRes_status.text
-        supplier = str(self.ids.addRes_supplier.text)
-        cost = str(self.ids.addRes_cost.text)
+        try:
+            name = str(self.ids.addRes_name.text)
+            qty = str(self.ids.addRes_qty.text)
+            status = self.ids.addRes_status.text
+            supplier = str(self.ids.addRes_supplier.text)
+            cost = str(self.ids.addRes_cost.text)
+        except AttributeError or ValueError:
+            self.res_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Validate & Confirm first, then it recursively calls the Submit part
         if requestType == "Validate":

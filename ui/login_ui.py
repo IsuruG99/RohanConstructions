@@ -100,9 +100,13 @@ class AdminControls(GridLayout):
                 self.ids.account_list.add_widget(grid)
 
     def add_user(self, requestType: str = "Submit") -> None:
-        email = str(self.ids.edit_email.text)
-        password = str(self.ids.edit_password.text)
-        access = int(self.ids.edit_access.text)
+        try:
+            email = str(self.ids.edit_email.text)
+            password = str(self.ids.edit_password.text)
+            access = int(self.ids.edit_access.text)
+        except AttributeError or ValueError:
+            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         if requestType == "Validate":
             if not validate_string(email, password, str(access)):
@@ -126,12 +130,15 @@ class AdminControls(GridLayout):
             self.populate_users(load_users(0))
 
     def edit_user(self, requestType: str = "Submit") -> None:
-        email = str(self.ids.edit_email.text)
-        password = str(self.ids.edit_password.text)
-        access = int(self.ids.edit_access.text)
-        print(email, password, access)
+        try:
+            email = str(self.ids.edit_email.text)
+            password = str(self.ids.edit_password.text)
+            access = int(self.ids.edit_access.text)
+        except AttributeError or ValueError:
+            self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
         if requestType == "Validate":
-            if not validate_string(email, password, access):
+            if not validate_string(email, password, str(access)):
                 self.main_screen.CMessageBox('Error', 'All fields are required.', 'Message')
                 return
             # if access is 0 or 1

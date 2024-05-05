@@ -16,6 +16,28 @@ from validation import *
 import datetime
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            # Lv2 and 3 can't add/edit and delete anything in Finances.
+            # View block is handled by main.py preventing the function opening entirely.
+            if accessLV in [2, 3]:
+                blockList = ['add_log_popup', 'edit_log', 'delete_log', 'addLog']
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.finances_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 class AddLogPopup(GridLayout):
     def __init__(self, finances_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -35,13 +57,17 @@ class AddLogPopup(GridLayout):
         self.ids.addLog_project.values = project_names
 
     def addLog(self, requestType: str = "Submit") -> None:
-        fin_type = str(self.ids.addLog_type.text)
-        amount = str(self.ids.addLog_amount.text)
-        date = str(self.ids.addLog_date.text)
-        desc = str(self.ids.addLog_desc.text)
-        entity = str(self.ids.addLog_entity.text)
-        project = str(self.ids.addLog_project.text)
-        category = str(self.ids.addLog_category.text)
+        try:
+            fin_type = str(self.ids.addLog_type.text)
+            amount = str(self.ids.addLog_amount.text)
+            date = str(self.ids.addLog_date.text)
+            desc = str(self.ids.addLog_desc.text)
+            entity = str(self.ids.addLog_entity.text)
+            project = str(self.ids.addLog_project.text)
+            category = str(self.ids.addLog_category.text)
+        except AttributeError or ValueError:
+            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Validate & Confirm first, then recursively go to Submit
         if requestType == "Validate":
@@ -117,14 +143,19 @@ class ViewLogPopup(GridLayout):
         self.ids.viewLog_project.text = log["project_name"]
         self.ids.viewLog_category.text = log["category"]
 
+    @AccessControl
     def edit_log(self, requestType: str = "Submit") -> None:
-        fin_type = str(self.ids.viewLog_type.text)
-        amount = str(self.ids.viewLog_amount.text)
-        date = str(self.ids.viewLog_date.text)
-        desc = str(self.ids.viewLog_desc.text)
-        entity = str(self.ids.viewLog_entity.text)
-        project = str(self.ids.viewLog_project.text)
-        category = str(self.ids.viewLog_category.text)
+        try:
+            fin_type = str(self.ids.viewLog_type.text)
+            amount = str(self.ids.viewLog_amount.text)
+            date = str(self.ids.viewLog_date.text)
+            desc = str(self.ids.viewLog_desc.text)
+            entity = str(self.ids.viewLog_entity.text)
+            project = str(self.ids.viewLog_project.text)
+            category = str(self.ids.viewLog_category.text)
+        except AttributeError or ValueError:
+            self.finances_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
         # Validate & Confirm first, then recursively go to Submit
         if requestType == "Validate":
             # Validate inputs
@@ -162,6 +193,7 @@ class ViewLogPopup(GridLayout):
     def load_project_list(self) -> list:
         return load_project_names()
 
+    @AccessControl
     def delete_log(self, requestType: str = "Submit") -> None:
         # Validate first, then recursively go to Submit
         if requestType == "Validate":
@@ -275,6 +307,7 @@ class FinancesScreen(Screen):
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
+    @AccessControl
     def add_log_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddLogPopup(self, temp_addPop_popup)
@@ -282,6 +315,7 @@ class FinancesScreen(Screen):
         addPop_popup.popup = addPop
         addPop.open()
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel', btn1click: str = None, btn2click: str = None) -> None:
         if context == 'Message':
@@ -323,9 +357,9 @@ class FinancesScreen(Screen):
 
 
 class FinanceOverview(GridLayout):
-    def __init__(self, finance_screen: Screen, popup, **kwargs):
+    def __init__(self, finances_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
-        self.finance_screen = finance_screen
+        self.finances_screen = finances_screen
         year = str(datetime.datetime.now().year)
         month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
         self.populate_overview(year, month)
@@ -335,7 +369,7 @@ class FinanceOverview(GridLayout):
 
     def populate_overview(self, y: str, m: str) -> None:
         if y == '' or None:
-            self.finance_screen.CMessageBox('Error', 'Year is required.', 'Message')
+            self.finances_screen.CMessageBox('Error', 'Year is required.', 'Message')
             return
 
         finances = load_all_finances(0)

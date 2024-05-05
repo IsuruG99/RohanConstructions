@@ -1,0 +1,20 @@
+BrainStorming :
+- Users
+- Who are users? (Trained Admin (0), Owner & Manager (1), Assistant (2), Receptionist (3))
+- Privileges (based on above, what do you think)
+    0: Full Access (Super Admin)
+    1: View & Edit All. Limited Admin Controls
+    2: View All, Edit Resources/Manpower (To pay salaries and update resources)
+    3: View Everything Except Finances
+- Main Computers that use these roles
+    0: Main Admin Computer, only a trained worker will use this.
+    1: Rohan and maybe 1 more manager's computer
+    2: Assistant Manager's Computer
+    3: The computer near the reception, customer support phone, that's why i named it receptionist
+
+
+Explicit Access Control Description
+Lv3 (Receptionist) - View Permissions ONLY, Cannot Add/Edit/Delete Data. (Can't get reports)(Can't Access Finances/Archives/Admin Panel)
+Lv2 (Assistant) - View Permissions, Add/Edit/Delete Resources and Manpower, Can get reports. (Can't Access Archives/Admin Panel)
+Lv1 (Owner & Manager) - View Permissions, Add/Edit/Delete everything. (Can't edit superAdmin users)
+Lv0 (Trained Admin) - Full Access, Can view, edit, add, delete everything including users. (Everything allowed)

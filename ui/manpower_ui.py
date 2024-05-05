@@ -9,6 +9,27 @@ from custom import *
 from validation import *
 
 
+# Manages user access to most functions. (Implemented by project leader)
+def AccessControl(func):
+    def wrapper(self, *args, **kwargs):
+        # function validate_access in validation.py takes function's name (string) and returns True/False
+        from kivy.app import App
+        if App.get_running_app().get_accessLV() is not None:
+            accessLV = App.get_running_app().get_accessLV()
+            blockList = []
+            # Lv3 users cant add/edit/delete, everyone can view.
+            if accessLV == 3:
+                blockList = ['add_emp', 'add_employee', 'edit_employee', 'delete_employee', 'reload']
+            if validate_access(accessLV, func.__name__, blockList):
+                return func(self, *args, **kwargs)
+            else:
+                try:
+                    self.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+                except AttributeError:
+                    self.manpower_screen.CMessageBox('Error', 'You do not have permission \nto access this feature.', 'Message')
+    return wrapper
+
+
 class AddManpower(GridLayout):
     def __init__(self, manpower_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -18,15 +39,20 @@ class AddManpower(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    @AccessControl
     def add_employee(self, requestType: str = "Submit") -> None:
         # Stringify
-        name = str(self.ids.addEmp_name.text)
-        email = str(self.ids.addEmp_email.text)
-        phone_number = str(self.ids.addEmp_phone.text)
-        role = str(self.ids.addEmp_role.text)
-        status = str(self.ids.addEmp_status.text)
-        contract_fee = str(self.ids.addEmp_contractFee.text)
-        retainer_fee = str(self.ids.addEmp_retainerFee.text)
+        try:
+            name = str(self.ids.addEmp_name.text)
+            email = str(self.ids.addEmp_email.text)
+            phone_number = str(self.ids.addEmp_phone.text)
+            role = str(self.ids.addEmp_role.text)
+            status = str(self.ids.addEmp_status.text)
+            contract_fee = str(self.ids.addEmp_contractFee.text)
+            retainer_fee = str(self.ids.addEmp_retainerFee.text)
+        except AttributeError or ValueError:
+            self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Check if all fields are full, except assignments
         if requestType == "Validate":
@@ -90,23 +116,33 @@ class ViewManpower(GridLayout):
                            font_name='Roboto', size_hint_x=0.2, on_release=partial(self.reload, project, "Remove")))
                 self.ids.viewEmp_projects.add_widget(grid)
 
+    @AccessControl
     def reload(self, project_name: Screen, action: str, instance) -> None:
-        print(project_name, action)
+        try:
+            project_name = str(project_name)
+            action = str(action)
+        except ValueError or AttributeError:
+            return
         project_assignment(self.emp_id, project_name, action)
         # Clear all widgets from viewEmp_projects
         self.ids.viewEmp_projects.clear_widgets()
         self.populateEmp()
 
+    @AccessControl
     def edit_employee(self, requestType: str = "Submit") -> None:
         # Project assignments is a list of projects, not validating it
         # Stringify inputs
-        name = str(self.ids.viewEmp_name.text)
-        email = str(self.ids.viewEmp_email.text)
-        phone_number = str(self.ids.viewEmp_phone.text)
-        role = str(self.ids.viewEmp_role.text)
-        status = str(self.ids.viewEmp_status.text)
-        contract_fee = str(self.ids.viewEmp_contractFee.text)
-        retainer_fee = str(self.ids.viewEmp_retainerFee.text)
+        try:
+            name = str(self.ids.viewEmp_name.text)
+            email = str(self.ids.viewEmp_email.text)
+            phone_number = str(self.ids.viewEmp_phone.text)
+            role = str(self.ids.viewEmp_role.text)
+            status = str(self.ids.viewEmp_status.text)
+            contract_fee = str(self.ids.viewEmp_contractFee.text)
+            retainer_fee = str(self.ids.viewEmp_retainerFee.text)
+        except AttributeError or ValueError:
+            self.manpower_screen.CMessageBox('Error', 'All fields are required.', 'Message')
+            return
 
         # Validate & Confirm first, then call Submit
         if requestType == "Validate":
@@ -218,6 +254,7 @@ class ManpowerScreen(Screen):
         viewEmp_popup.popup = viewEmp
         viewEmp.open()
 
+    @AccessControl
     def add_emp(self) -> None:
         temp_addEmp_popup = Popup()
         addEmp_popup = AddManpower(self, temp_addEmp_popup)
@@ -225,6 +262,7 @@ class ManpowerScreen(Screen):
         addEmp_popup.popup = addEmp
         addEmp.open()
 
+    @AccessControl
     def delete_employee(self, emp_id: str, instance) -> None:
         self.dempID = emp_id
         self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm',
@@ -245,6 +283,7 @@ class ManpowerScreen(Screen):
             print("illegal action")
             self.dempID = None
 
+    # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'None',
                     btn1: str = 'Ok', btn2: str = 'Cancel', btn1click = None, btn2click = None):
         if context == 'Message':

@@ -73,18 +73,15 @@ BrainStorming :
 - Understand Finance Reports (Financial Report Popup? Window, Format, Structure)
 
 To-Do List:
-- Apply RPopup to message box
-- Redo Finance Report Structure
+- The icon isn't exporting, and it isn't even an icon! (Fix soon)
 - Get Refs will crash without internet, implement blank return
-- Session Controls? (For super admin)
-- Access Controls V3+ (Postponed till every function complete)
 - Project Report (Make the Dates look YYYY %B %d)
-- Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
 
 FINAL TASK: (After ALL Above)
-- Project Deletion after Completion. Extremely difficult to implement, will require a lot of patience.
+- Archive Conversion, extremely complicated
 
 Optional
+- Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
 - Images for Employees (Optional), it is python, of course it can do that
 - Export a Report (?)
 
@@ -99,3 +96,4 @@ Best moments in project(Coding) so far:
 - I HATE ROUNDED EVERYTHING (On kivy, literally spent 2 weeks on nothing but visuals)
 - Rounded Popup was an absolute cinema, the content encapsulation and triple class inheritance was a nightmare
 - Moving the pieChart forcefully with manual positioning over 1 hour and half
+- Decorators are awesome

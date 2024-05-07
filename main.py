@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.scrollview import ScrollView
 import os
+import atexit
 
 from ui.archive_ui import ArchiveScreen
 from ui.manpower_ui import ManpowerScreen
@@ -148,23 +149,32 @@ class MainScreen(Screen):
 
 
 class MainApp(App):
-    accessLV: int = None
-    accessName: str = None
+    def __init__(self, **kwargs):
+        super(MainApp, self).__init__(**kwargs)
 
-    def set_accessLV(self, level) -> None:
-        if level is None:
-            self.accessLV = None
-        else:
-            self.accessLV = int(level)
+    # This way, even if the app crashes, the user will be logged out
+    def run(self):
+        try:
+            super(MainApp, self).run()
+        finally:
+            self.cleanup()
 
-    def get_accessLV(self) -> int:
-        return self.accessLV
+    def cleanup(self):
+        self.set_accessLV(None)
+        self.set_accessName(None)
 
-    def set_accessName(self, name: str) -> None:
-        self.accessName = name
+    def set_accessLV(self, level):
+        update_session_file('level', level)
 
-    def get_accessName(self) -> str:
-        return self.accessName
+    def set_accessName(self, name):
+        update_session_file('name', name)
+
+    def get_accessLV(self):
+        level = get_session_value('level')
+        return None if level == 'None' else int(level)
+
+    def get_accessName(self):
+        return get_session_value('name')
 
     def build(self) -> ScreenManager:
         Window.size = (1200, 720)
@@ -176,6 +186,9 @@ class MainApp(App):
 
         # Screen Manager Initialized
         sm = ScreenManager()
+
+        self.set_accessLV(None)
+        self.set_accessName(None)
 
         # Screens are added to Manager
         sm.add_widget(MainScreen(name='main'))

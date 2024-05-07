@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('extra/service.json', 'extra'), ('main.kv', '.'), ('ui/login.kv', 'ui/'), ('ui/projects.kv', 'ui/'), ('ui/suppliers.kv', 'ui/'), ('ui/clients.kv', 'ui/'), ('ui/resources.kv', 'ui/'), ('ui/manpower.kv', 'ui/'), ('ui/finances.kv', 'ui/'), ('ui/archive.kv', 'ui/'), ('validation.kv', '.'), ('visuals/icon.png', 'visuals')],
+    datas=[('extra/service.json', 'extra'), ('main.kv', '.'), ('ui/login.kv', 'ui/'), ('ui/projects.kv', 'ui/'), ('ui/suppliers.kv', 'ui/'), ('ui/clients.kv', 'ui/'), ('ui/resources.kv', 'ui/'), ('ui/manpower.kv', 'ui/'), ('ui/finances.kv', 'ui/'), ('ui/archive.kv', 'ui/'), ('validation.kv', '.'), ('visuals/icon.png', 'visuals'), ('visuals/icon.ico', 'visuals'), ('log.txt', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -24,7 +24,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='main',
+    name='RohanApp',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -36,5 +36,6 @@ exe = EXE(
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
-    entitlements_file=None
+    entitlements_file=None,
+    icon='visuals/icon.ico'
 )

@@ -1,5 +1,7 @@
 import datetime
 import re
+import os
+import sys
 from calendar import calendar
 
 from custom import *
@@ -162,3 +164,36 @@ def TimeDiff(timestamp):
         return str(hours) + 'H ' + str(minutes) + 'M Ago'
     else:
         return str(minutes) + 'M Ago'
+
+def get_log_file_path():
+    # Get the directory of the current script or executable
+    application_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+
+    # Use this base path for any files you need to access
+    return os.path.join(application_path, 'log.txt')
+
+def check_session_file():
+    log_file_path = get_log_file_path()
+    if not os.path.exists(log_file_path):
+        with open(log_file_path, 'w') as f:
+            f.write('level=None\nname=None\n')
+
+def update_session_file(key, value):
+    log_file_path = get_log_file_path()
+    check_session_file()
+    with open(log_file_path, 'r') as f:
+        lines = f.readlines()
+    with open(log_file_path, 'w') as f:
+        for line in lines:
+            if key in line:
+                f.write(f'{key}={value}\n')
+            else:
+                f.write(line)
+
+def get_session_value(key):
+    log_file_path = get_log_file_path()
+    check_session_file()
+    with open(log_file_path, 'r') as f:
+        for line in f.readlines():
+            if key in line:
+                return line.split('=')[1].strip()

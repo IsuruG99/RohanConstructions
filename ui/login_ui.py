@@ -38,7 +38,7 @@ class LogInPopUp(GridLayout):
         app.set_accessLV(getAccessLV(email))
         app.set_accessName(getAccessName(email))
         update_last_login(email)
-        self.mainScreen.CMessageBox('Success', 'Welcome, ' + email, 'Message')
+        self.mainScreen.CMessageBox('Success', f'Welcome {email}', 'Message')
         self.popup.dismiss()
         self.mainScreen.loggedIn(email)
 
@@ -167,7 +167,7 @@ class AdminControls(GridLayout):
         self.rows = 1
 
     def populate_users(self, users: list = load_users(0), headers: list = None) -> None:
-        self.ids.current_user.text = 'Current User: ' + App.get_running_app().get_accessName()
+        self.ids.current_user.text = f'Current User: {App.get_running_app().get_accessName()}'
         self.ids.account_list.clear_widgets()
         self.ids.account_headers.clear_widgets()
 

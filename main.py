@@ -1,3 +1,10 @@
+from kivy.config import Config
+# Set the window size
+Config.set('graphics', 'width', '1280')
+Config.set('graphics', 'height', '720')
+# Make the window non-resizable
+Config.set('graphics', 'resizable', False)
+
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -21,6 +28,15 @@ from utils import *
 from custom import *
 from validation import *
 from pieChart import *
+
+def calculate_sp(value, window):
+    # Calculate the ratio of the new window size to the original window size
+    ratio = window.width / 1200  # 1200 is the original window width
+    # Calculate the new sp value
+    new_sp = value * ratio
+    # Convert the new sp value to pixels
+    return sp(new_sp)
+
 
 # Get the directory of the current Python script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -177,12 +193,8 @@ class MainApp(App):
         return get_session_value('name')
 
     def build(self) -> ScreenManager:
-        Window.size = (1200, 720)
         Window.clearcolor = rgba('#343534')
         Window.set_icon('visuals/icon.png')
-
-        # Remove max/min buttons
-        Window.borderless = False
 
         # Screen Manager Initialized
         sm = ScreenManager()
@@ -204,7 +216,6 @@ class MainApp(App):
 
     def on_start(self) -> None:
         Window.set_title('Rohan Constructions')
-
 
 if __name__ == '__main__':
     MainApp().run()

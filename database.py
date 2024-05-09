@@ -38,4 +38,4 @@ def get_ref(ref_name):
         return None
     except (google.auth.exceptions.RefreshError, google.auth.exceptions.TransportError):
         message_box('Error', 'No internet connection.', 'Message')
-        return None
+        exit(1)

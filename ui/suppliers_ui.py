@@ -206,8 +206,8 @@ class ReportSupPopup(GridLayout):
         res: list = load_resources()
         resList: list = []
 
-        self.ids.reportSupplier_supplierCount.text = "Total Suppliers : " + str(len(suppliers))
-        self.ids.reportSupplier_resCount.text = "Total Resource Types : " + str(len(res))
+        self.ids.reportSupplier_supplierCount.text = f'Total Suppliers : {str(len(suppliers))}'
+        self.ids.reportSupplier_resCount.text = f'Total Resources : {str(len(res))}'
 
         headers = GridLayout(cols=2, size_hint_y=None, height=40)
         headers.add_widget(CLabel(text='Resource', bold=True))
@@ -376,7 +376,8 @@ class SuppliersScreen(Screen):
             self.populate_suppliers(load_suppliers(0))
 
         # Categorization, All, Level 1, Level 2, Level 3, each calls populate function to regenerate data
-        elif txt == 'Filter : All' or txt == 'Filter : Level 1' or txt == 'Filter : Level 2' or txt == 'Filter : Level 3':
+        elif (txt == 'Filter : All' or txt == 'Filter : Level 1' or txt == 'Filter : Level 2' or
+              txt == 'Filter : Level 3'):
             if txt == 'Filter : All':
                 self.populate_suppliers(load_suppliers(1))
                 self.ids.supplierFilter.text = 'Filter : Level 1'

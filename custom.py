@@ -10,6 +10,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.utils import rgba
 from kivy.uix.dropdown import DropDown
+from kivy.metrics import sp
 
 import database
 
@@ -43,6 +44,15 @@ text_input_font_size = '18sp'
 
 pieChart_color1 = rgba('#ff69b4')  # Light Pink
 pieChart_color2 = rgba('#add8e6')  # Light Blue
+
+
+def calculate_sp(value, window):
+    # Calculate the ratio of the new window size to the original window size
+    ratio = window.width / 1200  # 1200 is the original window width
+    # Calculate the new sp value
+    new_sp = value * ratio
+    # Convert the new sp value to pixels
+    return sp(new_sp)
 
 
 class CPopup(Popup):

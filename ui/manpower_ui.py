@@ -65,7 +65,7 @@ class AddManpower(GridLayout):
             if not validate_mobileNo(phone_number):
                 self.manpower_screen.CMessageBox('Error', 'Invalid phone number.', 'Message')
                 return
-            self.manpower_screen.CMessageBox('Add Employee', str('Are you sure you want to add employee ' + name + '?'),
+            self.manpower_screen.CMessageBox('Add Employee', str(f'Are you sure you want to add employee {name}?'),
                                              'Confirm', 'Yes', 'No', self.add_employee)
             self.validCheck = 1
         if requestType == "Submit" and self.validCheck == 1:
@@ -156,7 +156,7 @@ class ViewManpower(GridLayout):
             if not validate_mobileNo(phone_number):
                 self.manpower_screen.CMessageBox('Error', 'Invalid Mobile No.', 'Message')
                 return
-            self.manpower_screen.CMessageBox('Edit Employee', 'Are you sure you want to edit employee ' + name + '?',
+            self.manpower_screen.CMessageBox('Edit Employee', f'Are you sure you want to edit employee {name}?',
                                              'Confirm', 'Yes', 'No', self.edit_employee)
             self.validCheck = 1
         # Send to update_employee
@@ -265,7 +265,7 @@ class ManpowerScreen(Screen):
     @AccessControl
     def delete_employee(self, emp_id: str, instance) -> None:
         self.dempID = emp_id
-        self.CMessageBox('Delete Employee', 'Are you sure you want to delete employee ' + emp_id + '?', 'Confirm',
+        self.CMessageBox('Delete Employee', f'Are you sure you want to delete employee {emp_id}?', 'Confirm',
                          'Yes', 'No',
                          self.confirmedDelete)
 

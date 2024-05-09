@@ -16,7 +16,6 @@ from math import atan2, sqrt, pow, degrees, sin, cos, radians
 from custom import *
 
 
-
 class PieChart(GridLayout):
     def __init__(self, data, position=(5, 5), size=(100, 100), legend_enable=False, **kwargs):
         super(PieChart, self).__init__(**kwargs)

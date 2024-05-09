@@ -234,13 +234,13 @@ class ReportsPopup(GridLayout):
                             years = days_left // 365
                             months = (days_left % 365) // 30
                             days = (days_left % 365) % 30
-                            self.ids.reportProject_status.text = str(years) + "Y " + str(months) + "M " + str(days) + "D left"
+                            self.ids.reportProject_status.text = f'{years}Y {months}M {days}D left'
                         elif days_left > 30:
                             months = days_left // 30
                             days = days_left % 30
-                            self.ids.reportProject_status.text = str(months) + "M " + str(days) + "D left"
+                            self.ids.reportProject_status.text = f'{months}M {days}D left'
                         else:
-                            self.ids.reportProject_status.text = str(days_left) + "D left"
+                            self.ids.reportProject_status.text = f'{days_left}D left'
 
                     self.ids.reportProject_projectBudget.text = convert_currency(project['budget'])
                     # costs must be calculated
@@ -269,8 +269,10 @@ class ReportsPopup(GridLayout):
     @AccessControl
     def finalize_projects(self, pName: str) -> None:
         if pName is not None and pName != '':
-            self.projects_screen.CMessageBox(title='Finalize Project', content='Are you sure you want to finalize this project?',
-                                             context='Confirm', btn1='Yes', btn2='No', btn1click=partial(finalize_project, pName))
+            self.projects_screen.CMessageBox(title='Finalize Project',
+                                             content='Are you sure you want to finalize this project?',
+                                             context='Confirm', btn1='Yes', btn2='No',
+                                             btn1click=partial(finalize_project, pName))
             self.projects_screen.populate_projects(load_projects(0))
             self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
             self.popup.dismiss()
@@ -287,7 +289,6 @@ class ProjectsScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_projects(load_projects(0))
-
 
     # Populate the ScrollView with the projects
     def populate_projects(self, projects: list = load_projects(0), headers: list = None) -> None:

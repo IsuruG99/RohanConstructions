@@ -154,7 +154,7 @@
                         RText:
                                 id: address
                                 multiline: False
-                                hint_text: 'No01, Merchan Tower, Kollupitiya.'
+                                hint_text: 'No01, Merchant Tower, Kollupitiya.'
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                         CLabel:
                                 text: 'Start Dealing'
@@ -259,7 +259,7 @@
                                 hint_text: 'No01, Merchant Tower, Kollupitiya.'
 
                         CLabel:
-                                text: 'Start Date'
+                                text: 'Start Dealing'
                                 color: 1, 1, 1, 1
                                 size_hint: 0.3, 1
                         RText:
@@ -286,10 +286,6 @@
                         size_hint: 1, 0.1
 
                         RButton4:
-                                text: 'Report'
-                                on_release: root.reports_popup()
-
-                        RButton4:
                                 text: 'Save'
                                 on_release:
                                         root.editSupplier(requestType="Validate")
@@ -297,6 +293,10 @@
                         RButton4:
                                 text: 'Delete'
                                 on_release: root.deleteSupplier(requestType="Validate")
+
+                        RButton4:
+                                text: 'Cancel'
+                                on_release: root.dismiss_popup(root.popup)
 
 <ReportSupPopup>:
         GridLayout:

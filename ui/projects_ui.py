@@ -158,13 +158,12 @@ class ViewPopup(GridLayout):
                 if update_project(self.project_id, name, description, start_date, end_date, client_name, budget,
                                   status):
                     self.projects_screen.CMessageBox('Success', 'Project updated successfully.', 'Message')
-                    self.validCheck = 0
                     self.projects_screen.populate_projects(load_projects(0))
                     self.projects_screen.ids.projects_filter.text = 'Filter: In Progress'
                     self.projects_screen.dismiss_popup(self.popup)
                 else:
-                    self.validCheck = 0
                     self.projects_screen.CMessageBox('Error', 'Failed to update project.', 'Message')
+                self.validCheck = 0
 
     def load_clients(self) -> list:
         return load_client_names()

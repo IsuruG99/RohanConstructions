@@ -265,7 +265,10 @@ class ManpowerScreen(Screen):
     @AccessControl
     def delete_employee(self, emp_id: str, instance) -> None:
         self.dempID = emp_id
-        self.CMessageBox('Delete Employee', f'Are you sure you want to delete employee {emp_id}?', 'Confirm',
+        emp = get_employee(emp_id)
+        # get emp name
+        emp_name = emp['name']
+        self.CMessageBox('Delete Employee', f'Are you sure you want to \n delete employee {emp_name}?', 'Confirm',
                          'Yes', 'No',
                          self.confirmedDelete)
 

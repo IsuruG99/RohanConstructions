@@ -65,19 +65,36 @@ def update_project(project_id: str, name: str, description: str, start_date: str
                    budget: str, status: str):
     # Get a reference to DB
     ref = database.get_ref('projects')
-    if ref is not None:
-        ref.child(project_id).update({
-            'name': name,
-            'description': description,
-            'start_date': start_date,
-            'end_date': end_date,
-            'client_name': client_name,
-            'budget': budget,
-            'status': status
-        })
-        return True
-    else:
+    project = get_project(project_id)
+    renamed = False
+    if ref is None or project is None:
         return False
+
+    ref.child(project_id).update({
+        'name': name,
+        'description': description,
+        'start_date': start_date,
+        'end_date': end_date,
+        'client_name': client_name,
+        'budget': budget,
+        'status': status
+    })
+    # if project name wasn't changed, end it here
+    if project['name'] == name:
+        return True
+
+    for resource in load_resources():
+        for assignment in resource['resource_assignments']:
+            if project['name'] == assignment['project']:
+                resource_assignment(resource['id'], assignment['amount'], project['name'], 'Remove')
+                resource_assignment(resource['id'], assignment['amount'], name, 'Add')
+
+    for employee in load_manpower():
+        if project['name'] in employee['project_assignments']:
+            project_assignment(employee['id'], project['name'], 'Remove')
+            project_assignment(employee['id'], name, 'Add')
+
+    return True
 
 
 # Delete a project by ID, and remove all relevant resource and employee assignments

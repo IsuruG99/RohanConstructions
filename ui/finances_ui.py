@@ -93,7 +93,7 @@ class AddLogPopup(GridLayout):
 
         # Send to finances.py
         elif requestType == "Submit" and self.validCheck == 1:
-            if add_log(fin_type, amount, date, desc, entity, project, category):
+            if add_log(fin_type, amount, date, desc, entity, project, category, App.get_running_app().get_accessName()):
                 self.finances_screen.CMessageBox('Success', 'Log added successfully.', 'Message')
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.validCheck = 0

@@ -98,7 +98,7 @@ class AddLogPopup(GridLayout):
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.validCheck = 0
                 self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                self.finances_screen.dismiss_popup(self.popup)
+                self.popup.dismiss()
             else:
                 self.finances_screen.CMessageBox('Error', 'Failed to add log.', 'Message')
                 self.validCheck = 0
@@ -171,7 +171,7 @@ class ViewLogPopup(GridLayout):
                 self.finances_screen.CMessageBox('Error', 'Invalid category.', 'Message')
                 return
             # Send data to finances.py
-            self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to edit this log?', 'Confirm',
+            self.finances_screen.CMessageBox('Update Finance Log', 'Are you sure you want to save changes?', 'Confirm',
                                              'Submit', 'Cancel', self.edit_log)
             self.validCheck = 1
 
@@ -181,12 +181,11 @@ class ViewLogPopup(GridLayout):
                         App.get_running_app().get_accessName()):
                 self.finances_screen.CMessageBox('Success', 'Log edited successfully.', 'Message')
                 self.finances_screen.populate_logs(load_all_finances(0))
-                self.validCheck = 0
                 self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                self.finances_screen.dismiss_popup(self.popup)
+                self.popup.dismiss()
             else:
                 self.finances_screen.CMessageBox('Error', 'Failed to edit log.', 'Message')
-                self.validCheck = 0
+            self.validCheck = 0
 
     def load_project_list(self) -> list:
         return load_project_names()
@@ -204,7 +203,7 @@ class ViewLogPopup(GridLayout):
                 self.finances_screen.CMessageBox('Success', 'Log deleted successfully.', 'Message')
                 self.finances_screen.populate_logs(load_all_finances(0))
                 self.finances_screen.ids.finances_filter.text = 'Filter: All'
-                self.finances_screen.dismiss_popup(self.popup)
+                self.popup.dismiss()
             else:
                 self.finances_screen.CMessageBox('Error', 'Failed to delete log.', 'Message')
 
@@ -351,7 +350,7 @@ class FinancesScreen(Screen):
                 self.ids.search.text = ''
 
     def dismiss_popup(self, instance) -> None:
-        self.popup.dismiss()
+        instance.dismiss()
 
 
 class FinanceOverview(GridLayout):

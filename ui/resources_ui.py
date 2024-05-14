@@ -106,20 +106,20 @@ class ViewResource(GridLayout):
             if not validate_currency(qty):
                 self.res_screen.CMessageBox('Error', 'Invalid Quantity.', 'Message')
                 return
-            self.res_screen.CMessageBox('Edit Resource', 'Are you sure you want to edit this resource?', 'Confirm',
+            self.res_screen.CMessageBox('Update Resource', 'Are you sure you want to save changes?', 'Confirm',
                                         'Yes', 'No', self.editRes)
             self.validCheck = 1
         # Send data to edit_res function in resources.py
         elif requestType == "Submit":
             if self.validCheck == 1:
                 if update_res(self.res_id, name, qty, status, supplier, cost):
-                    self.res_screen.CMessageBox('Success', 'Resource edited successfully.', 'Message')
+                    self.res_screen.CMessageBox('Success', 'Resource updated successfully.', 'Message')
                     self.res_screen.populate_res(load_resources(0))
                     self.validCheck = 0
                     self.res_screen.ids.resource_filter.text = 'Filter: All'
                     self.dismiss_popup(self.popup)
                 else:
-                    self.res_screen.CMessageBox('Error', 'Failed to edit resource.', 'Message')
+                    self.res_screen.CMessageBox('Error', 'Failed to update resource.', 'Message')
 
     @AccessControl
     def deleteRes(self, requestType: str = "Submit") -> None:

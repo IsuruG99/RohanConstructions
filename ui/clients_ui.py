@@ -134,7 +134,7 @@ class ViewClientPopup(GridLayout):
                         validate_email(email)]):
                 self.clients_screen.CMessageBox('Error', 'Invalid input.', 'Message')
                 return
-            self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to update this client?', 'Confirm', 'Yes',
+            self.clients_screen.CMessageBox('Update Client', 'Are you sure you want to save changes?', 'Confirm', 'Yes',
                                             'No', self.edit_client)
             self.validCheck = 1
 
@@ -153,7 +153,7 @@ class ViewClientPopup(GridLayout):
     def delete_client(self, requestType: str = "Submit") -> None:
         # Validate and Confirm First, then recursively call Submit
         if requestType == "Validate":
-            self.clients_screen.CMessageBox('Confirm', 'Are you sure you want to delete this client?', 'Confirm', 'Yes',
+            self.clients_screen.CMessageBox('Delete Client', 'Are you sure you want to delete this client?', 'Confirm', 'Yes',
                                             'No', self.delete_client)
         # Send the data to clients.py
         elif requestType == "Submit" and delete_client(self.client_id):

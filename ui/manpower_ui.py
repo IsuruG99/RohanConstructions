@@ -156,19 +156,19 @@ class ViewManpower(GridLayout):
             if not validate_mobileNo(phone_number):
                 self.manpower_screen.CMessageBox('Error', 'Invalid Mobile No.', 'Message')
                 return
-            self.manpower_screen.CMessageBox('Edit Employee', f'Are you sure you want to edit employee {name}?',
+            self.manpower_screen.CMessageBox('Update Employee', 'Are you sure you want to save changes?',
                                              'Confirm', 'Yes', 'No', self.edit_employee)
             self.validCheck = 1
         # Send to update_employee
         if requestType == "Submit":
             if self.validCheck == 1:
                 if update_employee(self.emp_id, name, role, email, phone_number, status, contract_fee, retainer_fee):
-                    self.manpower_screen.CMessageBox('Success', 'Employee edited successfully.', 'Message')
+                    self.manpower_screen.CMessageBox('Success', 'Employee updated successfully.', 'Message')
                     self.validCheck = 0
                     self.manpower_screen.populate_manpower(load_manpower(0))
                     self.popup.dismiss()
                 else:
-                    self.manpower_screen.CMessageBox('Error', 'Failed to edit Employee.', 'Message')
+                    self.manpower_screen.CMessageBox('Error', 'Failed to update Employee.', 'Message')
                     self.validCheck = 0
 
     def load_projects(self) -> list:

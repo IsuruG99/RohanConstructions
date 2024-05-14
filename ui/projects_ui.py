@@ -148,8 +148,8 @@ class ViewPopup(GridLayout):
                 self.projects_screen.CMessageBox('Error', 'Project name must be unique.', 'Message')
                 return
             # Send data to projects.py
-            self.projects_screen.CMessageBox(title='Update Project',
-                                             content='Are you sure you want to update this project?',
+            self.projects_screen.CMessageBox(title='Save Changes',
+                                             content='Are you sure you want to save changes?',
                                              context='Confirm', btn1='Yes', btn2='No', btn1click=self.editProj)
             self.validCheck = 1
         # Submit to projects.py

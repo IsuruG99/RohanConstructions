@@ -126,7 +126,7 @@ class EditUserPopup(GridLayout):
             return
 
         if requestType == "Validate":
-            self.main_screen.CMessageBox('Confirm', 'Are you sure you want to edit this user?', 'Confirm', 'Yes', 'No',
+            self.main_screen.CMessageBox('Update User', 'Are you sure you want to update this user?', 'Confirm', 'Yes', 'No',
                                          self.edit_user)
         elif requestType == "Submit" and edit_user(email, password, access):
             self.main_screen.CMessageBox('Success', 'User edited successfully.', 'Message')
@@ -139,7 +139,7 @@ class EditUserPopup(GridLayout):
         if email:
             if App.get_running_app().get_accessLV() <= getAccessLV(email):
                 if requestType == "Validate":
-                    self.main_screen.CMessageBox('Confirm', 'Are you sure you want to delete this user?', 'Confirm',
+                    self.main_screen.CMessageBox('Delete User', 'Are you sure you want to delete this user?', 'Confirm',
                                                  'Yes', 'No', self.delete_user)
                 elif requestType == "Submit":
                     delete_user(email)

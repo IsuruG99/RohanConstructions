@@ -44,14 +44,33 @@ class AddArchive(GridLayout):
         self.cols = 1
         self.rows = 1
 
-    def addArchive(self, projectName: str) -> None:
-        pass
+    def addArchive(self, requestType: str = "Submit") -> None:
+        # field
+        try:
+            projectName = self.ids.addArchive_project.text
+        except (AttributeError, ValueError, TypeError):
+            self.archiveScreen.CMessageBox('Error', 'Please select a project first.', 'Message')
+            return
+
+        if requestType == "Validate":
+
+            # This is a big part, we have to convert the whole thing, but let's do it inside the archive.py
+            self.archiveScreen.CMessageBox('Convert Archive', 'Are you sure you want to archive this project?', 'Confirm',
+                                           'Yes', 'No', self.addArchive)
+        if requestType == "Submit":
+            if convert_project(projectName):
+                self.archiveScreen.CMessageBox('Success', 'Project archived successfully.', 'Message')
+                self.popup.dismiss()
+            else:
+                self.archiveScreen.CMessageBox('Error', 'Project could not be archived.', 'Message')
+            self.archiveScreen.populate_archive(load_all_archives(0))
 
     def load_projects(self):
         return load_project_names(load_projects(3))
 
     def dismiss_popup(self):
         self.popup.dismiss()
+
 
 class ViewArchive(GridLayout):
     def __init__(self, archiveScreen: Screen, popup, archive_id: str, **kwargs):
@@ -70,26 +89,25 @@ class ViewArchive(GridLayout):
         self.ids.viewArchive_end.text = archive['end_date']
         self.ids.viewArchive_user.text = archive['user']
         self.ids.viewArchive_desc.text = archive['description']
-
         for employee in archive['employee_allocations']:
-            if employee['count'] is not None:
-                grid = GridLayout(cols=2, size_hint_y=None, height=40)
-                grid.add_widget(CLabel(text=employee['role'], size_hint_x=0.5))
-                grid.add_widget(CLabel(text=employee['count'], size_hint_x=0.5))
-                self.ids.viewArchive_assignedEmp.add_widget(grid)
+            grid = GridLayout(cols=2, size_hint_y=None, height=40)
+            if employee['count'] is not None or employee['count'] != '':
+                grid.add_widget(CLabel(text=employee['role'], size_hint_x=0.8))
+                grid.add_widget(CLabel(text=str(employee['count']), size_hint_x=0.2))
+            self.ids.viewArchive_assignedEmp.add_widget(grid)
 
         for resource in archive['resource_allocations']:
-            if resource['amount'] is not None and resource['resource'] is not None:
-                grid = GridLayout(cols=2, size_hint_y=None, height=40)
-                grid.add_widget(CLabel(text=resource['resource'], size_hint_x=0.5))
-                grid.add_widget(CLabel(text=resource['amount'], size_hint_x=0.5))
-                self.ids.viewArchive_assignedRes.add_widget(grid)
+            grid = GridLayout(cols=2, size_hint_y=None, height=40)
+            # Assume resource includes [{"resource": "amount"}, ...] style
+            if resource['amount'] is not None or resource['amount'] != '':
+                grid.add_widget(CLabel(text=resource['resource'], size_hint_x=0.8))
+                grid.add_widget(CLabel(text=str(resource['amount']), size_hint_x=0.2))
+            self.ids.viewArchive_assignedRes.add_widget(grid)
 
         self.ids.viewArchive_budget.text = archive['budget']
         self.ids.viewArchive_resCost.text = archive['resourceCost']
         self.ids.viewArchive_empCost.text = archive['manpowerCost']
         self.ids.viewArchive_netProfit.text = archive['netProfit']
-
 
     def dismiss_popup(self):
         self.popup.dismiss()
@@ -99,7 +117,6 @@ class ArchiveScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_archive(load_all_archives(0))
-
 
     def populate_archive(self, archiveList: list = load_all_archives(), headers: list = None) -> None:
         self.ids.archive_list.clear_widgets()

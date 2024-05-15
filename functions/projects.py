@@ -163,6 +163,25 @@ def load_res(project_name: str) -> dict:
 
     return resource_list
 
+# Output { Resource: resource, Amount: amount } style list from Resources
+def load_res_list(project_name: str) -> list:
+    resources = load_resources(0)
+    resource_list = []
+    for resource in resources:
+        for assignment in resource['resource_assignments']:
+            if project_name in assignment['project']:
+                resource_list.append({'resource': resource['name'], 'amount': assignment['amount']})
+    return resource_list
+
+# Output { Role: role, Count: count } style list from manpower
+def load_members_list(project_name: str) -> list:
+    manpower = load_manpower()
+    roles = []
+    for employee in manpower:
+        if project_name in employee['project_assignments']:
+            roles.append({'role': employee['role'], 'count': 1})
+    return roles
+
 
 # Load all project names
 def load_project_names(projects: list = load_projects(2)) -> list:

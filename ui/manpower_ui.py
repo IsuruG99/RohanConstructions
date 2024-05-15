@@ -171,6 +171,23 @@ class ViewManpower(GridLayout):
                     self.manpower_screen.CMessageBox('Error', 'Failed to update Employee.', 'Message')
                     self.validCheck = 0
 
+    @AccessControl
+    def delete_employee(self, requestType: str = "Submit") -> None:
+        if requestType == "Validate":
+            emp = get_employee(self.emp_id)
+            emp_name = emp['name']
+            self.manpower_screen.CMessageBox('Delete Employee', f'Are you sure you want to \n delete employee {emp_name}?', 'Confirm',
+                             'Yes', 'No', self.delete_employee)
+
+        if requestType == "Submit":
+            if delete_employee(self.emp_id):
+                self.manpower_screen.CMessageBox('Success', 'Employee deleted successfully.', 'Message')
+                self.manpower_screen.populate_manpower(load_manpower(0))
+                self.manpower_screen.ids.manpower_filter.text = 'Filter: All'
+                self.popup.dismiss()
+            else:
+                self.manpower_screen.CMessageBox('Error', 'Failed to delete Employee.', 'Message')
+
     def load_projects(self) -> list:
         return load_project_names()
 
@@ -182,7 +199,6 @@ class ManpowerScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.populate_manpower(load_manpower(0))
-        self.dempID = None
 
     def populate_manpower(self, employees: list = load_manpower(0), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView
@@ -191,26 +207,22 @@ class ManpowerScreen(Screen):
 
         # headers
         if headers is None:
-            headers = ['Name', 'Role', 'Email', '', '']
-        size_hints = [0.3, 0.2, 0.3, 0.1, 0.1]
+            headers = ['Name', 'Role', 'Email', 'Status']
+        size_hints = [0.4, 0.15, 0.3, 0.15]
         for header in headers:
             self.ids.manpower_headers.add_widget(
                 CButton(text=header, bold=True, padding=(10, 10), size_hint_x=size_hints[headers.index(header)],
                         on_release=partial(self.sort_manpower, employees, header)))
 
         for emp in employees:
-            grid = GridLayout(cols=5, spacing=10, size_hint_y=None, height=40)
-            grid.add_widget(CLabel(text=emp["name"], size_hint_x=0.3))
-            grid.add_widget(CLabel(text=emp["role"], size_hint_x=0.2))
+            grid = GridLayout(cols=4, spacing=10, size_hint_y=None, height=40)
+            grid.add_widget(Button(text=emp["name"], on_release=partial(self.view_emp, emp["id"]),
+                                   background_normal='', font_size='20sp', size_hint_x=0.4,
+                                   background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
+                                   bold=True))
+            grid.add_widget(CLabel(text=emp["role"], size_hint_x=0.15))
             grid.add_widget(CLabel(text=emp["email"], size_hint_x=0.3))
-            grid.add_widget(Button(text='View', on_release=partial(self.view_emp, emp["id"]),
-                                   background_normal='', font_size='20sp', size_hint_x=0.1,
-                                   background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
-                                   bold=True))
-            grid.add_widget(Button(text='Delete', on_release=partial(self.delete_employee, emp["id"]),
-                                   background_normal='', font_size='20sp', size_hint_x=0.1,
-                                   background_color=(0.1, 0.1, 0.1, 0), font_name='Roboto', color=(1, 1, 1, 1),
-                                   bold=True))
+            grid.add_widget(CLabel(text=emp["employment_status"], size_hint_x=0.15))
             grid.emp = emp
             self.ids.manpower_list.add_widget(grid)
 
@@ -219,22 +231,22 @@ class ManpowerScreen(Screen):
     def sort_manpower(self, manpower: list, header: str, instance) -> None:
         if header == 'Name' or header == 'Name [D]':
             manpower = sorted(manpower, key=lambda x: x['name'])
-            self.populate_manpower(manpower, ['Name [A]', 'Role', 'Email', '', ''])
+            self.populate_manpower(manpower, ['Name [A]', 'Role', 'Email', 'Status'])
         elif header == 'Name [A]':
             manpower = sorted(manpower, key=lambda x: x['name'], reverse=True)
-            self.populate_manpower(manpower, ['Name [D]', 'Role', 'Email', '', ''])
+            self.populate_manpower(manpower, ['Name [D]', 'Role', 'Email', 'Status'])
         elif header == 'Role' or header == 'Role [D]':
             manpower = sorted(manpower, key=lambda x: x['role'])
-            self.populate_manpower(manpower, ['Name', 'Role [A]', 'Email', '', ''])
+            self.populate_manpower(manpower, ['Name', 'Role [A]', 'Email', 'Status'])
         elif header == 'Role [A]':
             manpower = sorted(manpower, key=lambda x: x['role'], reverse=True)
-            self.populate_manpower(manpower, ['Name', 'Role [D]', 'Email', '', ''])
+            self.populate_manpower(manpower, ['Name', 'Role [D]', 'Email', 'Status'])
         elif header == 'Email' or header == 'Email [D]':
             manpower = sorted(manpower, key=lambda x: x['email'])
-            self.populate_manpower(manpower, ['Name', 'Role', 'Email [A]', '', ''])
+            self.populate_manpower(manpower, ['Name', 'Role', 'Email [A]', 'Status'])
         elif header == 'Email [A]':
             manpower = sorted(manpower, key=lambda x: x['email'], reverse=True)
-            self.populate_manpower(manpower, ['Name', 'Role', 'Email [D]', '', ''])
+            self.populate_manpower(manpower, ['Name', 'Role', 'Email [D]', 'Status'])
 
     def search_manpower(self, search_text: str) -> None:
         if not search_text == '':
@@ -262,29 +274,7 @@ class ManpowerScreen(Screen):
         addEmp_popup.popup = addEmp
         addEmp.open()
 
-    @AccessControl
-    def delete_employee(self, emp_id: str, instance) -> None:
-        self.dempID = emp_id
-        emp = get_employee(emp_id)
-        # get emp name
-        emp_name = emp['name']
-        self.CMessageBox('Delete Employee', f'Are you sure you want to \n delete employee {emp_name}?', 'Confirm',
-                         'Yes', 'No',
-                         self.confirmedDelete)
 
-    def confirmedDelete(self, requestType: str = "Validated") -> None:
-        if requestType == "Validated":
-            if delete_employee(self.dempID):
-                self.CMessageBox('Success', 'Employee deleted successfully.', 'Message')
-                self.dempID = None
-                self.populate_manpower(load_manpower(0))
-                self.ids.manpower_filter.text = 'Filter: All'
-            else:
-                self.CMessageBox('Error', 'Failed to delete Employee.', 'Message')
-                self.dempID = None
-        else:
-            print("illegal action")
-            self.dempID = None
 
     # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'Message',

@@ -322,7 +322,9 @@ class SuppliersScreen(Screen):
                      search_text in supplier['supplierName'].lower() or
                      search_text in supplier['contactNo'].lower() or
                      search_text in supplier['email'].lower() or
-                     search_text in supplier['startDealing'].lower()]
+                     search_text in supplier['startDealing'].lower() or
+                     search_text in supplier['address'].lower()]
+
         self.populate_suppliers(suppliers)
 
     def view_suppliers(self, suppliers_id: str, instance) -> None:

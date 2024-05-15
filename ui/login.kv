@@ -20,7 +20,7 @@
                                 id: email
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 size_hint: 0.6, 0.25
-                                text: 'a'
+                                hint_text: 'abc@def.com'
 
                         CLabel:
                                 text: 'Password'
@@ -28,7 +28,6 @@
                                 bold: True
                         RText:
                                 id: password
-                                text: 'a'
                                 size_hint: 0.6, 0.25
                                 padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 password: True
@@ -224,7 +223,7 @@
                         spacing: 10
                         RButton4:
                                 size_hint: 0.5, 1
-                                text: 'Edit'
+                                text: 'Save'
                                 on_release: root.edit_user(requestType="Validate")
 
                         RButton4:

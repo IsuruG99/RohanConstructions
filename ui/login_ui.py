@@ -70,6 +70,10 @@ class AddUserPopup(GridLayout):
             self.main_screen.CMessageBox('Error', 'Invalid input.', 'Message')
             return
 
+        if not validate_email(email):
+            self.main_screen.CMessageBox('Error', 'Invalid email.', 'Message')
+            return
+
         if requestType == "Validate":
             if check_unique_email(email, "New"):
                 self.main_screen.CMessageBox('Confirm', 'Are you sure you want to add this user?', 'Confirm', 'Yes',
@@ -118,6 +122,10 @@ class EditUserPopup(GridLayout):
 
         if not validate_string(email, password, str(access)) or access not in range(4):
             self.main_screen.CMessageBox('Error', 'Invalid input.', 'Message')
+            return
+
+        if not validate_email(email):
+            self.main_screen.CMessageBox('Error', 'Invalid email.', 'Message')
             return
 
         if access < App.get_running_app().get_accessLV():

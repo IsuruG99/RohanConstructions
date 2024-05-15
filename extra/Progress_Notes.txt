@@ -1,0 +1,22 @@
+To-Do List:
+- Project Report (Make the Dates look YYYY %B %d)
+
+FINAL TASK: Complete (Project Archive Conversion Implemented)
+
+Optional
+- Client Function may need an Active Inactive filter (projects.py includes a list for this if needed)
+- Images for Employees (Optional), it is python, of course it can do that
+- Export a Report (?)
+
+Best moments in project(Coding) so far:
+- Learning Kivy's dynamics
+- Creating the dropdown Textbox custom widget
+- Creating the custom confirm message box. (Pretty much the hardest obstacle in the project, did it recursively instead).
+- Patient Zero for every node in firebase
+- Access Control Structure & Admin Panel
+- Figuring out the resource assignments (i did not expect it to require + -)
+- The way the project completion will work, and how it will connect to the finance function
+- I HATE ROUNDED EVERYTHING (On kivy, literally spent 2 weeks on nothing but visuals)
+- Rounded Popup was an absolute cinema, the content encapsulation and triple class inheritance was a nightmare
+- Moving the pieChart forcefully with manual positioning over 1 hour and half
+- Decorators are awesome

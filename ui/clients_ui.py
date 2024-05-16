@@ -38,7 +38,7 @@ def AccessControl(func):
     return wrapper
 
 
-# add a popup window to insert client data to the database
+# Content for Add Client Popup
 class AddClientPopup(GridLayout):
     def __init__(self, clients_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -48,16 +48,14 @@ class AddClientPopup(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Add client function, takes the data from the text inputs and sends it to clients.py
     def add_client(self, requestType: str = "Submit") -> None:
-        # add_client_name.text, add_client_phone_number.text, add_client_email.text, add_client_address.text
         try:
             name = str(self.ids.add_client_name.text)
             phone_number = str(self.ids.add_client_phone_number.text)
             email = str(self.ids.add_client_email.text)
             address = str(self.ids.add_client_address.text)
-        except AttributeError:
-            return
-        except ValueError:
+        except (AttributeError, ValueError):
             self.clients_screen.CMessageBox('Error', 'All fields are required.', 'Message')
             return
 
@@ -87,9 +85,11 @@ class AddClientPopup(GridLayout):
                     self.clients_screen.CMessageBox('Error', 'Failed to add client.', 'Message')
                     self.validCheck = 0
 
+    # Load project list for the dropdown
     def load_project_list(self) -> list:
         return load_project_names()
 
+    # Dismiss the popup window
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()
 

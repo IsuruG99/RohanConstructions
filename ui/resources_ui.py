@@ -34,6 +34,7 @@ def AccessControl(func):
     return wrapper
 
 
+# Content of View Resource Popup Window
 class ViewResource(GridLayout):
     def __init__(self, res_screen: Screen, res_id: str, popup, **kwargs):
         super().__init__(**kwargs)
@@ -45,6 +46,7 @@ class ViewResource(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Autofill the view popup text fields
     def populate_view(self) -> None:
         # Get the resource data from the DB
         res = get_res(self.res_id)
@@ -69,6 +71,7 @@ class ViewResource(GridLayout):
                                                                            assignment["project"], "Remove")))
             self.ids.viewRes_projects.add_widget(grid)
 
+    # Resource Assignment (Add/Remove) Function, validates and sends data to resources.py
     @AccessControl
     def reload(self, amount: str, project_name: str, action: str, instance) -> None:
         if project_name == "":
@@ -85,6 +88,7 @@ class ViewResource(GridLayout):
                 self.ids.viewRes_projects.clear_widgets()
                 self.populate_view()
 
+    # Edit Resource Function, checks if the inputs are valid and then sends the data to resources.py
     @AccessControl
     def editRes(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
@@ -121,6 +125,7 @@ class ViewResource(GridLayout):
                 else:
                     self.res_screen.CMessageBox('Error', 'Failed to update resource.', 'Message')
 
+    # Delete Resource Function, checks if the inputs are valid and then sends the data to resources.py
     @AccessControl
     def deleteRes(self, requestType: str = "Submit") -> None:
         # Confirm first, then it recursively calls the Submit part
@@ -139,12 +144,15 @@ class ViewResource(GridLayout):
             self.res_screen.ids.resource_filter.text = 'Filter: All'
             self.dismiss_popup(self.popup)
 
+    # Loads Supplier Names from DB for the Dropdown
     def load_suppliers(self) -> list:
         return load_supplier_names()
 
+    # Loads Project Names from DB for the Dropdown
     def load_projects(self) -> list:
         return load_project_names()
 
+    # Triggers the Report Resource Popup Window
     @AccessControl
     def reportRes(self) -> None:
         temp_reportPop_popup = Popup()
@@ -153,10 +161,12 @@ class ViewResource(GridLayout):
         reportPop_popup.popup = reportPop
         reportPop.open()
 
+    # Dismiss Popup placeholder
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()
 
 
+# Content of Report Resource Popup Window
 class ReportResource(GridLayout):
     # Report Popup, you will see an overview of the resource, that is all
     def __init__(self, res_id, popup, **kwargs):
@@ -167,6 +177,7 @@ class ReportResource(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Autofill the report fields
     def populate_report(self) -> None:
         res = get_res(self.res_id)
         self.ids.reportRes_name.text = res["name"]
@@ -182,6 +193,7 @@ class ReportResource(GridLayout):
                 grid.add_widget(CLabel(text=assignment["amount"], size_hint_x=0.2))
                 self.ids.assigned_projects.add_widget(grid)
 
+    # Dissmiss Popup Window
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()
 
@@ -262,6 +274,7 @@ class ResourcesScreen(Screen):
             resources = sorted(resources, key=lambda x: x['quantity'], reverse=True)
             self.populate_res(resources, ['Name', 'Status', 'Supplier', 'Stock [D]'])
 
+    # Search Function, takes search_text and calls populate function with filtered res List
     def search_res(self, search_text: str) -> None:
         if not search_text == '':
             resources = load_resources(0)
@@ -288,7 +301,7 @@ class ResourcesScreen(Screen):
         addPop_popup.popup = addPop
         addPop.open()
 
-    # Button Click goes back to Main UI
+    # Button Clicks of main resource display
     def btn_click(self, instance) -> None:
         txt = instance.text
         if txt == 'Back':
@@ -313,10 +326,12 @@ class ResourcesScreen(Screen):
                 self.populate_res(load_resources(3))
                 self.ids.search.text = ''
 
+    # Dismiss Popup placeholder
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
+# Content of Add Resource Popup Window
 class AddResource(GridLayout):
     def __init__(self, res_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -326,6 +341,7 @@ class AddResource(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Add Resource Function, checks if the inputs are valid and then sends the data to resources.py
     def add_resource(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
         try:
@@ -365,8 +381,10 @@ class AddResource(GridLayout):
                 else:
                     self.res_screen.CMessageBox('Error', 'Failed to add resource.', 'Message')
 
+    # Load Supplier Names from DB for the Dropdown
     def load_suppliers(self) -> list:
         return load_supplier_names()
 
+    # Dismiss Popup placeholder
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()

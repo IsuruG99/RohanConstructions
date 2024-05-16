@@ -422,5 +422,6 @@ class ProjectsScreen(Screen):
         elif txt == 'Back':
             self.parent.current = 'main'
 
+    # Dismiss Popup placeholder
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()

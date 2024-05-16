@@ -38,6 +38,7 @@ def AccessControl(func):
     return wrapper
 
 
+# Content for Add Supplier Popup Window
 class AddSupPopup(GridLayout):
     def __init__(self, suppliers_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -47,6 +48,7 @@ class AddSupPopup(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Add Supplier Function
     def add_Supplier(self, requestType: str = "Submit") -> None:
         try:
             supplierName = str(self.ids.supplierName.text)
@@ -89,10 +91,12 @@ class AddSupPopup(GridLayout):
                 self.validCheck = 0
                 self.suppliers_screen.populate_suppliers(load_suppliers())
 
+    # Dissmiss popup
     def dismiss_popup(self, instance) -> None:
         self.suppliers_screen.dismiss_popup(self.popup)
 
 
+# Content for Supplier View Popup
 class ViewSupPopup(GridLayout):
     def __init__(self, suppliers_screen: Screen, suppliers_id: str, popup, **kwargs):
         super().__init__(**kwargs)
@@ -104,7 +108,7 @@ class ViewSupPopup(GridLayout):
         self.cols = 1
         self.rows = 1
 
-    # Populate PopUp Window
+    # Autofill PopUp Window
     def populate_view(self) -> None:
         # Get the suppliers data from the DB
         supplier = get_supplier(self.suppliers_id)
@@ -117,7 +121,7 @@ class ViewSupPopup(GridLayout):
         self.ids.startDealing.text = supplier["startDealing"]
         self.ids.supplierLevel.text = supplier["supplierLevel"]
 
-    # Edit Supplier
+    # Edit Supplier function
     @AccessControl
     def editSupplier(self, requestType: str = "Submit") -> None:
         # Stringify inputs (Including Dates)
@@ -166,7 +170,7 @@ class ViewSupPopup(GridLayout):
                 self.suppliers_screen.populate_suppliers(load_suppliers())
                 self.suppliers_screen.dismiss_popup(self.popup)
 
-    # Delete Supplier
+    # Delete Supplier function
     @AccessControl
     def deleteSupplier(self, requestType: str = "Submit") -> None:
         # Confirm first, then it recursively calls the Submit part
@@ -184,10 +188,12 @@ class ViewSupPopup(GridLayout):
                 self.suppliers_screen.CMessageBox('Error', 'Delete failed !')
             self.validCheck = 0
 
+    # Dismiss Popup
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
 
+# Content for Supplier Overview Popup
 class ReportSupPopup(GridLayout):
     def __init__(self, suppliers_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
@@ -197,6 +203,7 @@ class ReportSupPopup(GridLayout):
         self.cols = 1
         self.rows = 1
 
+    # Autofill Supplier Overview
     def populate_supplierOverview(self, supplierName: str = None) -> None:
         self.ids.reportSupplier_headers.clear_widgets()
         self.ids.reportSupplier_resList.clear_widgets()
@@ -229,6 +236,7 @@ class ReportSupPopup(GridLayout):
                     self.ids.reportSupplier_resList.add_widget(grid)
             self.populate_pieChart(resList)
 
+    # Generate PieChart
     def populate_pieChart(self, resList: list) -> None:
         if resList is None or len(resList) == 0:
             data = {"No Data": 1}
@@ -248,10 +256,11 @@ class ReportSupPopup(GridLayout):
         grid.add_widget(chart)
         self.ids.reportSupplier_pieChart.add_widget(grid)
 
-
+    #  Load Supplier Names for the dropdown
     def load_suppliers(self) -> None:
         return load_supplier_names()
 
+    # Dismiss Popup
     def dismiss_popup(self, instance) -> None:
         self.suppliers_screen.dismiss_popup(instance)
 
@@ -262,6 +271,7 @@ class SuppliersScreen(Screen):
         super().__init__(**kwargs)
         self.populate_suppliers(load_suppliers())
 
+    # Populate Main Supplier Table with Supplier Data
     def populate_suppliers(self, suppliers: list = load_suppliers(), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView & Headers
         self.ids.Supplier_list.clear_widgets()
@@ -334,6 +344,7 @@ class SuppliersScreen(Screen):
 
         self.populate_suppliers(suppliers)
 
+    # Triggers View Popup Window with ViewSupPopup class as content
     def view_suppliers(self, suppliers_id: str, instance) -> None:
         temp_viewPop_popup = Popup()
         viewPop_popup = ViewSupPopup(self, suppliers_id, temp_viewPop_popup)
@@ -341,6 +352,7 @@ class SuppliersScreen(Screen):
         viewPop_popup.popup = viewPop
         viewPop.open()
 
+    # Triggers Overview Popup Window with ReportSupPopup class as content
     @AccessControl
     def overview_suppliers(self):
         temp_overview_popup = Popup()
@@ -349,7 +361,7 @@ class SuppliersScreen(Screen):
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
-    # Open to supplier add popup window
+    # Open to supplier add popup window with AddSupPopup class as content
     @AccessControl
     def add_popup(self) -> None:
         temp_addPop_popup = Popup()
@@ -372,7 +384,7 @@ class SuppliersScreen(Screen):
             cfm_popup.popup = popup
             popup.open()
 
-    # Button Click Event Handler
+    # Handle Button Clicks from Main Supplier UI
     def btn_click(self, instance) -> None:
         txt = instance.text
         if txt == 'Back':
@@ -400,5 +412,6 @@ class SuppliersScreen(Screen):
                 self.populate_suppliers(load_suppliers(0))
                 self.ids.supplierFilter.text = 'Filter : All'
 
+    # Dismiss Popup Placeholder
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()

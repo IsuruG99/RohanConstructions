@@ -89,7 +89,9 @@
                                                 root.manager.current = 'main'
                                                 root.manager.transition.direction = 'right'
 
-<AddSupPopup>:
+<AddSupPopup@Popup>:
+        auto_dismiss: False
+
         GridLayout:
                 rows: 2
                 cols: 1
@@ -306,56 +308,66 @@
                 pos: root.pos
                 padding: 20
                 spacing: 20
+
                 GridLayout:
                         cols: 2
                         rows: 1
                         spacing: 10
                         padding: 0,10
-                        size_hint: 1, 0.4
+                        size_hint: 1, 0.7
+
                         GridLayout:
                                 cols: 1
                                 rows: 3
-                                size_hint: 0.5, 1
+                                size_hint: 0.4, 1
                                 spacing: 10
                                 RAutoFillText:
                                         id: reportSupplier_supplierList
                                         text: ''
                                         hint_text: 'Supplier'
-                                        size_hint_x: 0.4
+                                        size_hint_x: 0.2
+                                        size_hint_y: 0.2
                                         completions: root.load_suppliers()
                                         padding_y: [self.height / 2.0 - (self.line_height / 2.0) * len(self._lines), 0]
                                 RButton4:
                                         text: 'Search'
+                                        size_hint_x: 0.1
+                                        size_hint_y: 0.15
                                         on_release: root.populate_supplierOverview(reportSupplier_supplierList.text)
 
                                 GridLayout:
                                         cols: 1
-                                        rows: 2
+                                        rows: 4
                                         size_hint: 0.5, 1
-                                        spacing: 10
+                                        spacing: 1
                                         CLabel:
                                                 id: reportSupplier_supplierCount
                                         CLabel:
-                                                id: reportSupplier_resCount
+                                                id: reportSupplier_level1Count
+                                        CLabel:
+                                                id: reportSupplier_level2Count
+                                        CLabel:
+                                                id: reportSupplier_level3Count
 
 
                         GridLayout:
                                 cols: 1
                                 rows: 1
-                                size_hint: 0.5, 1
+                                halign: 'center'
+                                size_hint: 0.6, 1
                                 id: reportSupplier_pieChart
 
                 GridLayout:
                         cols: 1
                         rows: 2
-                        size_hint: 1, 0.6
+                        size_hint: 1, 0.3
                         spacing: 10
                         GridLayout:
                                 rows: 3
                                 size_hint: 1, 0.5
                                 spacing:5
                                 CLabel:
-                                        text: 'Provided Resources'
+                                        text: '--------------------------------------------------   Provided Resources   --------------------------------------------------'
                                         size_hint: 1, 0.05
                                 GridLayout:
                                         size_hint: 1, 0.2

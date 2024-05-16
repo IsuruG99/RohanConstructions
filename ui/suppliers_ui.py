@@ -205,9 +205,14 @@ class ReportSupPopup(GridLayout):
         suppliers: list = load_suppliers()
         res: list = load_resources()
         resList: list = []
+        level1: list = load_suppliers(1)
+        level2: list = load_suppliers(2)
+        level3: list = load_suppliers(3)
 
         self.ids.reportSupplier_supplierCount.text = f'Total Suppliers : {str(len(suppliers))}'
-        self.ids.reportSupplier_resCount.text = f'Total Resources : {str(len(res))}'
+        self.ids.reportSupplier_level1Count.text = f'Level 1 Supplier Count : {str(len(level1))}'
+        self.ids.reportSupplier_level2Count.text = f'Level 2 Supplier Count : {str(len(level2))}'
+        self.ids.reportSupplier_level3Count.text = f'Level 3 Supplier Count : {str(len(level3))}'
 
         headers = GridLayout(cols=2, size_hint_y=None, height=40)
         headers.add_widget(CLabel(text='Resource', bold=True))
@@ -236,8 +241,10 @@ class ReportSupPopup(GridLayout):
                     data["Out of Stock"] += 1
 
         grid = GridLayout(cols=1, size_hint_y=None, height=200)
-        chart = PieChart(data=data, position=(1, 1),
-                         size=(150, 150), legend_enable=True)
+        chart = PieChart(data=data,
+                         position=(1, 1),
+                         size=(150, 150),
+                         legend_enable=True)
         grid.add_widget(chart)
         self.ids.reportSupplier_pieChart.add_widget(grid)
 
@@ -347,7 +354,7 @@ class SuppliersScreen(Screen):
     def add_popup(self) -> None:
         temp_addPop_popup = Popup()
         addPop_popup = AddSupPopup(self, temp_addPop_popup)
-        addPop = RPopup(title='Add Supplier', content=addPop_popup, size_hint=(0.55, 0.8))
+        addPop = RPopup(title='Add Supplier', content=addPop_popup, size_hint=(0.55, 0.8), auto_dismiss=False)
         addPop_popup.popup = addPop
         addPop.open()
 

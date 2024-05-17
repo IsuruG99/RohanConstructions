@@ -4,7 +4,7 @@ from utils import message_box
 
 # Load finance logs function
 def load_all_finances(status: int = 0) -> list:
-    # Get a reference to DB
+    # Get a reference to DB - from database.py
     ref = database.get_ref('finances')
 
     # Retrieve all finance logs as a list of dictionaries
@@ -44,6 +44,7 @@ def edit_log(fin_id: str, fin_type: str, amount: str, date: str, desc: str, enti
 
     # Update the log data
     if ref is not None:
+        #Get reference to child
         ref.child(fin_id).update({
             'type': fin_type,
             'amount': amount,
@@ -85,7 +86,7 @@ def add_log(fin_type: str, amount: str, date: str, desc: str, entity: str, proje
 def delete_log(fin_id: str) -> bool:
     # Get a reference to DB
     ref = database.get_ref('finances')
-
+    #Delete the child from the DB
     if ref is not None:
         ref.child(fin_id).delete()
         return True

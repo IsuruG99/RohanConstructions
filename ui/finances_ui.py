@@ -289,6 +289,7 @@ class FinancesScreen(Screen):
                     searchResults.append(log)
             self.populate_logs(searchResults)
 
+    # Create and open a popup window to display the finance log
     def view_log(self, fin_id: str, instance) -> None:
         temp_viewPop_popup = Popup()
         viewPop_popup = ViewLogPopup(self, fin_id, temp_viewPop_popup)
@@ -296,7 +297,7 @@ class FinancesScreen(Screen):
         viewPop_popup.popup = viewPop
         viewPop.open()
 
-
+    # Create and display a finance overview popup
     def overview_log(self) -> None:
         temp_overview_popup = Popup()
         overviewPop_popup = FinanceOverview(self, temp_overview_popup)
@@ -304,6 +305,7 @@ class FinancesScreen(Screen):
         overviewPop_popup.popup = overviewPop
         overviewPop.open()
 
+    # Create and display a popup for adding a finance log
     @AccessControl
     def add_log_popup(self) -> None:
         temp_addPop_popup = Popup()
@@ -326,6 +328,7 @@ class FinancesScreen(Screen):
             cfm_popup.popup = popup
             popup.open()
 
+    # Handle button clicks( back,main,add,refresh btn etc........)
     def btn_click(self, instance) -> None:
         if instance.text == 'Back':
             self.parent.current = 'main'
@@ -349,24 +352,26 @@ class FinancesScreen(Screen):
                 self.ids.finances_filter.text = 'Filter: All'
                 self.ids.search.text = ''
 
+    # Dismiss the given popup instance
     def dismiss_popup(self, instance) -> None:
         instance.dismiss()
 
-
+# Define a class for displaying finance overview
 class FinanceOverview(GridLayout):
     def __init__(self, finances_screen: Screen, popup, **kwargs):
         super().__init__(**kwargs)
         self.finances_screen = finances_screen
-        year = str(datetime.datetime.now().year)
+        year = str(datetime.datetime.now().year)   # Initialize with current year and month
         month = str(convert_monthToNumber(convert_numberToMonth(datetime.datetime.now().month)))
         self.populate_overview(year, month)
         self.popup = popup
-        self.cols = 1
+        self.cols = 1   # Set grid layout with 1 column and 1 row
         self.rows = 1
 
+    # Populate the overview based on the given year and month
     def populate_overview(self, y: str, m: str) -> None:
         if y == '' or None:
-            self.finances_screen.CMessageBox('Error', 'Year is required.', 'Message')
+            self.finances_screen.CMessageBox('Error', 'Year is required.', 'Message')#Display an error message
             return
 
         finances = load_all_finances(0)
@@ -408,6 +413,6 @@ class FinanceOverview(GridLayout):
         self.ids.overview_expense.text = convert_currency(total_expense)
         self.ids.overview_balance.text = convert_currency(total_income - total_expense)
 
-
+    # Dismiss the popup associated with this instance
     def dismiss_popup(self, instance) -> None:
         self.popup.dismiss()

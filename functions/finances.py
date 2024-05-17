@@ -9,8 +9,8 @@ def load_all_finances(status: int = 0) -> list:
 
     # Retrieve all finance logs as a list of dictionaries
     finances = []
-    for fin_id, finance in ref.get().items():
-        if fin_id == 'logZero':
+    for fin_id, finance in ref.get().items():#used to get all items form firebase
+        if fin_id == 'logZero':# invisible entity to to prevent ref deletion
             continue
         finance['id'] = fin_id
         finances.append(finance)

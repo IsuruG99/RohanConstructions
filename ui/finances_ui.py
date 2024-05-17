@@ -250,7 +250,7 @@ class FinancesScreen(Screen):
             self.ids.finances_list.add_widget(grid)
 
     # Sorts Table Headers like a Table Column (It is not actually a Table but a ScrollView)
-    # Finances Sorting Function, takes headers, finances List and calls populate function with sorted finances list
+    # Finances Sorting Function, takes headers, finances List and calls populate function with sorted finances list#filter fun
     def sort_logs(self, header: str, finances: list, instance) -> None:
         # Sort by header
         if header == "Amount" or header == "Amount [D]":

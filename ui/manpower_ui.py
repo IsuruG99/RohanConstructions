@@ -200,6 +200,7 @@ class ManpowerScreen(Screen):
         super().__init__(**kwargs)
         self.populate_manpower(load_manpower(0))
 
+    # Fill the main display table with manpower data
     def populate_manpower(self, employees: list = load_manpower(0), headers: list = None) -> None:
         # Clear the existing widgets in the ScrollView
         self.ids.manpower_list.clear_widgets()
@@ -248,6 +249,7 @@ class ManpowerScreen(Screen):
             manpower = sorted(manpower, key=lambda x: x['email'], reverse=True)
             self.populate_manpower(manpower, ['Name', 'Role', 'Email [D]', 'Status'])
 
+    # Search Function, take query and search from all manpower
     def search_manpower(self, search_text: str) -> None:
         if not search_text == '':
             manpower = load_manpower(0)
@@ -259,6 +261,7 @@ class ManpowerScreen(Screen):
                     results.append(emp)
             self.populate_manpower(results)
 
+    # Open view_emp popup, and calls ViewManpower class as 'content'
     def view_emp(self, emp_id: str, instance) -> None:
         temp_viewEmp_popup = Popup()
         viewEmp_popup = ViewManpower(self, emp_id, temp_viewEmp_popup)
@@ -266,6 +269,7 @@ class ManpowerScreen(Screen):
         viewEmp_popup.popup = viewEmp
         viewEmp.open()
 
+    # Open add_employee Popup, and calls AddManpower class as 'content'
     @AccessControl
     def add_emp(self) -> None:
         temp_addEmp_popup = Popup()
@@ -273,8 +277,6 @@ class ManpowerScreen(Screen):
         addEmp = RPopup(title='Add Employee', content=addEmp_popup, size_hint=(0.45, 0.85))
         addEmp_popup.popup = addEmp
         addEmp.open()
-
-
 
     # Open Message/Confirm Popup Window (Custom Widget implemented by Project Leader)
     def CMessageBox(self, title: str = 'Message', content: str = 'Message Content', context: str = 'Message',
@@ -290,6 +292,7 @@ class ManpowerScreen(Screen):
             cfm_popup.popup = popup
             popup.open()
 
+    # Handles most general Button Clicks on main display
     def btn_click(self, instance) -> None:
         text = instance.text
         if text == 'Back':
@@ -314,5 +317,6 @@ class ManpowerScreen(Screen):
                 self.ids.manpower_filter.text = 'Filter: All'
                 self.ids.search.text = ''
 
+    # Dismiss Popup placeholder
     def dismiss_popup(self, instance) -> None:
         instance.dismiss

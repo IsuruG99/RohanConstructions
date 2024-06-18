@@ -168,16 +168,8 @@ class MainApp(App):
     def __init__(self, **kwargs):
         super(MainApp, self).__init__(**kwargs)
 
-    # This way, even if the app crashes, the user will be logged out
     def run(self):
-        try:
-            super(MainApp, self).run()
-        finally:
-            self.cleanup()
-
-    def cleanup(self):
-        self.set_accessLV(None)
-        self.set_accessName(None)
+        super(MainApp, self).run()
 
     def set_accessLV(self, level):
         update_session_file('level', level)

@@ -165,24 +165,33 @@ class MainScreen(Screen):
 
 
 class MainApp(App):
+    access_level = None
+    access_name = None
+
     def __init__(self, **kwargs):
         super(MainApp, self).__init__(**kwargs)
 
     def run(self):
-        super(MainApp, self).run()
+        try:
+            super(MainApp, self).run()
+        finally:
+            self.clean_up()
+
+    def clean_up(self):
+        self.access_level = None
+        self.access_name = None
 
     def set_accessLV(self, level):
-        update_session_file('level', level)
+        self.access_level = level
 
     def set_accessName(self, name):
-        update_session_file('name', name)
+        self.access_name = name
 
     def get_accessLV(self):
-        level = get_session_value('level')
-        return None if level == 'None' else int(level)
+        return None if self.access_level == None else int(self.access_level)
 
     def get_accessName(self):
-        return get_session_value('name')
+        return self.access_name
 
     def build(self) -> ScreenManager:
         Window.clearcolor = rgba('#343534')

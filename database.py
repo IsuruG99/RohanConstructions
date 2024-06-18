@@ -7,11 +7,12 @@ from firebase_admin import credentials, db
 from utils import *
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
+dbURL = 'https://rohan-constructions-db-default-rtdb.asia-southeast1.firebasedatabase.app/'
 
 try:
     cred = credentials.Certificate(os.path.join(root_dir, 'extra', 'service.json'))
     firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://rohan-constructions-db-default-rtdb.asia-southeast1.firebasedatabase.app/'})
+        'databaseURL': dbURL})
 except (google.auth.exceptions.RefreshError, google.auth.exceptions.TransportError):
     message_box('Error', 'No internet connection.', 'Message')
     exit(1)

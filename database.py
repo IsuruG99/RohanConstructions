@@ -1,15 +1,24 @@
 import os
 import firebase_admin
 import google.auth.exceptions
+from cryptography.fernet import Fernet
+import json
 
 from firebase_admin import credentials, db
 
 from utils import *
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
+key = 'm6wefkxwzhyuNqo3MowCBcwTdMnyt1pl-8kx41TvtmM='
+cipher = Fernet(key)
+
+with open(os.path.join(root_dir, 'extra', 'service.json'), 'rb') as encrypted_file:
+    decrypted_data = cipher.decrypt(encrypted_file.read())
+
+firebase_creds = json.loads(decrypted_data)
 
 try:
-    cred = credentials.Certificate(os.path.join(root_dir, 'extra', 'service.json'))
+    cred = credentials.Certificate(firebase_creds)
     firebase_admin.initialize_app(cred, {
         'databaseURL': 'https://rohan-constructions-db-default-rtdb.asia-southeast1.firebasedatabase.app/'})
 except (google.auth.exceptions.RefreshError, google.auth.exceptions.TransportError):
